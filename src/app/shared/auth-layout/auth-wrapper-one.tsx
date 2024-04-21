@@ -1,15 +1,16 @@
 "use client";
 
-import Link from "next/link";
-import logoImg from "@public/logo-primary.svg";
-import logoImgText from "@public/logo-primary-text.svg";
-import Image from "next/image";
-import { Title, Text } from "@/components/ui/text";
 import { Button } from "@/components/ui/button";
-import { PiAppleLogoFill, PiArrowLeftBold } from "react-icons/pi";
-import { FcGoogle } from "react-icons/fc";
-import OrSeparation from "./or-separation";
+import { Text, Title } from "@/components/ui/text";
+import logoImgText from "@public/logo-primary-text.svg";
+import logoImg from "@public/logo-primary.svg";
+import Image from "next/image";
+import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
+import { FcGoogle } from "react-icons/fc";
+import { PiAppleLogoFill, PiArrowLeftBold } from "react-icons/pi";
+import OrSeparation from "./or-separation";
+import Link from "next/link";
 
 export default function AuthWrapperOne({
   children,
@@ -99,10 +100,7 @@ export default function AuthWrapperOne({
                   </Button>
                   <Button
                     variant="outline"
-                    onClick={() =>
-                      // it should be signIn('google')
-                      handleSignIn()
-                    }
+                    onClick={() => signIn("google")}
                     className="h-11 w-full"
                   >
                     <FcGoogle className="me-2 h-4 w-4 shrink-0" />

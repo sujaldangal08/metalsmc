@@ -1,14 +1,22 @@
-import SignInForm from "./sign-in-form";
 import AuthWrapperOne from "@/app/shared/auth-layout/auth-wrapper-one";
-import Image from "next/image";
 import UnderlineShape from "@/components/shape/underline";
 import { metaObject } from "@/config/site.config";
+import Image from "next/image";
+import SignInForm from "./sign-in-form";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export const metadata = {
   ...metaObject("Sign In"),
 };
 
 export default function SignIn() {
+  const access_token = cookies().get("access_token");
+
+  if (access_token) {
+    redirect("/");
+  }
+
   return (
     <AuthWrapperOne
       title={

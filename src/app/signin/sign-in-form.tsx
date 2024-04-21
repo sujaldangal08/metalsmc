@@ -1,18 +1,17 @@
 "use client";
 
-import Link from "next/link";
-import { useState } from "react";
-import { signIn } from "next-auth/react";
-import { SubmitHandler } from "react-hook-form";
-import { PiArrowRightBold } from "react-icons/pi";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Password } from "@/components/ui/password";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Form } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Password } from "@/components/ui/password";
 import { Text } from "@/components/ui/text";
 import { routes } from "@/config/routes";
 import { loginSchema, LoginSchema } from "@/utils/validators/login.schema";
+import Link from "next/link";
+import { useState } from "react";
+import { SubmitHandler } from "react-hook-form";
+import { PiArrowRightBold } from "react-icons/pi";
 
 const initialValues: LoginSchema = {
   email: "admin@admin.com",
@@ -26,9 +25,6 @@ export default function SignInForm() {
 
   const onSubmit: SubmitHandler<LoginSchema> = (data) => {
     console.log(data);
-    signIn("credentials", {
-      ...data,
-    });
   };
 
   return (

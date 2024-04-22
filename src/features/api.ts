@@ -11,27 +11,24 @@ export const api = {
     return instance.get<T>(endpoint, {
       params,
       headers,
-      withCredentials: true,
     });
   },
   post: async <T, S>(
     endpoint: string,
     body: S,
     options: {
-      isFileUpload: boolean,
-      headers?: object,
+      isFileUpload: boolean;
+      headers?: object;
     }
   ) => {
     const customHeaders = await getHeadersWithAccessToken();
     if (options.isFileUpload) {
       return fileUploadInstance.post<T>(endpoint, body, {
         headers: { ...customHeaders, ...options.headers },
-        withCredentials: true,
       });
     } else {
       return instance.post<T>(endpoint, body, {
         headers: { ...customHeaders, ...options.headers },
-        withCredentials: true,
       });
     }
   },
@@ -39,20 +36,18 @@ export const api = {
     endpoint: string,
     body: S,
     options: {
-      isFileUpload: boolean,
-      headers?: object,
+      isFileUpload: boolean;
+      headers?: object;
     }
   ) => {
     const customHeaders = await getHeadersWithAccessToken();
     if (options.isFileUpload) {
       return fileUploadInstance.put<T>(endpoint, body, {
         headers: { ...customHeaders, ...options.headers },
-        withCredentials: true,
       });
     } else {
       return instance.put<T>(endpoint, body, {
         headers: { ...customHeaders, ...options.headers },
-        withCredentials: true,
       });
     }
   },
@@ -60,7 +55,6 @@ export const api = {
     const customHeaders = await getHeadersWithAccessToken();
     return instance.delete<T>(endpoint, {
       headers: { ...customHeaders, ...headers },
-      withCredentials: true,
     });
   },
 };
@@ -76,8 +70,9 @@ const getHeadersWithAccessToken = async (): Promise<object> => {
 
   if (isAccessTokenExpired()) {
     const newToken = await getNewAccessToken();
-    customHeaders.Authorization = `Bearer ${newToken.access || localStorage.getItem("access_token")
-      }`;
+    customHeaders.Authorization = `Bearer ${
+      newToken.access || localStorage.getItem("access_token")
+    }`;
   } else {
     customHeaders.Authorization = `Bearer ${accessToken}`;
   }

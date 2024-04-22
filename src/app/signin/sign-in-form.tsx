@@ -7,9 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Password } from "@/components/ui/password";
 import { Text } from "@/components/ui/text";
 import { routes } from "@/config/routes";
+import { useSignIn } from "@/features/services/auth";
 import { loginSchema, LoginSchema } from "@/utils/validators/login.schema";
+import { date } from "date-arithmetic";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SubmitHandler } from "react-hook-form";
 import { PiArrowRightBold } from "react-icons/pi";
 
@@ -23,8 +25,14 @@ export default function SignInForm() {
   //TODO: why we need to reset it here
   const [reset, setReset] = useState({});
 
+  const { data: value, mutate } = useSignIn();
+
+  useEffect(()=>{
+    console.log(value)
+  },[value])
+
   const onSubmit: SubmitHandler<LoginSchema> = (data) => {
-    console.log(data);
+    mutate();
   };
 
   return (

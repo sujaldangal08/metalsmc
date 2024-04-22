@@ -10,34 +10,24 @@ let instance: AxiosInstance;
 let fileUploadInstance: AxiosInstance;
 
 const config: Config = {
-  baseURL: `${process.env.VITE_REACT_API_URL}`,
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true,
+  withCredentials: false,
 };
 
 const fileInstanceConfig: Config = {
-  baseURL: `${process.env.VITE_REACT_API_URL}`,
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
   headers: {
     "Content-Type": "multipart/form-data",
   },
-  withCredentials: true,
+  withCredentials: false,
 };
 
 // Use switch-case instead of if-else if you need to add more cases in the future
-switch (process.env.VITE_REACT_VERSION) {
-  case "dev":
-    instance = axios.create(config);
-    fileUploadInstance = axios.create(fileInstanceConfig);
-    break;
-  case "test":
-    instance = axios.create(config);
-    fileUploadInstance = axios.create(fileInstanceConfig);
-    break;
-  default:
-    throw new Error("Invalid environment.");
-}
+instance = axios.create(config);
+fileUploadInstance = axios.create(fileInstanceConfig);
 
 export default instance;
 export { fileUploadInstance };

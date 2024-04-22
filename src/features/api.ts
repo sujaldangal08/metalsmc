@@ -5,6 +5,11 @@ type Token = {
   refresh: string | null;
 };
 
+type Options = {
+  isFileUpload: boolean
+  headers: object
+}
+
 export const api = {
   get: async <T>(endpoint: string, params?: object) => {
     const headers = await getHeadersWithAccessToken();
@@ -16,38 +21,35 @@ export const api = {
   post: async <T, S>(
     endpoint: string,
     body: S,
-    options: {
-      isFileUpload: boolean;
-      headers?: object;
-    }
+    options?: Options
   ) => {
     const customHeaders = await getHeadersWithAccessToken();
-    if (options.isFileUpload) {
+    if (options?.isFileUpload) {
       return fileUploadInstance.post<T>(endpoint, body, {
         headers: { ...customHeaders, ...options.headers },
       });
     } else {
       return instance.post<T>(endpoint, body, {
-        headers: { ...customHeaders, ...options.headers },
+        headers: { ...customHeaders, ...options?.headers },
       });
     }
   },
   put: async <T, S>(
     endpoint: string,
     body: S,
-    options: {
+    options?: {
       isFileUpload: boolean;
       headers?: object;
     }
   ) => {
     const customHeaders = await getHeadersWithAccessToken();
-    if (options.isFileUpload) {
+    if (options?.isFileUpload) {
       return fileUploadInstance.put<T>(endpoint, body, {
         headers: { ...customHeaders, ...options.headers },
       });
     } else {
       return instance.put<T>(endpoint, body, {
-        headers: { ...customHeaders, ...options.headers },
+        headers: { ...customHeaders, ...options?.headers },
       });
     }
   },
@@ -70,9 +72,8 @@ const getHeadersWithAccessToken = async (): Promise<object> => {
 
   if (isAccessTokenExpired()) {
     const newToken = await getNewAccessToken();
-    customHeaders.Authorization = `Bearer ${
-      newToken.access || localStorage.getItem("access_token")
-    }`;
+    customHeaders.Authorization = `Bearer ${newToken.access || localStorage.getItem("access_token")
+      }`;
   } else {
     customHeaders.Authorization = `Bearer ${accessToken}`;
   }

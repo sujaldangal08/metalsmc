@@ -3,20 +3,14 @@ import UnderlineShape from "@/components/shape/underline";
 import { metaObject } from "@/config/site.config";
 import Image from "next/image";
 import SignInForm from "./sign-in-form";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import withoutAuth from "@/lib/hoc/withoutAuth";
+import { handleGoogleSignin } from "@/lib/auth";
 
 export const metadata = {
   ...metaObject("Sign In"),
 };
 
-export default function SignIn() {
-  const access_token = cookies().get("access_token");
-
-  if (access_token) {
-    redirect("/");
-  }
-
+function SignIn() {
   return (
     <AuthWrapperOne
       title={
@@ -54,3 +48,5 @@ export default function SignIn() {
     </AuthWrapperOne>
   );
 }
+
+export default withoutAuth(SignIn);

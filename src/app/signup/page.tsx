@@ -3,12 +3,13 @@ import UnderlineShape from "@/components/shape/underline";
 import SignUpForm from "./sign-up-form";
 import AuthWrapperOne from "@/app/shared/auth-layout/auth-wrapper-one";
 import { metaObject } from "@/config/site.config";
+import withoutAuth from "@/lib/hoc/withoutAuth";
 
 export const metadata = {
   ...metaObject("Sign Up 1"),
 };
 
-export default function SignUp() {
+function SignUp() {
   return (
     <AuthWrapperOne
       title={
@@ -44,3 +45,5 @@ export default function SignUp() {
     </AuthWrapperOne>
   );
 }
+
+export default withoutAuth(SignUp);

@@ -5,7 +5,7 @@ import { Text, Title } from "@/components/ui/text";
 import logoImgText from "@public/logo-primary-text.svg";
 import logoImg from "@public/logo-primary.svg";
 import Image from "next/image";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import { PiAppleLogoFill, PiArrowLeftBold } from "react-icons/pi";
@@ -31,7 +31,9 @@ export default function AuthWrapperOne({
   isSocialLoginActive?: boolean;
   isSignIn?: boolean;
 }) {
-  function handleSignIn() {
+  // const { status } = useSession();
+
+  const handleSignIn = () => {
     toast.error(
       <Text>
         This is only demo purpose, click on the{" "}
@@ -41,7 +43,7 @@ export default function AuthWrapperOne({
         button to login.
       </Text>
     );
-  }
+  };
   return (
     <>
       <Link
@@ -102,6 +104,7 @@ export default function AuthWrapperOne({
                     variant="outline"
                     onClick={() => signIn("google")}
                     className="h-11 w-full"
+                    // disabled={status === "loading"}
                   >
                     <FcGoogle className="me-2 h-4 w-4 shrink-0" />
                     <span className="truncate">Signin With Google</span>

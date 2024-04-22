@@ -3447,6 +3447,11 @@ jose@^4.11.4, jose@^4.15.5:
   resolved "https://registry.yarnpkg.com/jose/-/jose-4.15.5.tgz#6475d0f467ecd3c630a1b5dadd2735a7288df706"
   integrity sha512-jc7BFxgKPKi94uOvEmzlSWFFe2+vASyXaKUpdQKatWAESU2MWjDfFf0fdfc83CDKcA5QecabZeNLyfhe3yKNkg==
 
+jose@^5.2.4:
+  version "5.2.4"
+  resolved "https://registry.yarnpkg.com/jose/-/jose-5.2.4.tgz#c0d296caeeed0b8444a8b8c3b68403d61aa4ed72"
+  integrity sha512-6ScbIk2WWCeXkmzF6bRPmEuaqy1m8SbsRFMa/FLrSCkGIhj8OLVG/IH+XHVmNMx/KUo8cVWEE6oKR4dJ+S0Rkg==
+
 jotai@2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/jotai/-/jotai-2.6.1.tgz#ece33a50b604e41b0134f94dd621e55d1bdc66f7"

@@ -1,4 +1,4 @@
-import instance, { fileUploadInstance } from "./baseUrl";
+import instance, { fileUploadInstance } from "./axios.config";
 
 type Token = {
   access: string | null;
@@ -30,6 +30,25 @@ export const api = {
       });
     } else {
       return instance.post<T>(endpoint, body, {
+        headers: { ...customHeaders, ...options?.headers },
+      });
+    }
+  },
+  patch: async <T, S>(
+    endpoint: string,
+    body: S,
+    options?: {
+      isFileUpload: boolean;
+      headers?: object;
+    }
+  ) => {
+    const customHeaders = await getHeadersWithAccessToken();
+    if (options?.isFileUpload) {
+      return fileUploadInstance.put<T>(endpoint, body, {
+        headers: { ...customHeaders, ...options.headers },
+      });
+    } else {
+      return instance.put<T>(endpoint, body, {
         headers: { ...customHeaders, ...options?.headers },
       });
     }

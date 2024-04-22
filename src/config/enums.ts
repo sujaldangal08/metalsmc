@@ -26,3 +26,14 @@ export enum CouponType {
   PERCENTAGE = 'percentage',
   FREE_SHIPPING = 'free_shipping',
 }
+
+export enum ROLES {
+  Administrator = 'Administrator',
+  Manager = 'Manager',
+  Sales = 'Sales',
+  Support = 'Support',
+  Developer = 'Developer',
+  HRD = 'HR Department',
+  RestrictedUser = 'Restricted User',
+  Customer = 'Customer',
+};

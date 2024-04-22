@@ -1,78 +1,83 @@
+"use server";
+
 import axios from "axios";
 import { Account } from "next-auth";
 import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
+import { AuthTokenExpireTime } from "./enums/auth.enums";
 
-const accessTokenExpireTime = 10 * 60 * 60 * 1000;
-const refreshTokenExpireTime = 7 * 24 * 60 * 60 * 1000;
-
+/**
+ * Handles the Google Sign-in process and sets the session and refresh token cookies.
+ *
+ * @param {Account} account - The account object obtained from the Google Sign-in process.
+ * @returns {Promise<boolean>} A promise that resolves to true if the operation is successful.
+ */
 export const handleGoogleSignin = async (account: Account) => {
     const id_token = account?.id_token;
+
     const response = await axios.post(`${process.env.API_URL}/api/v1/oauth/google`, {
         token: id_token,
-    })
+    });
 
     const { access_token, refresh_token } = response.data;
 
-    // Create the session
-    const accessTokenExpireDate = new Date(Date.now() + accessTokenExpireTime);
-    const refreshTokenExpireDate = new Date(Date.now() + refreshTokenExpireTime);
+    const accessTokenExpireDate = new Date(Date.now() + AuthTokenExpireTime.SESSION);
+    const refreshTokenExpireDate = new Date(Date.now() + AuthTokenExpireTime.REFRESH_TOKEN);
 
-    // Save the session
     cookies().set('session', access_token, { expires: accessTokenExpireDate, httpOnly: true });
     cookies().set('refresh_token', refresh_token, { expires: refreshTokenExpireDate, httpOnly: true });
 
-    console.log(id_token, response.data);
     return true;
-}
+};
 
-export const handleFacebookSignin = async (account: Account) => {
-    // Haven't got facebook signin endpoint yet
-    return true;
-}
-
+/**
+ * Logs out the user by clearing the session cookie.
+ */
 export async function logout() {
-    // Destroy the session
     cookies().set("session", "", { expires: new Date(0) });
 }
 
+/**
+ * Retrieves the current session and refreshes the access token if necessary.
+ *
+ * @returns {Promise<any>} A promise that resolves with the session object or null if the session is not valid.
+ */
 export async function getSession() {
-    const session: any = cookies().get("session");
+    const session = cookies().get("session")?.value;
+
     if (!session) return null;
 
-    if (session.expires < new Date()) {
-        const newAccessToken = await refreshAccessToken();
-        if (newAccessToken) {
-            session.access_token = newAccessToken;
-        } else {
-            return null;
-        }
+    const accessTokenExpireDate = new Date(Date.now() + AuthTokenExpireTime.SESSION);
+    const newAccessToken = await refreshAccessToken();
+
+    if (newAccessToken) {
+        cookies().set('session', newAccessToken, { expires: accessTokenExpireDate, httpOnly: true });
+        return newAccessToken;
     }
 
     return session;
 }
 
+/**
+ * Refreshes the access token using the refresh token.
+ *
+ * @returns {Promise<string|null>} A promise that resolves with the new access token or null if the refresh token is not available or the refresh fails.
+ */
 export const refreshAccessToken = async () => {
     const refreshToken = cookies().get('refresh_token')?.value;
+
     if (!refreshToken) {
-        return null; // No refresh token available
+        return null;
     }
 
     try {
-        // Call the API to refresh the access token using the refresh token
         const response = await axios.post(`${process.env.API_URL}/api/v1/oauth/refresh`, {
             refresh_token: refreshToken,
         });
 
         const { access_token, refresh_token: newRefreshToken } = response.data;
 
-        // Save the updated session
-        cookies().set('session', access_token, { expires: new Date(Date.now() + accessTokenExpireTime), httpOnly: true });
-
-
-        // Update the refresh token cookie if a new refresh token was issued
         if (newRefreshToken) {
-            const refreshTokenExpires = new Date(Date.now() + refreshTokenExpireTime); // 7 days
+            const refreshTokenExpires = new Date(Date.now() + AuthTokenExpireTime.REFRESH_TOKEN);
             cookies().set('refresh_token', newRefreshToken, { expires: refreshTokenExpires, httpOnly: true });
         }
 
@@ -82,18 +87,3 @@ export const refreshAccessToken = async () => {
         return null;
     }
 };
-
-
-export async function updateSession(request: NextRequest) {
-    const session = request.cookies.get("session")?.value;
-    if (!session) return;
-
-    const res = NextResponse.next();
-    res.cookies.set({
-        name: "session",
-        value: session,
-        httpOnly: true,
-        expires: accessTokenExpireTime,
-    });
-    return res;
-}

@@ -8,6 +8,7 @@ const withAuth = <T extends object>(
   const AuthenticatedComponent: React.FC<T> = async (props) => {
     const access_token = await getSession();
 
+    console.log(access_token);
     if (!access_token) {
       redirect("/signin");
     }

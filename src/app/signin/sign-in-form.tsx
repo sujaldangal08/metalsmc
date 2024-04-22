@@ -7,9 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Password } from "@/components/ui/password";
 import { Text } from "@/components/ui/text";
 import { routes } from "@/config/routes";
-import { signInFn } from "@/features/services/auth";
+import { signInFn } from "@/features/api/auth";
 import { LoginSchema, loginSchema } from "@/utils/validators/login.schema";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler } from "react-hook-form";
 import { PiArrowRightBold } from "react-icons/pi";
@@ -23,10 +24,11 @@ const initialValues: LoginSchema = {
 export default function SignInForm() {
   //TODO: why we need to reset it here
   const [reset, setReset] = useState();
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
     const res = await signInFn({ email: data.email, password: data.password });
-    console.log(res);
+    router.push("/");
   };
 
   return (

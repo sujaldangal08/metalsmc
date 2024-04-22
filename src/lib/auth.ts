@@ -1,8 +1,10 @@
 import axios from "axios";
-import { SignJWT, jwtVerify } from "jose";
 import { Account } from "next-auth";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+
+const accessTokenExpireTime = 10 * 60 * 60 * 1000;
+const refreshTokenExpireTime = 7 * 24 * 60 * 60 * 1000;
 
 export const handleGoogleSignin = async (account: Account) => {
     const id_token = account?.id_token;
@@ -10,16 +12,17 @@ export const handleGoogleSignin = async (account: Account) => {
         token: id_token,
     })
 
-    const user = { token: response.data.token };
+    const { access_token, refresh_token } = response.data;
 
     // Create the session
-    const expires = new Date(Date.now() + 10 * 60 * 60 * 1000);
-    const encryptedSession = await encrypt({ user, expires });
+    const accessTokenExpireDate = new Date(Date.now() + accessTokenExpireTime);
+    const refreshTokenExpireDate = new Date(Date.now() + refreshTokenExpireTime);
 
     // Save the session
-    cookies().set('session', encryptedSession, { expires, httpOnly: true });
+    cookies().set('session', access_token, { expires: accessTokenExpireDate, httpOnly: true });
+    cookies().set('refresh_token', refresh_token, { expires: refreshTokenExpireDate, httpOnly: true });
 
-    console.log(response.data);
+    console.log(id_token, response.data);
     return true;
 }
 
@@ -28,57 +31,69 @@ export const handleFacebookSignin = async (account: Account) => {
     return true;
 }
 
-
-const secretKey = process.env.NEXTAUTH_SECRET;
-const key = new TextEncoder().encode(secretKey);
-
-export async function encrypt(payload: any) {
-    return await new SignJWT(payload)
-        .setProtectedHeader({ alg: "HS256" })
-        .setIssuedAt()
-        .setExpirationTime("10 hr from now")
-        .sign(key);
-}
-
-export async function decrypt(input: string): Promise<any> {
-    try {
-        const { payload } = await jwtVerify(input, key, {
-            algorithms: ["HS256"],
-        });
-
-        return payload;
-    } catch (err) {
-        console.log(err);
-    }
-
-    return undefined;
-}
-
 export async function logout() {
     // Destroy the session
     cookies().set("session", "", { expires: new Date(0) });
 }
 
 export async function getSession() {
-    const session = cookies().get("session")?.value;
+    const session: any = cookies().get("session");
     if (!session) return null;
-    return await decrypt(session);
+
+    if (session.expires < new Date()) {
+        const newAccessToken = await refreshAccessToken();
+        if (newAccessToken) {
+            session.access_token = newAccessToken;
+        } else {
+            return null;
+        }
+    }
+
+    return session;
 }
+
+export const refreshAccessToken = async () => {
+    const refreshToken = cookies().get('refresh_token')?.value;
+    if (!refreshToken) {
+        return null; // No refresh token available
+    }
+
+    try {
+        // Call the API to refresh the access token using the refresh token
+        const response = await axios.post(`${process.env.API_URL}/api/v1/oauth/refresh`, {
+            refresh_token: refreshToken,
+        });
+
+        const { access_token, refresh_token: newRefreshToken } = response.data;
+
+        // Save the updated session
+        cookies().set('session', access_token, { expires: new Date(Date.now() + accessTokenExpireTime), httpOnly: true });
+
+
+        // Update the refresh token cookie if a new refresh token was issued
+        if (newRefreshToken) {
+            const refreshTokenExpires = new Date(Date.now() + refreshTokenExpireTime); // 7 days
+            cookies().set('refresh_token', newRefreshToken, { expires: refreshTokenExpires, httpOnly: true });
+        }
+
+        return access_token;
+    } catch (error) {
+        console.error('Failed to refresh access token:', error);
+        return null;
+    }
+};
 
 
 export async function updateSession(request: NextRequest) {
     const session = request.cookies.get("session")?.value;
     if (!session) return;
 
-    // Refresh the session so it doesn't expire
-    const parsed = await decrypt(session);
-    parsed.expires = new Date(Date.now() + 10 * 1000);
     const res = NextResponse.next();
     res.cookies.set({
         name: "session",
-        value: await encrypt(parsed),
+        value: session,
         httpOnly: true,
-        expires: parsed.expires,
+        expires: accessTokenExpireTime,
     });
     return res;
 }

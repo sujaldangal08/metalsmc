@@ -6,9 +6,9 @@ type Token = {
 };
 
 type Options = {
-  isFileUpload: boolean
-  headers: object
-}
+  isFileUpload: boolean;
+  headers: object;
+};
 
 export const api = {
   get: async <T>(endpoint: string, params?: object) => {
@@ -18,11 +18,7 @@ export const api = {
       headers,
     });
   },
-  post: async <T, S>(
-    endpoint: string,
-    body: S,
-    options?: Options
-  ) => {
+  post: async <T, S>(endpoint: string, body: S, options?: Options) => {
     const customHeaders = await getHeadersWithAccessToken();
     if (options?.isFileUpload) {
       return fileUploadInstance.post<T>(endpoint, body, {
@@ -53,6 +49,25 @@ export const api = {
       });
     }
   },
+  patch: async <T, S>(
+    endpoint: string,
+    body: S,
+    options?: {
+      isFileUpload: boolean;
+      headers?: object;
+    }
+  ) => {
+    const customHeaders = await getHeadersWithAccessToken();
+    if (options?.isFileUpload) {
+      return fileUploadInstance.patch<T>(endpoint, body, {
+        headers: { ...customHeaders, ...options.headers },
+      });
+    } else {
+      return instance.put<T>(endpoint, body, {
+        headers: { ...customHeaders, ...options?.headers },
+      });
+    }
+  },
   delete: async <T>(endpoint: string, headers?: object) => {
     const customHeaders = await getHeadersWithAccessToken();
     return instance.delete<T>(endpoint, {
@@ -72,8 +87,9 @@ const getHeadersWithAccessToken = async (): Promise<object> => {
 
   if (isAccessTokenExpired()) {
     const newToken = await getNewAccessToken();
-    customHeaders.Authorization = `Bearer ${newToken.access || localStorage.getItem("access_token")
-      }`;
+    customHeaders.Authorization = `Bearer ${
+      newToken.access || localStorage.getItem("access_token")
+    }`;
   } else {
     customHeaders.Authorization = `Bearer ${accessToken}`;
   }

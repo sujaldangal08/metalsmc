@@ -39,9 +39,9 @@ export async function logout() {
 /**
  * Retrieves the current session and refreshes the access token if necessary.
  *
- * @returns {Promise<any>} A promise that resolves with the session object or null if the session is not valid.
+ * @returns {Promise<string | null>} A promise that resolves with the session object or null if the session is not valid.
  */
-export async function getSession() {
+export async function getSession(): Promise<string | null> {
     const session = cookies().get("session")?.value;
 
     if (!session) return null;

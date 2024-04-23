@@ -8,6 +8,7 @@ export const getUserDetails = async () => {
 }
 
 export const updateUserDetails = async <T = Partial<IUser>>(body: T) => {
-    const response = await api.patch<UpdateUserResponse, T>("/profile", body);
+    const response = await api.request<UpdateUserResponse, T>({ endpoint: "/profile", body: body, method: "PATCH" });
     return response.data;
 }
+

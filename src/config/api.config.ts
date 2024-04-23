@@ -1,130 +1,133 @@
-import instance, { fileUploadInstance } from "./axios.config";
+import { getSession } from "@/lib/auth";
+import { AxiosService, config } from "./axios.config";
 
-type Token = {
-  access: string | null;
-  refresh: string | null;
-};
+/**
+ * Defines the type for HTTP request methods.
+ */
+type RequestMethod = "POST" | "PUT" | "PATCH" | "DELETE";
 
-type Options = {
-  isFileUpload: boolean
-  headers: object
+/**
+ * Represents options for making an HTTP request.
+ * @template S The type of the request body.
+ */
+interface RequestOptions<S> {
+  /** The endpoint URL for the request. */
+  endpoint: string;
+  /** The HTTP method for the request. */
+  method: RequestMethod;
+  /** The body of the request. */
+  body: S;
+  /** Query parameters for the request. */
+  params?: Record<string, any>;
+  /** Additional options for the request. */
+  options?: {
+    /** Custom headers for the request. */
+    headers?: object;
+    /** Indicates whether the request involves file upload. */
+    isFileUpload?: boolean;
+  };
 }
 
-export const api = {
-  get: async <T>(endpoint: string, params?: object) => {
-    const headers = await getHeadersWithAccessToken();
-    return instance.get<T>(endpoint, {
-      params,
-      headers,
-    });
-  },
-  post: async <T, S>(
-    endpoint: string,
-    body: S,
-    options?: Options
-  ) => {
-    const customHeaders = await getHeadersWithAccessToken();
-    if (options?.isFileUpload) {
-      return fileUploadInstance.post<T>(endpoint, body, {
-        headers: { ...customHeaders, ...options.headers },
-      });
-    } else {
-      return instance.post<T>(endpoint, body, {
-        headers: { ...customHeaders, ...options?.headers },
-      });
-    }
-  },
-  patch: async <T, S>(
-    endpoint: string,
-    body: S,
-    options?: {
-      isFileUpload: boolean;
-      headers?: object;
-    }
-  ) => {
-    const customHeaders = await getHeadersWithAccessToken();
-    if (options?.isFileUpload) {
-      return fileUploadInstance.put<T>(endpoint, body, {
-        headers: { ...customHeaders, ...options.headers },
-      });
-    } else {
-      return instance.put<T>(endpoint, body, {
-        headers: { ...customHeaders, ...options?.headers },
-      });
-    }
-  },
-  put: async <T, S>(
-    endpoint: string,
-    body: S,
-    options?: {
-      isFileUpload: boolean;
-      headers?: object;
-    }
-  ) => {
-    const customHeaders = await getHeadersWithAccessToken();
-    if (options?.isFileUpload) {
-      return fileUploadInstance.put<T>(endpoint, body, {
-        headers: { ...customHeaders, ...options.headers },
-      });
-    } else {
-      return instance.put<T>(endpoint, body, {
-        headers: { ...customHeaders, ...options?.headers },
-      });
-    }
-  },
-  delete: async <T>(endpoint: string, headers?: object) => {
-    const customHeaders = await getHeadersWithAccessToken();
-    return instance.delete<T>(endpoint, {
-      headers: { ...customHeaders, ...headers },
-    });
-  },
-};
+/**
+ * A service class for handling API requests.
+ * @class
+ */
+class ApiService {
+  /**
+   * The AxiosService instance used for making API requests.
+   * @private
+   * @type {AxiosService}
+   */
+  private axiosService;
 
-// Function to get headers with access token
-const getHeadersWithAccessToken = async (): Promise<object> => {
-  let customHeaders: Record<string, string> = {};
-  let accessToken = localStorage.getItem("access_token");
+  /**
+   * Creates an instance of the ApiService class.
+   * @constructor
+   */
+  constructor() {
+    this.axiosService = AxiosService.getInstance(config);
+  }
 
-  if (!accessToken) {
+  /**
+   * Sends a GET request to the specified endpoint.
+   * @async
+   * @template T - The expected response type.
+   * @param {string} endpoint - The API endpoint URL.
+   * @param {Record<string, any>} [params] - Request parameters to be included in the query string.
+   * @returns {Promise<T>} A promise that resolves with the response data.
+   */
+  async get<T>(endpoint: string, params?: Record<string, any>) {
+    const headers = await this.getHeadersWithAccessToken();
+    return this.axiosService.axios.get<T>(endpoint, { params, headers });
+  }
+
+  /**
+  * Makes an asynchronous HTTP request.
+  * @template T The expected response type.
+  * @template S The type of the request body.
+  * @param {RequestOptions<S>} params The options for the request.
+  */
+  async request<T, S>({
+    options,
+    method,
+    endpoint,
+    body,
+    params,
+  }: RequestOptions<S>) {
+    // Get headers with access token
+    const headers = await this.getHeadersWithAccessToken();
+    const customHeaders = { ...headers, ...options?.headers };
+
+    // Determine whether the request involves file upload
+    if (options?.isFileUpload) {
+      // Send file upload request
+      return this.axiosService.fileUpload.request<T>({
+        url: endpoint,
+        method,
+        data: body,
+        params,
+        headers: customHeaders,
+      });
+    } else {
+      // Send regular request
+      return this.axiosService.axios.request<T>({
+        url: endpoint,
+        method,
+        data: body,
+        params,
+        headers: customHeaders,
+      });
+    }
+  }
+
+  /**
+   * Sends a DELETE request to the specified endpoint.
+   * @async
+   * @template T - The expected response type.
+   * @param {string} endpoint - The API endpoint URL.
+   * @param {Record<string, string>} [headers] - Additional headers to be included in the request.
+   * @returns {Promise<T>} A promise that resolves with the response data.
+   */
+  async delete<T>(endpoint: string, headers?: Record<string, string>) {
+    const customHeaders = await this.getHeadersWithAccessToken();
+    return this.axiosService.axios.delete<T>(endpoint, { headers: { ...customHeaders, ...headers } });
+  }
+
+  /**
+   * Retrieves the headers with the access token.
+   * @private
+   * @async
+   * @returns {Promise<Record<string, string>>} A promise that resolves with the headers.
+   */
+  private async getHeadersWithAccessToken() {
+    const token = await getSession();
+    const customHeaders: Record<string, string> = { "Authorization": `Bearer ${token}` };
     return customHeaders;
   }
+}
 
-  if (isAccessTokenExpired()) {
-    const newToken = await getNewAccessToken();
-    customHeaders.Authorization = `Bearer ${newToken.access || localStorage.getItem("access_token")
-      }`;
-  } else {
-    customHeaders.Authorization = `Bearer ${accessToken}`;
-  }
-
-  return customHeaders;
-};
-
-// Get a new access token ==============
-// =====================================
-const getNewAccessToken = async (): Promise<Token> => {
-  const response = await instance.post<any>(
-    "/school/refresh",
-    {
-      refresh: localStorage.getItem("refresh_token"),
-    },
-    { withCredentials: true }
-  );
-
-  //set tokens to local storage
-  localStorage.setItem("access_token", response.data.access!);
-  localStorage.setItem("issued_at", Date.now().toString());
-  localStorage.setItem("refresh_token", response.data.refresh!);
-
-  return response.data;
-};
-
-// Function to check if access token is expired or not ========
-// ==================================================
-const isAccessTokenExpired = (): boolean => {
-  const issuedAt = Number(localStorage.getItem("issued_at"));
-  const expirationTime = issuedAt + 3600 * 1000;
-  const currentTime = Date.now();
-
-  return currentTime > expirationTime;
-};
+/**
+ * The instance of the ApiService class.
+ * @type {ApiService}
+ */
+export const api = new ApiService();

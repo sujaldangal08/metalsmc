@@ -1,22 +1,30 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { UserLoginBody, UserRegisterBody, VerifyOtpBody } from "./types";
+import axios from "axios";
 
 const baseURL = process.env.API_URL;
 
-export async function signInFn(body: { email: string, password: string }) {
-    const response = await fetch(`${baseURL}/api/v1/login`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': "application/json",
-        },
-        body: JSON.stringify(body)
-    });
-
-    const jsonResponse = await response.json();
+export async function signInFn(body: UserLoginBody) {
+    const response = await axios.post(`${baseURL}/api/v1/login`,
+        body
+    );
 
     //save tokens in the cookies
-    cookies().set('session', jsonResponse.access_token, { httpOnly: true, expires: new Date(Date.now() + 10 * 60 * 60 * 1000) });
+    cookies().set('session', response.data.access_token, { httpOnly: true, expires: new Date(Date.now() + 10 * 60 * 60 * 1000) });
 
-    return jsonResponse;
+    return response.data;
 }
+
+export async function registerUser(body: UserRegisterBody) {
+    const response = await axios.post(`${baseURL}/api/v1/register`, body);
+    return response.data;
+}
+
+export async function verifyOtp(body: VerifyOtpBody) {
+    const response = await axios.post(`${baseURL}/api/v1/verify`, body);
+    return response.data;
+}
+
+

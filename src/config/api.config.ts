@@ -62,11 +62,11 @@ class ApiService {
   }
 
   /**
-  * Makes an asynchronous HTTP request.
-  * @template T The expected response type.
-  * @template S The type of the request body.
-  * @param {RequestOptions<S>} params The options for the request.
-  */
+   * Makes an asynchronous HTTP request.
+   * @template T The expected response type.
+   * @template S The type of the request body.
+   * @param {RequestOptions<S>} params The options for the request.
+   */
   async request<T, S>({
     options,
     method,
@@ -110,7 +110,9 @@ class ApiService {
    */
   async delete<T>(endpoint: string, headers?: Record<string, string>) {
     const customHeaders = await this.getHeadersWithAccessToken();
-    return this.axiosService.axios.delete<T>(endpoint, { headers: { ...customHeaders, ...headers } });
+    return this.axiosService.axios.delete<T>(endpoint, {
+      headers: { ...customHeaders, ...headers },
+    });
   }
 
   /**
@@ -121,7 +123,9 @@ class ApiService {
    */
   private async getHeadersWithAccessToken() {
     const token = await getSession();
-    const customHeaders: Record<string, string> = { "Authorization": `Bearer ${token}` };
+    const customHeaders: Record<string, string> = {
+      Authorization: `Bearer ${token}`,
+    };
     return customHeaders;
   }
 }

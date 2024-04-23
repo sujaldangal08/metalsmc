@@ -1,4 +1,4 @@
-import { api } from "@/features/api";
+import { api } from "@/config/api.config";
 import {
   PermanentDeleteMaintenanceResponse,
   UpdateMaintenanceBody,
@@ -22,10 +22,10 @@ export async function restoreMaintenance({
   id: string;
   body: RestoreMaintenanceBody;
 }) {
-  const response = await api.post<
+  const response = await api.request<
     RestoreMaintenanceResponse,
     RestoreMaintenanceBody
-  >(`${baseEnd}/restore/${id}`, body);
+  >({ endpoint: `${baseEnd}/restore/${id}`, method: "POST", body });
   return response.data;
 }
 
@@ -45,10 +45,10 @@ export async function updateMaintenance({
   id: string;
   body: UpdateMaintenanceBody;
 }) {
-  const response = await api.patch<
+  const response = await api.request<
     UpdateMaintenanceResponse,
     UpdateMaintenanceBody
-  >(`${baseEnd}/${id}`, body);
+  >({ endpoint: `${baseEnd}/${id}`, body, method: "PATCH" });
   return response.data;
 }
 
@@ -66,10 +66,10 @@ export async function createMaintenance({
 }: {
   body: CreateMaintenanceBody;
 }) {
-  const response = await api.post<
+  const response = await api.request<
     CreateMaintenanceResponse,
     CreateMaintenanceBody
-  >(`${baseEnd}`, body);
+  >({ endpoint: `${baseEnd}`, method: "POST", body });
   return response.data;
 }
 

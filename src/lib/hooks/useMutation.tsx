@@ -1,6 +1,5 @@
+import { RequestMethod, api } from "@/config/api.config";
 import { useState } from "react";
-import axios, { AxiosResponse } from "axios";
-import { RequestMethod } from "@/config/api.config";
 
 interface UseMutationOptions {
   url: string;
@@ -8,23 +7,28 @@ interface UseMutationOptions {
   initialData?: any;
 }
 
-const useMutation = <T,>({ url, method, initialData }: UseMutationOptions) => {
-  const [data, setData] = useState<T | undefined>(initialData);
+const useMutation = <T, R>({
+  url,
+  method,
+  initialData,
+}: UseMutationOptions) => {
+  const [data, setData] = useState(initialData);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  const mutate = async (requestData: any) => {
+  const mutate = async (requestData: T) => {
     setIsLoading(true);
     setIsError(false);
 
     try {
-      const response: AxiosResponse<T> = await axios.request({
-        url,
+      const response = await api.request<R, T>({
+        endpoint: url,
         method,
-        data: requestData,
+        body: requestData,
       });
 
       setData(response.data);
+      return response;
     } catch (error) {
       setIsError(true);
     } finally {

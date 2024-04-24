@@ -22,11 +22,8 @@ export const handleGoogleSignin = async (account: Account) => {
 
         const { access_token, refresh_token } = response.data;
 
-        const accessTokenExpireDate = new Date(Date.now() + AuthTokenExpireTime.SESSION);
-        const refreshTokenExpireDate = new Date(Date.now() + AuthTokenExpireTime.REFRESH_TOKEN);
-
-        Cookies.set('session', access_token, { expires: accessTokenExpireDate });
-        Cookies.set('refresh_token', refresh_token, { expires: refreshTokenExpireDate, httpOnly: true });
+        setSessionCookie(access_token);
+        setRefreshTokenCookie(refresh_token);
 
     } catch (err: any) {
         console.log(err);
@@ -59,16 +56,26 @@ export async function getSession(): Promise<string | null> {
     const session = await Cookies.get("session");
     if (!session) return null;
 
-    const accessTokenExpireDate = new Date(Date.now() + AuthTokenExpireTime.SESSION);
     const newAccessToken = await refreshAccessToken();
 
     if (newAccessToken) {
-        Cookies.set('session', newAccessToken, { expires: accessTokenExpireDate, httpOnly: true });
+        setSessionCookie(newAccessToken);
         return newAccessToken;
     }
 
     return session;
 }
+
+export const setSessionCookie = (session: string) => {
+    const accessTokenExpireDate = new Date(Date.now() + AuthTokenExpireTime.SESSION);
+    Cookies.set('session', session, { expires: accessTokenExpireDate })
+}
+
+export const setRefreshTokenCookie = (session: string) => {
+    const refreshTokenExpireDate = new Date(Date.now() + AuthTokenExpireTime.REFRESH_TOKEN);
+    Cookies.set('refresh_token', session, { expires: refreshTokenExpireDate })
+}
+
 
 /**
  * Refreshes the access token using the refresh token.
@@ -90,8 +97,7 @@ export const refreshAccessToken = async () => {
         const { access_token, refresh_token: newRefreshToken } = response.data;
 
         if (newRefreshToken) {
-            const refreshTokenExpires = new Date(Date.now() + AuthTokenExpireTime.REFRESH_TOKEN);
-            Cookies.set('refresh_token', newRefreshToken, { expires: refreshTokenExpires, httpOnly: true });
+            setRefreshTokenCookie(newRefreshToken);
         }
 
         return access_token;

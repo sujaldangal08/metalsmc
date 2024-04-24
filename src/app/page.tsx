@@ -1,20 +1,119 @@
 "use client";
 
-import { getUserDetails } from "@/features/api/user";
+import TwoFactorAuth from "@/components/auth/TwoFactorAuth";
 import withAuth from "@/lib/hoc/withAuth";
-import { useEffect } from "react";
+import useMutation from "@/lib/hooks/useMutation";
+import { useState } from "react";
+import toast from "react-hot-toast";
+
+interface GenerateQrRequestBody {
+  user: number;
+}
+
+interface GenerateQrResponse {
+  message: string;
+  qr_code_url: string;
+  secret_key: string;
+}
+
+interface DisableTwoFactorAuthRequestBody extends GenerateQrRequestBody {}
+interface DisabledTwoFactorAuthResponse {
+  status: string;
+  message: string;
+  data: any;
+}
 
 function HomePage() {
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const response = await getUserDetails();
-  //     console.log(response);
-  //   };
+  const [secret, setSecret] = useState({
+    qr_code_url: "",
+    secret_key: "",
+  });
+  const [openModal, setOpenModal] = useState(false);
+  const { mutate: generateQrCodeMn, isLoading: qrGenerating } = useMutation<
+    GenerateQrRequestBody,
+    GenerateQrResponse
+  >({
+    url: "/2fa/generate",
+    method: "POST",
+  });
 
-  //   fetchData();
-  // }, []);
+  const { mutate: disableTwoFactorAuthMn, isLoading: disabling2Fa } =
+    useMutation<DisableTwoFactorAuthRequestBody, DisabledTwoFactorAuthResponse>(
+      {
+        url: "/2fa/disable",
+        method: "POST",
+      }
+    );
 
-  return <div>Hello world....</div>;
+  const generateQrCode = async ({ user_id }: { user_id: number }) => {
+    try {
+      const response = await generateQrCodeMn({ user: user_id });
+
+      console.log(response);
+
+      if (response?.status === 200) {
+        setOpenModal(true);
+        console.log(
+          "Homepage: " + response.data.qr_code_url,
+          response.data.secret_key
+        );
+        setSecret({
+          secret_key: response.data.secret_key,
+          qr_code_url: response.data.qr_code_url,
+        });
+      }
+    } catch (error: any) {
+      const resMessage = error.response && error.response.data;
+      toast.error(resMessage, {
+        position: "top-right",
+      });
+    }
+  };
+
+  const disableTwoFactorAuth = async (user_id: number) => {
+    try {
+      await disableTwoFactorAuthMn({ user: user_id });
+      toast.success("Two Factor Authentication Disabled", {
+        position: "top-right",
+      });
+    } catch (error: any) {
+      const resMessage = error.response && error.response.data;
+      toast.error(resMessage, {
+        position: "top-right",
+      });
+    }
+  };
+
+  return (
+    <div>
+      <h2>Setup Two factor auth</h2>
+      <button
+        disabled={qrGenerating}
+        className="bg-green-500 py-1.5 px-3 rounded text-white"
+        onClick={() => generateQrCode({ user_id: 1 })}
+      >
+        Setup 2fa
+      </button>
+
+      <h2>Setup Two factor auth</h2>
+      <button
+        disabled={disabling2Fa}
+        className="bg-red-500 py-1.5 px-3 rounded text-white"
+        onClick={() => disableTwoFactorAuth(1)}
+      >
+        Disable 2fa
+      </button>
+
+      {openModal && (
+        <TwoFactorAuth
+          secret_key={secret.secret_key}
+          qr_code_url={secret.qr_code_url}
+          user_id={1}
+          closeModal={() => setOpenModal(false)}
+        />
+      )}
+    </div>
+  );
 }
 
 export default withAuth(HomePage);

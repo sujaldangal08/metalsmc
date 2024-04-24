@@ -1,13 +1,10 @@
-import Image from "next/image";
-import UnderlineShape from "@/components/shape/underline";
-import SignUpForm from "./sign-up-form";
-import AuthWrapperOne from "@/app/shared/auth-layout/auth-wrapper-one";
-import { metaObject } from "@/config/site.config";
-import withoutAuth from "@/lib/hoc/withoutAuth";
+"use client";
 
-export const metadata = {
-  ...metaObject("Sign Up 1"),
-};
+import AuthWrapperOne from "@/app/shared/auth-layout/auth-wrapper-one";
+import UnderlineShape from "@/components/shape/underline";
+import withoutAuth from "@/lib/hoc/withoutAuth";
+import Image from "next/image";
+import SignUpForm from "./sign-up-form";
 
 function SignUp() {
   return (

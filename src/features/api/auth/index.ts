@@ -1,10 +1,10 @@
-"use server";
+"use client";
 
-import { cookies } from "next/headers";
+import Cookies from "js-cookie";
 import { UserLoginBody, UserRegisterBody, VerifyOtpBody } from "./types";
 import axios from "axios";
 
-const baseURL = process.env.API_URL;
+const baseURL = "http://20.192.30.237";
 
 export async function signInFn(body: UserLoginBody) {
     const response = await axios.post(`${baseURL}/api/v1/login`,
@@ -12,7 +12,7 @@ export async function signInFn(body: UserLoginBody) {
     );
 
     //save tokens in the cookies
-    cookies().set('session', response.data.access_token, { httpOnly: true, expires: new Date(Date.now() + 10 * 60 * 60 * 1000) });
+    Cookies.set('session', response.data.access_token, { expires: new Date(Date.now() + 10 * 60 * 60 * 1000) });
 
     return response.data;
 }

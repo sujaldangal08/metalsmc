@@ -1,12 +1,11 @@
-import { FC, useEffect, useState } from "react";
-import QRCode from "qrcode";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { object, string, TypeOf } from "zod";
+import { setSessionCookie } from "@/lib/auth";
+import useMutation from "@/lib/hooks/useMutation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Cookies from "js-cookie";
+import { FC, useEffect } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import useStore from "../store";
-import { IUser } from "@/features/api/user/types";
-import { api } from "@/config/api.config";
+import { TypeOf, object, string } from "zod";
 
 const styles = {
   heading3: `text-xl font-semibold text-gray-900 p-4 border-b`,
@@ -21,8 +20,8 @@ const styles = {
 
 type TwoFactorAuthProps = {
   qr_code_url: string;
-  base32: string;
-  user_id: string;
+  secret_key: string;
+  user_id: number;
   closeModal: () => void;
 };
 
@@ -32,15 +31,23 @@ const twoFactorAuthSchema = object({
 
 type TwoFactorAuthInput = TypeOf<typeof twoFactorAuthSchema>;
 
+interface Verify2faResponse {
+  status: string;
+  message: string;
+  token: string;
+}
+
+interface Verify2faRequestBody {
+  otp: string;
+  user: string;
+}
+
 const TwoFactorAuth: FC<TwoFactorAuthProps> = ({
   qr_code_url,
-  base32,
+  secret_key,
   user_id,
   closeModal,
 }) => {
-  const [qrcodeUrl, setqrCodeUrl] = useState("");
-  const store = useStore();
-
   const {
     handleSubmit,
     register,
@@ -50,33 +57,31 @@ const TwoFactorAuth: FC<TwoFactorAuthProps> = ({
     resolver: zodResolver(twoFactorAuthSchema),
   });
 
-  const verifyOtp = async (token: string) => {
+  const { mutate: verifyQrMn } = useMutation<
+    Verify2faRequestBody,
+    Verify2faResponse
+  >({
+    url: "/2fa/verify",
+    method: "POST",
+  });
+
+  const verifyOtp = async (otp: string) => {
     try {
-      store.setRequestLoading(true);
-      const {
-        data: { user },
-      } = await api.post<{ otp_verified: string; user: IUser }, >(
-        "/auth/otp/verify",
-        {
-          token,
-          user_id,
-        }
-      );
-      store.setRequestLoading(false);
-      store.setAuthUser(user);
+      const response = await verifyQrMn({
+        user: String(user_id),
+        otp,
+      });
+
       closeModal();
+
+      //save new generated token in cookies
+      setSessionCookie(response?.data.token!);
+
       toast.success("Two-Factor Auth Enabled Successfully", {
         position: "top-right",
       });
     } catch (error: any) {
-      store.setRequestLoading(false);
-      const resMessage =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.response.data.detail ||
-        error.message ||
-        error.toString();
+      const resMessage = error.response && error.response.data;
       toast.error(resMessage, {
         position: "top-right",
       });
@@ -88,12 +93,9 @@ const TwoFactorAuth: FC<TwoFactorAuthProps> = ({
   };
 
   useEffect(() => {
-    QRCode.toDataURL(qr_code_url).then(setqrCodeUrl);
-  }, []);
-
-  useEffect(() => {
     setFocus("token");
   }, [setFocus]);
+
   return (
     <div
       aria-hidden={true}
@@ -124,14 +126,16 @@ const TwoFactorAuth: FC<TwoFactorAuthProps> = ({
               <div className="flex justify-center">
                 <img
                   className="block w-64 h-64 object-contain"
-                  src={qrcodeUrl}
+                  src={qr_code_url}
                   alt="qrcode url"
                 />
               </div>
             </div>
             <div>
               <h4 className={styles.heading4}>Or Enter Code Into Your App</h4>
-              <p className="text-sm">SecretKey: {base32} (Base32 encoded)</p>
+              <p className="text-sm">
+                SecretKey: {secret_key} (Base32 encoded)
+              </p>
             </div>
             <div>
               <h4 className={styles.heading4}>Verify Code</h4>

@@ -87,7 +87,7 @@ export class AxiosService {
 }
 
 export const config: Config = {
-  baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
+  baseURL: "http://20.192.30.237/api/v1",
   headers: {
     "Content-Type": "application/json",
   },

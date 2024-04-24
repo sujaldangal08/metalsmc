@@ -1,4 +1,14 @@
-import {atom} from "jotai";
+"use client";
 
+import Cookies from "js-cookie";
+import { create } from "zustand";
 
-const authProfile = atom({})
+type AuthStoreState = {
+  session: string | undefined;
+  setSession: (token: string) => void;
+}
+
+export const useAuthStore = create<AuthStoreState>((set) => ({
+  session: Cookies.get('sesssion'),
+  setSession: (token: string) => set(() => ({ session: token })),
+}));

@@ -4,6 +4,7 @@ import { IUser, UpdateUserResponse } from "./types";
 
 export const getUserDetails = async () => {
     const response = await api.get<ApiResponseType<IUser>>("/user");
+    console.log(response.data);
     return response.data;
 }
 

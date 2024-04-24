@@ -1,9 +1,10 @@
-"use server";
+"use client";
 
 import axios from "axios";
 import { Account } from "next-auth";
-import { cookies } from "next/headers";
+import Cookies from "js-cookie";
 import { AuthTokenExpireTime } from "./enums/auth.enums";
+import toast from "react-hot-toast";
 
 /**
  * Handles the Google Sign-in process and sets the session and refresh token cookies.
@@ -14,26 +15,39 @@ import { AuthTokenExpireTime } from "./enums/auth.enums";
 export const handleGoogleSignin = async (account: Account) => {
     const id_token = account?.id_token;
 
-    const response = await axios.post(`${process.env.API_URL}/api/v1/oauth/google`, {
-        token: id_token,
-    });
+    try {
+        const response = await axios.post(`${process.env.API_URL}/api/v1/oauth/google`, {
+            token: id_token,
+        });
 
-    const { access_token, refresh_token } = response.data;
+        const { access_token, refresh_token } = response.data;
 
-    const accessTokenExpireDate = new Date(Date.now() + AuthTokenExpireTime.SESSION);
-    const refreshTokenExpireDate = new Date(Date.now() + AuthTokenExpireTime.REFRESH_TOKEN);
+        const accessTokenExpireDate = new Date(Date.now() + AuthTokenExpireTime.SESSION);
+        const refreshTokenExpireDate = new Date(Date.now() + AuthTokenExpireTime.REFRESH_TOKEN);
 
-    cookies().set('session', access_token, { expires: accessTokenExpireDate, httpOnly: true });
-    cookies().set('refresh_token', refresh_token, { expires: refreshTokenExpireDate, httpOnly: true });
+        Cookies.set('session', access_token, { expires: accessTokenExpireDate });
+        Cookies.set('refresh_token', refresh_token, { expires: refreshTokenExpireDate, httpOnly: true });
+
+    } catch (err: any) {
+        console.log(err);
+        toast.error(err.message);
+
+        return false;
+    }
 
     return true;
 };
+
+export const handleFacebookSignin = async (account: Account) => {
+    // Haven't got endpoint for it ====================
+    return true;
+}
 
 /**
  * Logs out the user by clearing the session cookie.
  */
 export async function logout() {
-    cookies().set("session", "", { expires: new Date(0) });
+    Cookies.set("session", "", { expires: new Date(0) });
 }
 
 /**
@@ -42,15 +56,14 @@ export async function logout() {
  * @returns {Promise<string | null>} A promise that resolves with the session object or null if the session is not valid.
  */
 export async function getSession(): Promise<string | null> {
-    const session = cookies().get("session")?.value;
-
+    const session = await Cookies.get("session");
     if (!session) return null;
 
     const accessTokenExpireDate = new Date(Date.now() + AuthTokenExpireTime.SESSION);
     const newAccessToken = await refreshAccessToken();
 
     if (newAccessToken) {
-        cookies().set('session', newAccessToken, { expires: accessTokenExpireDate, httpOnly: true });
+        Cookies.set('session', newAccessToken, { expires: accessTokenExpireDate, httpOnly: true });
         return newAccessToken;
     }
 
@@ -63,7 +76,7 @@ export async function getSession(): Promise<string | null> {
  * @returns {Promise<string|null>} A promise that resolves with the new access token or null if the refresh token is not available or the refresh fails.
  */
 export const refreshAccessToken = async () => {
-    const refreshToken = cookies().get('refresh_token')?.value;
+    const refreshToken = Cookies.get('refresh_token');
 
     if (!refreshToken) {
         return null;
@@ -78,7 +91,7 @@ export const refreshAccessToken = async () => {
 
         if (newRefreshToken) {
             const refreshTokenExpires = new Date(Date.now() + AuthTokenExpireTime.REFRESH_TOKEN);
-            cookies().set('refresh_token', newRefreshToken, { expires: refreshTokenExpires, httpOnly: true });
+            Cookies.set('refresh_token', newRefreshToken, { expires: refreshTokenExpires, httpOnly: true });
         }
 
         return access_token;

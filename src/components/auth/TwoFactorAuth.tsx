@@ -1,12 +1,10 @@
-import { FC, useEffect, useState } from "react";
-import QRCode from "qrcode";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { object, string, TypeOf } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "react-hot-toast";
-import useStore from "../store";
-import { IUser } from "@/features/api/user/types";
 import { api } from "@/config/api.config";
+import { zodResolver } from "@hookform/resolvers/zod";
+import QRCode from "qrcode";
+import { FC, useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
+import { TypeOf, object, string } from "zod";
 
 const styles = {
   heading3: `text-xl font-semibold text-gray-900 p-4 border-b`,
@@ -39,7 +37,6 @@ const TwoFactorAuth: FC<TwoFactorAuthProps> = ({
   closeModal,
 }) => {
   const [qrcodeUrl, setqrCodeUrl] = useState("");
-  const store = useStore();
 
   const {
     handleSubmit,
@@ -52,24 +49,22 @@ const TwoFactorAuth: FC<TwoFactorAuthProps> = ({
 
   const verifyOtp = async (token: string) => {
     try {
-      store.setRequestLoading(true);
       const {
         data: { user },
-      } = await api.post<{ otp_verified: string; user: IUser }, >(
-        "/auth/otp/verify",
-        {
+      } = await api.request<any, { token: string; user_id: string }>({
+        endpoint: "/auth/otp/verify",
+        body: {
           token,
           user_id,
-        }
-      );
-      store.setRequestLoading(false);
-      store.setAuthUser(user);
+        },
+        method: "POST",
+      });
+
       closeModal();
       toast.success("Two-Factor Auth Enabled Successfully", {
         position: "top-right",
       });
     } catch (error: any) {
-      store.setRequestLoading(false);
       const resMessage =
         (error.response &&
           error.response.data &&

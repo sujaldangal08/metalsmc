@@ -3,7 +3,7 @@ import GoogleIcon from "@public/assets/google_icon.png";
 import FacebookIcon from "@public/assets/facebook_icon.png";
 import LoginPhoto from "@public/assets/analytics-on-computer-screen.png";
 import Image from "next/image";
-
+import MetalIcon from "@public/assets/Icons/MetalIcon";
 export default function page() {
   return (
     <div className="flex flex-row w-full h-[100vh] bg-success">

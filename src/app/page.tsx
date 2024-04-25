@@ -1,24 +1,14 @@
 "use client";
 
-import SetupTwoFactorAuth from "@/components/auth/SetupTwoFactorAuth";
-import { api } from "@/config/api.config";
-import { useEffect } from "react";
+import XeroConnect from "@/components/xero/XeroConnect";
+import withAuth from "@/lib/hoc/withAuth";
 
 function Homepage() {
-  // const connectToXero = async () => {
-  //   const response = await api.get("/xero/connect");
-  //   console.log(response);
-  // };
-
-  // useEffect(() => {
-  //   connectToXero();
-  // }, []);
-
   return (
     <div>
-      <SetupTwoFactorAuth />
+      <XeroConnect />
     </div>
   );
 }
 
-export default Homepage;
+export default withAuth(Homepage);

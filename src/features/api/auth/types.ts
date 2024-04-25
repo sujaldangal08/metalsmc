@@ -1,5 +1,13 @@
 import { LoginSchema } from "@/utils/validators/login.schema";
 
+export interface LoginResponse {
+    status: string,
+    message: string,
+    "2fa": boolean,
+    access_token: string,
+    token_type: string
+}
+
 export interface UserRegisterBody {
     name: string;
     email: string;

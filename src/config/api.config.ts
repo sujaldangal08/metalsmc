@@ -18,7 +18,7 @@ interface RequestOptions<S> {
   /** The body of the request. */
   body: S;
   /** Query parameters for the request. */
-  params?: Record<string, any>;
+  withHeaders?: boolean;
   /** Additional options for the request. */
   options?: {
     /** Custom headers for the request. */
@@ -72,29 +72,27 @@ class ApiService {
     method,
     endpoint,
     body,
-    params,
+    withHeaders
   }: RequestOptions<S>) {
     // Get headers with access token
     const headers = await this.getHeadersWithAccessToken();
-    const customHeaders = { ...headers, ...options?.headers };
+    const customHeaders = withHeaders ? { ...headers, ...options?.headers } : { ...options?.headers };
 
     // Determine whether the request involves file upload
     if (options?.isFileUpload) {
       // Send file upload request
-      return this.axiosService.fileUpload.request<T>({
+      return await this.axiosService.fileUpload.request<T>({
         url: endpoint,
         method,
         data: body,
-        params,
         headers: customHeaders,
       });
     } else {
       // Send regular request
-      return this.axiosService.axios.request<T>({
+      return await this.axiosService.axios.request<T>({
         url: endpoint,
         method,
         data: body,
-        params,
         headers: customHeaders,
       });
     }

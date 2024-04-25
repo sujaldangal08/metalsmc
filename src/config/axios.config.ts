@@ -1,3 +1,4 @@
+
 import axios, { AxiosInstance } from "axios";
 
 /**
@@ -87,10 +88,9 @@ export class AxiosService {
 }
 
 export const config: Config = {
-  baseURL: "http://20.192.30.237/api/v1",
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: false,
 };
 

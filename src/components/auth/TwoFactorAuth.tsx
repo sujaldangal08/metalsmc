@@ -2,11 +2,12 @@ import { verifyQrFn } from "@/features/api/auth";
 import { Verify2faRequestBody } from "@/features/api/auth/types";
 import { setSessionCookie } from "@/lib/auth";
 import useMutation from "@/lib/hooks/useMutation";
+import { formatErrorMessage } from "@/utils/format-errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import { TypeOf, object, string } from "zod";
+import * as z from "zod";
 
 const styles = {
   heading3: `text-xl font-semibold text-gray-900 p-4 border-b`,
@@ -26,11 +27,11 @@ type TwoFactorAuthProps = {
   closeModal: () => void;
 };
 
-const twoFactorAuthSchema = object({
-  token: string().min(1, "Authentication code is required"),
+const twoFactorAuthSchema = z.object({
+  token: z.string().min(1, "Authentication code is required"),
 });
 
-type TwoFactorAuthInput = TypeOf<typeof twoFactorAuthSchema>;
+type TwoFactorAuthInput = z.infer<typeof twoFactorAuthSchema>;
 
 const TwoFactorAuth: FC<TwoFactorAuthProps> = ({
   qr_code_url,
@@ -58,19 +59,13 @@ const TwoFactorAuth: FC<TwoFactorAuthProps> = ({
         otp,
       });
 
-      console.log(response?.data);
-      if (response?.status === 400) {
-        toast.error(response?.data.message);
-      } else if (response?.status === 200) {
+      if (response?.status === 200) {
         setSessionCookie(response?.data.token!);
         closeModal();
         toast.success("Two-Factor Auth Enabled Successfully");
       }
     } catch (error: any) {
-      console.log(error);
-
-      const resMessage = error.response && error.response.data;
-      toast.error(resMessage);
+      toast.error(formatErrorMessage(error));
     }
   };
 

@@ -91,6 +91,5 @@ export const config: Config = {
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: false,
 };
 

@@ -34,7 +34,8 @@ export async function generateQrCodeFn<T = GenerateQrResponse, S = GenerateQrReq
     const response = await api.request<T, S>({
         endpoint: "/2fa/generate",
         method: "POST",
-        body
+        body,
+        withHeaders: false
     })
 
     return response;
@@ -44,7 +45,8 @@ export async function disableTwoFactorFn<S = DisableTwoFactorAuthRequestBody, T 
     const response = await api.request<T, S>({
         endpoint: "/2fa/disable",
         method: "POST",
-        body
+        body,
+        withHeaders: false
     })
 
     return response;
@@ -55,8 +57,14 @@ export async function verifyQrFn<T = Verify2faResponse, S = Verify2faRequestBody
     const response = await api.request<T, S>({
         endpoint: "/2fa/verify",
         method: "POST",
-        body
+        body,
+        withHeaders: false
     })
+
+    console.log('Reached in verify function');
+    // const response = await axios.post(`${baseURL}/api/v1/2fa/verify`, body)
+
+    console.log("VerifyQrFn response: " + JSON.stringify(response))
 
     return response;
 }

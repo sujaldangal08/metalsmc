@@ -19,8 +19,9 @@ const useMutation = <T,>({ initialData, mutateFn }: UseMutationOptions<T>) => {
       const responseData = await mutateFn(body);
       setData(responseData);
       return responseData;
-    } catch (error) {
+    } catch (error: any) {
       setIsError(true);
+      throw new Error(error.response.data.message);
     } finally {
       setIsLoading(false);
     }

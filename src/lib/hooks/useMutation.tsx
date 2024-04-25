@@ -1,34 +1,24 @@
-import { RequestMethod, api } from "@/config/api.config";
+import { AxiosResponse } from "axios";
 import { useState } from "react";
 
-interface UseMutationOptions {
-  url: string;
-  method: RequestMethod;
+interface UseMutationOptions<T> {
   initialData?: any;
+  mutateFn: (body: T) => Promise<AxiosResponse<any, any>>;
 }
 
-const useMutation = <T, R>({
-  url,
-  method,
-  initialData,
-}: UseMutationOptions) => {
+const useMutation = <T,>({ initialData, mutateFn }: UseMutationOptions<T>) => {
   const [data, setData] = useState(initialData);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  const mutate = async (requestData: T) => {
+  const mutate = async (body: T) => {
     setIsLoading(true);
     setIsError(false);
 
     try {
-      const response = await api.request<R, T>({
-        endpoint: url,
-        method,
-        body: requestData,
-      });
-
-      setData(response.data);
-      return response;
+      const responseData = await mutateFn(body);
+      setData(responseData);
+      return responseData;
     } catch (error) {
       setIsError(true);
     } finally {

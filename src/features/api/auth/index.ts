@@ -1,8 +1,9 @@
 "use client";
 
 import Cookies from "js-cookie";
-import { UserLoginBody, UserRegisterBody, VerifyOtpBody } from "./types";
+import { DisableTwoFactorAuthRequestBody, DisabledTwoFactorAuthResponse, GenerateQrRequestBody, GenerateQrResponse, UserLoginBody, UserRegisterBody, Verify2faRequestBody, Verify2faResponse, VerifyOtpBody } from "./types";
 import axios from "axios";
+import { api } from "@/config/api.config";
 
 const baseURL = "http://20.192.30.237";
 
@@ -27,4 +28,36 @@ export async function verifyOtp(body: VerifyOtpBody) {
     return response.data;
 }
 
+
+// Two factor auth functions ====================
+export async function generateQrCodeFn<T = GenerateQrResponse, S = GenerateQrRequestBody>(body: S) {
+    const response = await api.request<T, S>({
+        endpoint: "/2fa/generate",
+        method: "POST",
+        body
+    })
+
+    return response;
+}
+
+export async function disableTwoFactorFn<S = DisableTwoFactorAuthRequestBody, T = DisabledTwoFactorAuthResponse>(body: S) {
+    const response = await api.request<T, S>({
+        endpoint: "/2fa/disable",
+        method: "POST",
+        body
+    })
+
+    return response;
+}
+
+
+export async function verifyQrFn<T = Verify2faResponse, S = Verify2faRequestBody>(body: S) {
+    const response = await api.request<T, S>({
+        endpoint: "/2fa/verify",
+        method: "POST",
+        body
+    })
+
+    return response;
+}
 

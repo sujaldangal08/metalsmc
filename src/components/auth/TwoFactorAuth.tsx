@@ -1,7 +1,8 @@
+import { verifyQrFn } from "@/features/api/auth";
+import { Verify2faRequestBody } from "@/features/api/auth/types";
 import { setSessionCookie } from "@/lib/auth";
 import useMutation from "@/lib/hooks/useMutation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Cookies from "js-cookie";
 import { FC, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
@@ -31,17 +32,6 @@ const twoFactorAuthSchema = object({
 
 type TwoFactorAuthInput = TypeOf<typeof twoFactorAuthSchema>;
 
-interface Verify2faResponse {
-  status: string;
-  message: string;
-  token: string;
-}
-
-interface Verify2faRequestBody {
-  otp: string;
-  user: string;
-}
-
 const TwoFactorAuth: FC<TwoFactorAuthProps> = ({
   qr_code_url,
   secret_key,
@@ -57,12 +47,8 @@ const TwoFactorAuth: FC<TwoFactorAuthProps> = ({
     resolver: zodResolver(twoFactorAuthSchema),
   });
 
-  const { mutate: verifyQrMn } = useMutation<
-    Verify2faRequestBody,
-    Verify2faResponse
-  >({
-    url: "/2fa/verify",
-    method: "POST",
+  const { mutate: verifyQrMn } = useMutation<Verify2faRequestBody>({
+    mutateFn: (body) => verifyQrFn(body),
   });
 
   const verifyOtp = async (otp: string) => {
@@ -72,24 +58,24 @@ const TwoFactorAuth: FC<TwoFactorAuthProps> = ({
         otp,
       });
 
-      closeModal();
-
-      //save new generated token in cookies
-      setSessionCookie(response?.data.token!);
-
-      toast.success("Two-Factor Auth Enabled Successfully", {
-        position: "top-right",
-      });
+      console.log(response?.data);
+      if (response?.status === 400) {
+        toast.error(response?.data.message);
+      } else if (response?.status === 200) {
+        setSessionCookie(response?.data.token!);
+        closeModal();
+        toast.success("Two-Factor Auth Enabled Successfully");
+      }
     } catch (error: any) {
+      console.log(error);
+
       const resMessage = error.response && error.response.data;
-      toast.error(resMessage, {
-        position: "top-right",
-      });
+      toast.error(resMessage);
     }
   };
 
-  const onSubmitHandler: SubmitHandler<TwoFactorAuthInput> = (values) => {
-    verifyOtp(values.token);
+  const onSubmitHandler: SubmitHandler<TwoFactorAuthInput> = async (values) => {
+    await verifyOtp(values.token);
   };
 
   useEffect(() => {
@@ -99,7 +85,7 @@ const TwoFactorAuth: FC<TwoFactorAuthProps> = ({
   return (
     <div
       aria-hidden={true}
-      className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full bg-[#222] bg-opacity-50"
+      className="absolute top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full bg-[#222] bg-opacity-50"
       // onClick={closeModal}
     >
       <div className="relative p-4 w-full max-w-xl h-full md:h-auto left-1/2 -translate-x-1/2">

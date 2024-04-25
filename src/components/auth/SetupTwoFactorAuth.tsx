@@ -1,27 +1,15 @@
 "use client";
 
 import TwoFactorAuth from "@/components/auth/TwoFactorAuth";
+import { disableTwoFactorFn, generateQrCodeFn } from "@/features/api/auth";
+import {
+  DisableTwoFactorAuthRequestBody,
+  GenerateQrRequestBody,
+} from "@/features/api/auth/types";
 import withAuth from "@/lib/hoc/withAuth";
 import useMutation from "@/lib/hooks/useMutation";
 import { useState } from "react";
 import toast from "react-hot-toast";
-
-interface GenerateQrRequestBody {
-  user: number;
-}
-
-interface GenerateQrResponse {
-  message: string;
-  qr_code_url: string;
-  secret_key: string;
-}
-
-interface DisableTwoFactorAuthRequestBody extends GenerateQrRequestBody {}
-interface DisabledTwoFactorAuthResponse {
-  status: string;
-  message: string;
-  data: any;
-}
 
 function SetupTwoFactorAuthPage() {
   const [secret, setSecret] = useState({
@@ -29,36 +17,31 @@ function SetupTwoFactorAuthPage() {
     secret_key: "",
   });
   const [openModal, setOpenModal] = useState(false);
-  const { mutate: generateQrCodeMn, isLoading: qrGenerating } = useMutation<
-    GenerateQrRequestBody,
-    GenerateQrResponse
-  >({
-    url: "/2fa/generate",
-    method: "POST",
-  });
+  const { mutate: generateQrCodeMn, isLoading: qrGenerating } =
+    useMutation<GenerateQrRequestBody>({
+      mutateFn: (body) => generateQrCodeFn(body),
+    });
 
   const { mutate: disableTwoFactorAuthMn, isLoading: disabling2Fa } =
-    useMutation<DisableTwoFactorAuthRequestBody, DisabledTwoFactorAuthResponse>(
-      {
-        url: "/2fa/disable",
-        method: "POST",
-      }
-    );
+    useMutation<DisableTwoFactorAuthRequestBody>({
+      mutateFn: (body) => disableTwoFactorFn(body),
+    });
 
   const generateQrCode = async ({ user_id }: { user_id: number }) => {
     try {
       const response = await generateQrCodeMn({ user: user_id });
 
       if (response?.status === 200) {
-        setOpenModal(true);
-        console.log(
-          "SetupTwoFactorAuthPage: " + response.data.qr_code_url,
-          response.data.secret_key
-        );
-        setSecret({
-          secret_key: response.data.secret_key,
-          qr_code_url: response.data.qr_code_url,
-        });
+        if (response.data.message === "2FA already enabled") {
+          setOpenModal(false);
+          toast.success(response?.data.message!);
+        } else {
+          setOpenModal(true);
+          setSecret({
+            secret_key: response.data.secret_key,
+            qr_code_url: response.data.qr_code_url,
+          });
+        }
       }
     } catch (error: any) {
       const resMessage = error.response && error.response.data;
@@ -72,15 +55,12 @@ function SetupTwoFactorAuthPage() {
     try {
       const response = await disableTwoFactorAuthMn({ user: user_id });
 
-      console.log(response?.data.message);
-      toast.success("Two Factor Authentication Disabled", {
-        position: "top-right",
-      });
+      if (response?.status === 200) {
+        toast.success("Two Factor Authentication Disabled");
+      }
     } catch (error: any) {
       const resMessage = error.response && error.response.data;
-      toast.error(resMessage, {
-        position: "top-right",
-      });
+      toast.error(resMessage);
     }
   };
 

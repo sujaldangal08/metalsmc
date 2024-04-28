@@ -4,10 +4,10 @@ import { cookies } from "next/headers";
 import { UserLoginBody, UserRegisterBody, VerifyOtpBody } from "./types";
 import axios from "axios";
 
-const baseURL = process.env.API_URL;
+const baseURL = '/api/v1';
 
 export async function signInFn(body: UserLoginBody) {
-    const response = await axios.post(`${baseURL}/api/v1/login`,
+    const response = await axios.post(`${baseURL}/login`,
         body
     );
 
@@ -18,12 +18,12 @@ export async function signInFn(body: UserLoginBody) {
 }
 
 export async function registerUser(body: UserRegisterBody) {
-    const response = await axios.post(`${baseURL}/api/v1/register`, body);
+    const response = await axios.post(`${baseURL}/register`, body);
     return response.data;
 }
 
 export async function verifyOtp(body: VerifyOtpBody) {
-    const response = await axios.post(`${baseURL}/api/v1/verify`, body);
+    const response = await axios.post(`${baseURL}/verify`, body);
     return response.data;
 }
 

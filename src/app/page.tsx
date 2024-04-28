@@ -1,14 +1,10 @@
-"use client";
+import FileDashboard from "@/app/shared/file/dashboard";
+import { metaObject } from "@/config/site.config";
 
-import XeroConnect from "@/components/xero/XeroConnect";
-import withAuth from "@/lib/hoc/withAuth";
+export const metadata = {
+  ...metaObject(),
+};
 
-function Homepage() {
-  return (
-    <div>
-      <XeroConnect />
-    </div>
-  );
+export default function FileDashboardPage() {
+  return <FileDashboard />;
 }
-
-export default withAuth(Homepage);

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
+import HydrogenLayout from "@/layouts/layout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +19,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
+        <HydrogenLayout>{children}</HydrogenLayout>
         <Toaster toastOptions={{ position: "top-right" }} />
       </body>
     </html>

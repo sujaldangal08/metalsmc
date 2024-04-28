@@ -8,15 +8,17 @@ import { Password } from "@/components/ui/password";
 import { Text } from "@/components/ui/text";
 import { routes } from "@/config/routes";
 import { signInFn } from "@/features/api/auth";
+import { useAuthStore } from "@/store/store";
 import { LoginSchema, loginSchema } from "@/utils/validators/login.schema";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler } from "react-hook-form";
+import toast from "react-hot-toast";
 import { PiArrowRightBold } from "react-icons/pi";
 
 const initialValues: LoginSchema = {
-  email: "driver@gmail.com",
+  email: "user2@example.com",
   password: "password",
   rememberMe: true,
 };
@@ -27,8 +29,18 @@ export default function SignInForm() {
   const router = useRouter();
 
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
-    const res = await signInFn({ email: data.email, password: data.password });
-    router.push("/");
+    try {
+      const res = await signInFn({
+        email: data.email,
+        password: data.password,
+      });
+
+      router.push("/");
+    } catch (err: any) {
+      if (err.response && err.response.data) {
+        toast.error(err.response.data.message);
+      }
+    }
   };
 
   return (

@@ -4,7 +4,7 @@ import { AxiosService, config } from "./axios.config";
 /**
  * Defines the type for HTTP request methods.
  */
-type RequestMethod = "POST" | "PUT" | "PATCH" | "DELETE";
+export type RequestMethod = "POST" | "PUT" | "PATCH" | "DELETE";
 
 /**
  * Represents options for making an HTTP request.
@@ -18,7 +18,7 @@ interface RequestOptions<S> {
   /** The body of the request. */
   body: S;
   /** Query parameters for the request. */
-  params?: Record<string, any>;
+  withHeaders?: boolean;
   /** Additional options for the request. */
   options?: {
     /** Custom headers for the request. */
@@ -72,48 +72,32 @@ class ApiService {
     method,
     endpoint,
     body,
-    params,
+    withHeaders
   }: RequestOptions<S>) {
     // Get headers with access token
     const headers = await this.getHeadersWithAccessToken();
-    const customHeaders = { ...headers, ...options?.headers };
+    const customHeaders = withHeaders ? { ...headers, ...options?.headers } : { ...options?.headers };
 
     // Determine whether the request involves file upload
     if (options?.isFileUpload) {
       // Send file upload request
-      return this.axiosService.fileUpload.request<T>({
+      return await this.axiosService.fileUpload.request<T>({
         url: endpoint,
         method,
         data: body,
-        params,
         headers: customHeaders,
       });
     } else {
       // Send regular request
-      return this.axiosService.axios.request<T>({
+      return await this.axiosService.axios.request<T>({
         url: endpoint,
         method,
         data: body,
-        params,
         headers: customHeaders,
       });
     }
   }
 
-  /**
-   * Sends a DELETE request to the specified endpoint.
-   * @async
-   * @template T - The expected response type.
-   * @param {string} endpoint - The API endpoint URL.
-   * @param {Record<string, string>} [headers] - Additional headers to be included in the request.
-   * @returns {Promise<T>} A promise that resolves with the response data.
-   */
-  async delete<T>(endpoint: string, headers?: Record<string, string>) {
-    const customHeaders = await this.getHeadersWithAccessToken();
-    return this.axiosService.axios.delete<T>(endpoint, {
-      headers: { ...customHeaders, ...headers },
-    });
-  }
 
   /**
    * Retrieves the headers with the access token.

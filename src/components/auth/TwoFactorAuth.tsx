@@ -1,12 +1,13 @@
-import { FC, useEffect, useState } from "react";
-import QRCode from "qrcode";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { object, string, TypeOf } from "zod";
+import { verifyQrFn } from "@/features/api/auth";
+import { Verify2faRequestBody } from "@/features/api/auth/types";
+import { setSessionCookie } from "@/lib/auth";
+import useMutation from "@/lib/hooks/useMutation";
+import { formatErrorMessage } from "@/utils/format-errors";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { FC, useEffect } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import useStore from "../store";
-import { IUser } from "@/features/api/user/types";
-import { api } from "@/config/api.config";
+import * as z from "zod";
 
 const styles = {
   heading3: `text-xl font-semibold text-gray-900 p-4 border-b`,
@@ -21,26 +22,23 @@ const styles = {
 
 type TwoFactorAuthProps = {
   qr_code_url: string;
-  base32: string;
-  user_id: string;
+  secret_key: string;
+  user_id: number;
   closeModal: () => void;
 };
 
-const twoFactorAuthSchema = object({
-  token: string().min(1, "Authentication code is required"),
+const twoFactorAuthSchema = z.object({
+  token: z.string().min(1, "Authentication code is required"),
 });
 
-type TwoFactorAuthInput = TypeOf<typeof twoFactorAuthSchema>;
+type TwoFactorAuthInput = z.infer<typeof twoFactorAuthSchema>;
 
 const TwoFactorAuth: FC<TwoFactorAuthProps> = ({
   qr_code_url,
-  base32,
+  secret_key,
   user_id,
   closeModal,
 }) => {
-  const [qrcodeUrl, setqrCodeUrl] = useState("");
-  const store = useStore();
-
   const {
     handleSubmit,
     register,
@@ -50,54 +48,39 @@ const TwoFactorAuth: FC<TwoFactorAuthProps> = ({
     resolver: zodResolver(twoFactorAuthSchema),
   });
 
-  const verifyOtp = async (token: string) => {
+  const { mutate: verifyQrMn } = useMutation<Verify2faRequestBody>({
+    mutateFn: (body) => verifyQrFn(body),
+  });
+
+  const verifyOtp = async (otp: string) => {
     try {
-      store.setRequestLoading(true);
-      const {
-        data: { user },
-      } = await api.post<{ otp_verified: string; user: IUser }, >(
-        "/auth/otp/verify",
-        {
-          token,
-          user_id,
-        }
-      );
-      store.setRequestLoading(false);
-      store.setAuthUser(user);
-      closeModal();
-      toast.success("Two-Factor Auth Enabled Successfully", {
-        position: "top-right",
+      const response = await verifyQrMn({
+        user: String(user_id),
+        otp,
       });
+
+      if (response?.status === 200) {
+        setSessionCookie(response?.data.token!);
+        closeModal();
+        toast.success("Two-Factor Auth Enabled Successfully");
+      }
     } catch (error: any) {
-      store.setRequestLoading(false);
-      const resMessage =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.response.data.detail ||
-        error.message ||
-        error.toString();
-      toast.error(resMessage, {
-        position: "top-right",
-      });
+      toast.error(formatErrorMessage(error));
     }
   };
 
-  const onSubmitHandler: SubmitHandler<TwoFactorAuthInput> = (values) => {
-    verifyOtp(values.token);
+  const onSubmitHandler: SubmitHandler<TwoFactorAuthInput> = async (values) => {
+    await verifyOtp(values.token);
   };
-
-  useEffect(() => {
-    QRCode.toDataURL(qr_code_url).then(setqrCodeUrl);
-  }, []);
 
   useEffect(() => {
     setFocus("token");
   }, [setFocus]);
+
   return (
     <div
       aria-hidden={true}
-      className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full bg-[#222] bg-opacity-50"
+      className="absolute top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full bg-[#222] bg-opacity-50"
       // onClick={closeModal}
     >
       <div className="relative p-4 w-full max-w-xl h-full md:h-auto left-1/2 -translate-x-1/2">
@@ -124,14 +107,16 @@ const TwoFactorAuth: FC<TwoFactorAuthProps> = ({
               <div className="flex justify-center">
                 <img
                   className="block w-64 h-64 object-contain"
-                  src={qrcodeUrl}
+                  src={qr_code_url}
                   alt="qrcode url"
                 />
               </div>
             </div>
             <div>
               <h4 className={styles.heading4}>Or Enter Code Into Your App</h4>
-              <p className="text-sm">SecretKey: {base32} (Base32 encoded)</p>
+              <p className="text-sm">
+                SecretKey: {secret_key} (Base32 encoded)
+              </p>
             </div>
             <div>
               <h4 className={styles.heading4}>Verify Code</h4>

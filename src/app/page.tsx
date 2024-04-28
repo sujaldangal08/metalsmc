@@ -1,7 +1,14 @@
+"use client";
+
+import XeroConnect from "@/components/xero/XeroConnect";
 import withAuth from "@/lib/hoc/withAuth";
 
-function HomePage() {
-  return <div>Hello world....</div>;
+function Homepage() {
+  return (
+    <div>
+      <XeroConnect />
+    </div>
+  );
 }
 
-export default withAuth(HomePage);
+export default withAuth(Homepage);

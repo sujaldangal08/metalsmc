@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { signInFn } from "@/features/api/auth";
 
 const initialValues: LoginSchema = {
-  email: "driver@gmail.com",
+  email: "user2@example.com",
   password: "password",
   rememberMe: true,
 };

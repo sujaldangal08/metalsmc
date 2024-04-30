@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { Toaster } from "react-hot-toast";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import HydrogenLayout from "@/layouts/layout";
+import { Toaster } from "react-hot-toast";
 
-const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["devanagari", "latin", "latin-ext"],
+});
 
 export const metadata: Metadata = {
   title: "Metal Recycling App",
@@ -18,7 +21,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={poppins.className}>
         <HydrogenLayout>{children}</HydrogenLayout>
         <Toaster toastOptions={{ position: "top-right" }} />
       </body>

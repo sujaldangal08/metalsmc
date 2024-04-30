@@ -1,19 +1,19 @@
-import LoginPhoto from "@public/assets/login_photo.svg";
 import SideImage from "@/components/ui/Signup/signup";
-import SignInForm from "./signin-form";
+import ChangePasswordForm from "./change-password-form";
+import ChnagePasswordPhoto from "@public/assets/change_password_photo.svg";
 
 export default function page() {
   return (
     <>
       <SideImage
-        title="Welcome Back!"
-        titletext="Please Sign in to continue "
-        subtext="By signing up, you will gain access to exclusive content"
-        photo={LoginPhoto}
+        title="Set a new password"
+        titletext=""
+        subtext=""
+        photo={ChnagePasswordPhoto}
         sideDescription="Loorem Ipsum Loorem IpsumLoorem IpsumLoorem IpsumLoorem IpsumLoorem IpsumLoorem IpsumLoorem Ipsum"
         sideTitle="The simplest way to manage your workspace."
       >
-        <SignInForm />
+        <ChangePasswordForm />
       </SideImage>
     </>
   );

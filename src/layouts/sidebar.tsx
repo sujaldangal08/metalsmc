@@ -41,7 +41,7 @@ export default function Sidebar({ className }: { className?: string }) {
         </div>
       </div>
       {/* Content for Sidebar */}
-      <SimpleBar className="h-[calc(100%-80px)]">
+      {/* <SimpleBar className="h-[calc(100%-80px)]">
         <div className="pb-3">
           {menuItems.map((item, index) => {
             const isActive = pathname === (item?.href as string);
@@ -56,12 +56,12 @@ export default function Sidebar({ className }: { className?: string }) {
                 index={index}
                 isDropdownOpen={isDropdownOpen}
                 isActive={isActive}
-                pathname={pathnameExistInDropdowns}
+                pathname={}
               />
             );
           })}
         </div>
-      </SimpleBar>
+      </SimpleBar> */}
     </aside>
   );
 }

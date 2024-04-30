@@ -46,8 +46,8 @@ export default {
           900: "rgb(var(--gray-900) / <alpha-value>)",
           1000: "rgb(var(--gray-1000) / <alpha-value>)",
           DEFAULT: "rgb(var(--gray-default) / <alpha-value>)",
-          light:"rgb(var(--gray-light) / <alpha-value>)",
-          dark:"rgb(var(--gray-dark) / <alpha-value>)"
+          light: "rgb(var(--gray-light) / <alpha-value>)",
+          dark: "rgb(var(--gray-dark) / <alpha-value>)",
         },
         background: "rgb(var(--background) / <alpha-value>)",
         foreground: "rgb(var(--foreground) / <alpha-value>)",

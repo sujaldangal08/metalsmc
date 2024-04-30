@@ -21,7 +21,7 @@ export default function SignInForm() {
   const router = useRouter();
 
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
-    console.log(process.env.NEXT_PUBLIC_API_URL)
+    console.log(process.env.NEXT_PUBLIC_API_URL);
     const res = await signInFn({ email: data.email, password: data.password });
     router.push("/");
   };

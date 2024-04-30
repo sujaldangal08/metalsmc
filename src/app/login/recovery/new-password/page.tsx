@@ -1,8 +1,25 @@
+"use client";
+
 import SideImage from "@/components/ui/Signup/signup";
 import ChangePasswordForm from "./change-password-form";
 import ChnagePasswordPhoto from "@public/assets/change_password_photo.svg";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { Route } from "@/lib/enums/routes.enums";
 
-export default function page() {
+export default function ChangePasswordPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const hash = searchParams.get("hash");
+
+  useEffect(() => {
+    if (!hash) {
+      router.push(Route.Home);
+    }
+  }, [hash]);
+
+  if (!hash) return null;
+
   return (
     <>
       <SideImage
@@ -13,7 +30,7 @@ export default function page() {
         sideDescription="Loorem Ipsum Loorem IpsumLoorem IpsumLoorem IpsumLoorem IpsumLoorem IpsumLoorem IpsumLoorem Ipsum"
         sideTitle="The simplest way to manage your workspace."
       >
-        <ChangePasswordForm />
+        <ChangePasswordForm password_hash={hash} />
       </SideImage>
     </>
   );

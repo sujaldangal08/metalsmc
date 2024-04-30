@@ -1,8 +1,11 @@
-import LoginPhoto from "@public/assets/login_photo.svg";
+"use client";
+
 import SideImage from "@/components/ui/Signup/signup";
+import withoutAuth from "@/lib/hoc/withoutAuth";
+import LoginPhoto from "@public/assets/login_photo.svg";
 import SignInForm from "./signin-form";
 
-export default function page() {
+function Loginpage() {
   return (
     <>
       <SideImage
@@ -18,3 +21,5 @@ export default function page() {
     </>
   );
 }
+
+export default withoutAuth(Loginpage);

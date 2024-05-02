@@ -1,3 +1,3 @@
-'use client';
+"use client";
 
-export { Button, type ButtonProps } from 'rizzui';
+export { Button, type ButtonProps } from "rizzui";

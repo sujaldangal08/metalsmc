@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import HydrogenLayout from "@/layouts/layout";
 import { Toaster } from "react-hot-toast";
 
 const poppins = Poppins({
@@ -21,7 +22,8 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
-        {children} <Toaster position="top-right" />
+        <HydrogenLayout>{children}</HydrogenLayout>
+        <Toaster toastOptions={{ position: "top-right" }} />
       </body>
     </html>
   );

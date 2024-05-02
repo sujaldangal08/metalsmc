@@ -24,12 +24,11 @@ export default function Page() {
       </div>
       <div className="w-full flex items-center">
         <Select
-          color="primary"
           options={options}
           value={value}
           onChange={setValue}
           placeholder="Driver"
-          className={"text-primary"}
+          className=""
         />
       </div>
     </div>

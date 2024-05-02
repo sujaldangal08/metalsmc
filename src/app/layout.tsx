@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
-import "./globals.css";
-import HydrogenLayout from "@/layouts/layout";
-import { Toaster } from "react-hot-toast";
 import dynamic from "next/dynamic";
+import { Poppins } from "next/font/google";
+import { Toaster } from "react-hot-toast";
+import "./globals.css";
+import GlobalDrawer from "./shared/drawer-views/container";
+import GlobalModal from "./shared/modal-views/container";
+import { ThemeProvider } from "./shared/theme-provider";
 
 const NextProgress = dynamic(() => import("@/components/next-progress"), {
   ssr: false,
@@ -11,7 +13,7 @@ const NextProgress = dynamic(() => import("@/components/next-progress"), {
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  subsets: ["devanagari", "latin", "latin-ext"],
+  subsets: ["latin", "latin-ext"],
 });
 
 export const metadata: Metadata = {
@@ -27,9 +29,13 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <NextProgress />
-        <Toaster position="top-right" />
-        <HydrogenLayout>{children}</HydrogenLayout>
+        <ThemeProvider>
+          <NextProgress />
+          <Toaster position="top-right" />
+          {children}
+          <GlobalDrawer />
+          <GlobalModal />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -1,5 +1,7 @@
 
+/*
 import React from 'react'
+
 
 function table() {
 
@@ -142,3 +144,58 @@ function table() {
 }
 
 export default table
+
+*/
+import CustomTable from './customtable'
+
+import React from 'react'
+import { useMemo } from "react";
+import { ColumnDef } from "@tanstack/react-table";
+
+const data = [
+  { name: 'John Doe', phone:9876543210, email: 'john@example.com', action:'.' },
+  {  name: 'Jane Smith', phone:9876543210, email: 'jane@example.com', action:'.'},
+  // Add more data as needed
+];
+
+const columns: ColumnDef<any>[] = [
+    {
+      header: "Name",
+      accessorKey: "name",
+    },
+    {
+      header: "Phone",
+      accessorKey: "phone",
+    },
+    {
+      header: "Email",
+      accessorKey: "email",
+    },
+    {
+      header: "Action",
+      accessorKey: "action",
+    },
+
+
+  ]
+  
+
+
+function page() {
+  return (
+    
+    
+
+
+   <>
+   <CustomTable
+   data={data}
+   columnsData={columns}
+   
+   />
+   </>
+
+  )
+}
+
+export default page

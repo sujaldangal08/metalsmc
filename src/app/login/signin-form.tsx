@@ -1,17 +1,26 @@
 "use client";
-import { Button, Checkbox, Input, Password } from "rizzui";
-import Image from "next/image";
-import GoogleIcon from "@public/assets/google_icon.png";
-import FacebookIcon from "@public/assets/facebook_icon.png";
 import { Form } from "@/components/ui/form";
-import { loginSchema, LoginSchema } from "@/utils/validators/login.schema";
-import { SubmitHandler } from "react-hook-form";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import Spinner from "@/components/ui/spinner";
 import { signInFn } from "@/features/api/auth";
+import { UserLoginBody } from "@/features/api/auth/types";
+import { setSessionCookie } from "@/lib/auth";
+import { Route } from "@/lib/enums/routes.enums";
+import useMutation from "@/lib/hooks/useMutation";
+import { formatErrorMessage } from "@/utils/format-errors";
+import { LoginSchema, loginSchema } from "@/utils/validators/login.schema";
+import FacebookIcon from "@public/assets/facebook_icon.png";
+import GoogleIcon from "@public/assets/google_icon.png";
+import { signIn } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { SubmitHandler } from "react-hook-form";
+import toast from "react-hot-toast";
+import { Button, Checkbox, Input, Password } from "rizzui";
 
 const initialValues: LoginSchema = {
-  email: "user2@example.com",
+  email: "user1@example.com",
   password: "password",
   rememberMe: true,
 };
@@ -19,11 +28,23 @@ const initialValues: LoginSchema = {
 export default function SignInForm() {
   const [reset, setReset] = useState();
   const router = useRouter();
+  const { mutate: signInMn, isLoading } = useMutation<UserLoginBody>({
+    mutateFn: (body) => signInFn(body),
+  });
 
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
-    console.log(process.env.NEXT_PUBLIC_API_URL);
-    const res = await signInFn({ email: data.email, password: data.password });
-    router.push("/");
+    try {
+      const res = await signInMn({
+        email: data.email,
+        password: data.password,
+      });
+
+      setSessionCookie(res.data.access_token);
+      toast.success(res.data.message);
+      router.push(Route.Home);
+    } catch (err: any) {
+      toast.error(formatErrorMessage(err));
+    }
   };
 
   return (
@@ -64,26 +85,40 @@ export default function SignInForm() {
                 label="Remember Me"
                 className="[&>label>span]:font-normal"
               />
-              <p>Forgot password?</p>
+              <Link href={Route.ForgotPassword}>Forgot password?</Link>
             </div>
           </div>
           <div className="flex flex-col md:gap-6 gap-4">
-            <Button className="bg-primary hover:bg-primary-dark" type="submit">
-              <span>Sign in</span>
+            <Button
+              disabled={isLoading}
+              className="py-6 bg-primary hover:bg-primary-dark flex disabled:opacity-75"
+              type="submit"
+            >
+              {isLoading ? (
+                <Spinner tag="span" color="white" />
+              ) : (
+                <span>Sign in</span>
+              )}
             </Button>
-            <p className="text-primary sm:text-sm text-xs">
+            {/* <p className="text-primary sm:text-sm text-xs">
               Dont' have an Account ?
-              <span className="ml-2 text-text font-semibold cursor-pointer">
-                Sign up
-              </span>
-            </p>
+              <Link href={Route.Register}>
+                <span className="ml-2 text-text font-semibold cursor-pointer">
+                  Sign up
+                </span>
+              </Link>
+            </p> */}
             <div className="flex w-full items-center gap-4">
               <div className="w-1/2 h-[1px] bg-gray-light"></div>
               <p className="text-xs text-gray">or</p>
               <div className="w-1/2 h-[1px] bg-gray-light"></div>
             </div>
             <div className="flex md:flex-row flex-col w-full justify-between md:gap-10 gap-3">
-              <Button variant="outline" className="md:w-1/2 w-full">
+              <Button
+                onClick={() => signIn("google")}
+                variant="outline"
+                className="md:w-1/2 w-full"
+              >
                 <div className="flex items-center md:gap-4 gap-8 py-5">
                   <Image
                     src={GoogleIcon}

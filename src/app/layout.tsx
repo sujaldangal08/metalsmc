@@ -3,6 +3,11 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import HydrogenLayout from "@/layouts/layout";
 import { Toaster } from "react-hot-toast";
+import dynamic from "next/dynamic";
+
+const NextProgress = dynamic(() => import("@/components/next-progress"), {
+  ssr: false,
+});
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -22,8 +27,10 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
+        <NextProgress />
+        {children}
+        <Toaster position="top-right" />
         <HydrogenLayout>{children}</HydrogenLayout>
-        <Toaster toastOptions={{ position: "top-right" }} />
       </body>
     </html>
   );

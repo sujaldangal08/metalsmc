@@ -17,43 +17,43 @@ type FileStatsType = {
 const filesStatData = [
   {
     id: 1,
-    title: "Total Images",
-    metric: "36,476 GB",
-    fill: "#3872FA",
-    percentage: 32,
+    title: "Total Pickups",
+    metric: "1260",
+    fill: "#37A05F",
+    percentage: 12,
     increased: true,
     decreased: false,
     value: "+32.40",
   },
   {
     id: 2,
-    title: "Total Videos",
-    metric: "53,406 GB",
-    fill: "#3872FA",
-    percentage: 48,
-    increased: false,
-    decreased: true,
-    value: "-18.45",
+    title: "Total Deliveries",
+    metric: "1260",
+    fill: "#0A68EF",
+    percentage: 12,
+    increased: true,
+    decreased: false,
+    value: "+32.40",
   },
   {
     id: 3,
-    title: "Total Documents",
-    metric: "90,875 GB",
-    fill: "#EE0000",
-    percentage: 89,
+    title: "Total Customers",
+    metric: "1260",
+    fill: "#FF6464",
+    percentage: 12,
     increased: true,
     decreased: false,
-    value: "+20.34",
+    value: "+32.40",
   },
   {
     id: 4,
-    title: "Total Musics",
-    metric: "63,076 GB",
-    fill: "#3872FA",
-    percentage: 54,
+    title: "Total Drivers",
+    metric: "1260",
+    fill: "#FFAB00",
+    percentage: 12,
     increased: true,
     decreased: false,
-    value: "+14.45",
+    value: "+32.40",
   },
 ];
 
@@ -72,7 +72,7 @@ export function FileStatGrid({ className }: { className?: string }) {
               <CircleProgressBar
                 percentage={stat.percentage}
                 size={80}
-                stroke="#D7E3FE"
+                stroke={stat.fill + "33"}
                 strokeWidth={7}
                 progressColor={stat.fill}
                 useParentResponsive={true}

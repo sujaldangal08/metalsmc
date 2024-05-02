@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { Text } from '@/components/ui/text';
-import WidgetCard from '@/components/cards/widget-card';
-import { PieChart, Pie, Cell, ResponsiveContainer, Label } from 'recharts';
+import { Text } from "@/components/ui/text";
+import WidgetCard from "@/components/cards/widget-card";
+import { PieChart, Pie, Cell, ResponsiveContainer, Label } from "recharts";
 
 const data = [
-  { name: 'Available storage', value: 22 },
-  { name: 'Total used storage', value: 78 },
+  { name: "Total Present", value: 98 },
+  { name: "Total Absent", value: 2 },
 ];
-const COLORS = ['#BFDBFE', '#0070F3'];
+const COLORS = ["#37A05F", "#FFAB00"];
 
 function CustomLabel(props: any) {
   const { cx, cy } = props.viewBox;
@@ -43,7 +43,7 @@ function CustomLabel(props: any) {
 export default function StorageSummary({ className }: { className?: string }) {
   return (
     <WidgetCard
-      title={'Used Storage'}
+      title={"Used Storage"}
       headerClassName="hidden"
       className={className}
     >
@@ -56,15 +56,15 @@ export default function StorageSummary({ className }: { className?: string }) {
               innerRadius={100}
               outerRadius={120}
               paddingAngle={10}
-              fill="#BFDBFE"
-              stroke="rgba(0,0,0,0)"
+              fill="#37A05F"
+              stroke="#37A05F33"
               dataKey="value"
             >
               <Label
                 width={30}
                 position="center"
                 content={
-                  <CustomLabel value1={data[1].value} value2={'Used of 100'} />
+                  <CustomLabel value1={data[1].value} value2={"Used of 100"} />
                 }
               ></Label>
               {data.map((_, index) => (

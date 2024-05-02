@@ -3,7 +3,7 @@ import { Form } from "@/components/ui/form";
 import Spinner from "@/components/ui/spinner";
 import { signInFn } from "@/features/api/auth";
 import { UserLoginBody } from "@/features/api/auth/types";
-import { handleGoogleSignin, setSessionCookie } from "@/lib/auth";
+import { setSessionCookie } from "@/lib/auth";
 import { Route } from "@/lib/enums/routes.enums";
 import useMutation from "@/lib/hooks/useMutation";
 import { formatErrorMessage } from "@/utils/format-errors";
@@ -20,7 +20,7 @@ import toast from "react-hot-toast";
 import { Button, Checkbox, Input, Password } from "rizzui";
 
 const initialValues: LoginSchema = {
-  email: "user2@example.com",
+  email: "user1@example.com",
   password: "password",
   rememberMe: true,
 };
@@ -100,12 +100,14 @@ export default function SignInForm() {
                 <span>Sign in</span>
               )}
             </Button>
-            <p className="text-primary sm:text-sm text-xs">
+            {/* <p className="text-primary sm:text-sm text-xs">
               Dont' have an Account ?
-              <span className="ml-2 text-text font-semibold cursor-pointer">
-                Sign up
-              </span>
-            </p>
+              <Link href={Route.Register}>
+                <span className="ml-2 text-text font-semibold cursor-pointer">
+                  Sign up
+                </span>
+              </Link>
+            </p> */}
             <div className="flex w-full items-center gap-4">
               <div className="w-1/2 h-[1px] bg-gray-light"></div>
               <p className="text-xs text-gray">or</p>

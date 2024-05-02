@@ -1,3 +1,4 @@
+import { Route } from "@/lib/enums/routes.enums";
 import {
   DashboardIcon,
   AdminManagementIcon,
@@ -59,7 +60,10 @@ export const menuItems = [
     name: "Delivery & Pickups",
     href: "/",
     icon: DashboardIcon,
-    dropdownItems: [],
+    dropdownItems: [
+      { name: "Delivery Schedule", href: "/driver/management" },
+      { name: "Pickup Schedule", href: Route.PickupSchedule },
+    ],
   },
   {
     name: "Sales",

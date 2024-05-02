@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import HydrogenLayout from "@/layouts/layout";
 import { Toaster } from "react-hot-toast";
 import dynamic from "next/dynamic";
 
@@ -29,6 +30,7 @@ export default async function RootLayout({
         <NextProgress />
         {children}
         <Toaster position="top-right" />
+        <HydrogenLayout>{children}</HydrogenLayout>
       </body>
     </html>
   );

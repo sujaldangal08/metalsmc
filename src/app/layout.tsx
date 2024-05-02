@@ -28,7 +28,6 @@ export default async function RootLayout({
     <html lang="en">
       <body className={poppins.className}>
         <NextProgress />
-        {children}
         <Toaster position="top-right" />
         <HydrogenLayout>{children}</HydrogenLayout>
       </body>

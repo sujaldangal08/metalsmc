@@ -20,7 +20,7 @@
     /* For rgb(227 227 227 / <alpha-value>) = #e3e3e3 */
     --gray-200: 227 227 227;
     /* For rgb(223 223 223 / <alpha-value>) = #dfdfdf */
-    --gray-300: 220 220 220;
+    --gray-300: 223 223 223;
     /* For rgb(146 146 146 / <alpha-value>) = #929292 */
     --gray-400: 146 146 146;
     /* For rgb(102 102 102 / <alpha-value>) = #666666 */
@@ -39,7 +39,7 @@
     --gray-default: 148 148 148;
     --gray-dark: 112 111 111;
     --gray-light: 205 205 205;
-    --gray-darkest: 88 88 88;
+    --gray-darkest:88 88 88;
 
     /* body style */
     --background: 255 255 255; /* #ffffff */
@@ -59,7 +59,7 @@
     /* secondary colors */
     /* ----------------------------------- */
     --secondary-lighter: 221 227 255; /* #dde3ff */
-    --secondary-default: 78 54 245; /* #4e36f5 */
+    --secondary-default: 55 160 95; /* #4e36f5 */
     --secondary-dark: 67 42 216; /* #432ad8 */
     --secondary-foreground: 255 255 255; /* #ffffff */
 
@@ -100,7 +100,9 @@
     /* texts colors */
     /* ----------------------------------- */
     --text-default: 53 53 53; /* #353535 */
-    --text-light: 67 67 67 /* #434343 */;
+    --text-light: 67 67 67    /* #434343 */
+
+
   }
 
   /* dark theme */

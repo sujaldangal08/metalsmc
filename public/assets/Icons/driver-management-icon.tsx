@@ -20,6 +20,7 @@ export default function DriverManagementIcon({
         strokeLinecap="round"
         strokeLinejoin="round"
         className={className}
+        fillOpacity={0}
       />
       <path
         fillRule="evenodd"
@@ -30,6 +31,7 @@ export default function DriverManagementIcon({
         strokeLinecap="round"
         strokeLinejoin="round"
         className={className}
+        fillOpacity={0}
       />
       <path
         fillRule="evenodd"
@@ -40,6 +42,7 @@ export default function DriverManagementIcon({
         strokeLinecap="round"
         strokeLinejoin="round"
         className={className}
+        fillOpacity={0}
       />
     </svg>
   );

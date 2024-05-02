@@ -11,6 +11,7 @@ export default function SideTile({
   isDropdownOpen,
   isActive,
   pathname,
+  openDrawer,
 }: {
   item: {
     name: string;
@@ -22,12 +23,13 @@ export default function SideTile({
   isDropdownOpen: boolean;
   isActive: boolean;
   pathname: string;
+  openDrawer: boolean;
 }) {
   const Icon: JSXElementConstructor<IconProps> | undefined = item?.icon;
 
   return (
     <Fragment key={item.name + "-" + index}>
-      {item?.href ? (
+      {item?.name && item?.href ? (
         <>
           {item?.dropdownItems ? (
             <Collapse
@@ -36,31 +38,37 @@ export default function SideTile({
                 <div
                   onClick={toggle}
                   className={cn(
-                    "group relative mx-3 flex cursor-pointer items-center justify-between rounded-md px-3 py-2 font-medium lg:my-1 2xl:mx-5 2xl:my-2",
+                    "transition-colors duration-200 ease-in group relative mx-3 flex cursor-pointer items-center justify-between rounded-md px-3 py-2 font-medium lg:my-1 2xl:mx-5 2xl:my-2",
                     isDropdownOpen
-                      ? "text-green"
-                      : "text-white transition-colors duration-200 hover:bg-white hover:text-green"
+                      ? "text-green bg-white"
+                      : "text-white hover:bg-green-dark"
                   )}
                 >
-                  <span className="flex items-center truncate gap-3 text-sm font-medium">
+                  <div className="flex items-center truncate gap-3">
                     {Icon && (
-                      <span
+                      <Icon
+                        w="22"
+                        h="22"
                         className={cn(
-                          "",
-                          isDropdownOpen ? "text-primary" : "text-gray-800"
+                          isDropdownOpen
+                            ? "stroke-green fill-green"
+                            : "stroke-white fill-white"
                         )}
-                      >
-                        <Icon w="25" h="25" />
+                      />
+                    )}
+                    {openDrawer && (
+                      <span className="truncate text-sm font-medium">
+                        {item.name}
                       </span>
                     )}
-                    {item.name}
-                  </span>
+                  </div>
 
                   <PiCaretDownBold
                     strokeWidth={3}
                     className={cn(
-                      "h-3.5 w-3.5 -rotate-90 text-gray-500 transition-transform duration-200 rtl:rotate-90",
-                      open && "rotate-0 rtl:rotate-0"
+                      "h-3.5 w-3.5 -rotate-90 transition-transform duration-200 rtl:rotate-90",
+                      open && "rotate-0 rtl:rotate-0",
+                      isDropdownOpen ? "text-green" : "text-white"
                     )}
                   />
                 </div>
@@ -106,7 +114,7 @@ export default function SideTile({
                   : "text-white hover:bg-green-dark"
               )}
             >
-              <div className="flex items-center truncate gap-3">
+              <div className="flex items-center justify-center truncate gap-3">
                 {Icon && (
                   <Icon
                     w="22"
@@ -118,7 +126,12 @@ export default function SideTile({
                     )}
                   />
                 )}
-                <span className="truncate text-sm font-medium">
+                <span
+                  className={cn(
+                    "truncate text-sm font-medium transition-all delay-200 ease-in",
+                    openDrawer ? "w-full" : "w-0"
+                  )}
+                >
                   {item.name}
                 </span>
               </div>

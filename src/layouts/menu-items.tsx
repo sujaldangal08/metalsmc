@@ -22,14 +22,14 @@ export const menuItems = [
   },
   {
     name: "Customer Management",
-    href: "/",
     icon: UserIcon,
+    href: "/customer",
   },
   {
     name: "Driver Management",
-    href: "#",
+    href: "/driver",
     icon: DriverManagementIcon,
-    dropdownItems: [{ name: "Driver Management", href: "#" }],
+    dropdownItems: [{ name: "Driver Management", href: "/driver/management" }],
   },
   {
     name: "Staff Management",
@@ -70,7 +70,7 @@ export const menuItems = [
   {},
   {
     name: "About",
-    href: "/",
+    href: "/about",
     icon: DashboardIcon,
   },
   {
@@ -80,7 +80,7 @@ export const menuItems = [
   },
   {
     name: "FAQs",
-    href: "/",
+    href: "/FAQ",
     icon: DashboardIcon,
   },
   {

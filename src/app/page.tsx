@@ -1,14 +1,15 @@
-"use client";
+import FileDashboard from "@/app/shared/file/dashboard";
+import { metaObject } from "@/config/site.config";
+import HydrogenLayout from "@/layouts/layout";
 
-import XeroConnect from "@/components/xero/XeroConnect";
-import withAuth from "@/lib/hoc/withAuth";
+export const metadata = {
+  ...metaObject(),
+};
 
-function Homepage() {
+export default function FileDashboardPage() {
   return (
-    <div>
-      <XeroConnect />
-    </div>
+    <HydrogenLayout>
+      <FileDashboard />
+    </HydrogenLayout>
   );
 }
-
-export default withAuth(Homepage);

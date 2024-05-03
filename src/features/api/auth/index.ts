@@ -1,16 +1,20 @@
 import { api } from "@/config/api.config";
 import Cookies from "js-cookie";
 import {
+  ChangePasswordRequestBody,
+  ChangePasswordResponse,
   DisableTwoFactorAuthRequestBody,
   DisabledTwoFactorAuthResponse,
+  ForgotPasswordRequestBody,
+  ForgotPasswordResponse,
   GenerateQrRequestBody,
   GenerateQrResponse,
   LoginResponse,
   UserLoginBody,
-  UserRegisterBody,
   Verify2faRequestBody,
   Verify2faResponse,
   VerifyOtpBody,
+  VerifyOtpResponse
 } from "./types";
 
 export async function signInFn<R = UserLoginBody>(body: R) {
@@ -26,17 +30,40 @@ export async function signInFn<R = UserLoginBody>(body: R) {
     expires: new Date(Date.now() + 10 * 60 * 60 * 1000),
   });
 
-  return response.data;
+  return response;
 }
 
-export async function verifyOtp(body: VerifyOtpBody) {
-  const response = await api.request({
-    endpoint: "/verify",
+export async function verifyOtpFn<R = VerifyOtpBody>(body: R) {
+  const response = await api.request<VerifyOtpResponse, R>({
+    endpoint: "/verify-otp",
     body,
     method: "POST",
     withHeaders: false,
   });
-  return response.data;
+
+  return response;
+}
+
+export async function forgotPasswordFn<R = ForgotPasswordRequestBody>(body: R) {
+  const response = await api.request<ForgotPasswordResponse, R>({
+    endpoint: "/forgot-password",
+    body,
+    method: "POST",
+    withHeaders: false,
+  })
+
+  return response;
+}
+
+export async function changePasswordFn<R = ChangePasswordRequestBody>(body: R) {
+  const response = await api.request<ChangePasswordResponse, R>({
+    endpoint: "/change-password",
+    method: "PATCH",
+    body,
+    withHeaders: false,
+  })
+
+  return response;
 }
 
 // Two factor auth functions ====================

@@ -1,3 +1,4 @@
+
 export default function TrendingDownIcon({
   strokeWidth,
   ...props

@@ -21,6 +21,7 @@ const useMutation = <T,>({ initialData, mutateFn }: UseMutationOptions<T>) => {
       return responseData;
     } catch (error: any) {
       setIsError(true);
+      console.log(error);
       throw new Error(error.response.data.message);
     } finally {
       setIsLoading(false);

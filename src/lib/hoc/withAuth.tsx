@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { getSession } from "../auth";
+import { Route } from "../enums/routes.enums";
 
 const withAuth = <T extends object>(
   WrappedComponent: React.ComponentType<T>
@@ -16,7 +17,7 @@ const withAuth = <T extends object>(
         const session = await getSession();
 
         if (!session) {
-          router.push("/signin");
+          router.push(Route.Login);
         } else {
           setAuthSession(session);
         }

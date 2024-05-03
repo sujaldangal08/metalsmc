@@ -8,10 +8,10 @@ import {
 // form zod validation schema
 export const resetPasswordSchema = z
   .object({
-    password: validatePassword,
-    confirmPassword: validateConfirmPassword,
+    new_password: validatePassword,
+    confirm_password: validateConfirmPassword,
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine((data) => data.new_password === data.confirm_password, {
     message: messages.passwordsDidNotMatch,
     path: ["confirmPassword"], // Correct path for the confirmedPassword field
   });

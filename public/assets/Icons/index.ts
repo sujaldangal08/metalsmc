@@ -7,6 +7,10 @@ import DriverManagementIcon from "./driver-management-icon";
 import StaffManagementIcon from "./staff-management-icon";
 import InventoryManagementIcon from "./inventory-management-icon";
 import ForwardIcon from "./forward-icon";
+import EyeIcon from "./eye-icon";
+import PenIcon from "./pen-icon";
+import BinIcon from "./bin-icon";
+import DownIcon from "./down-icon";
 
 export {
   MetalIcon,
@@ -18,4 +22,8 @@ export {
   StaffManagementIcon,
   InventoryManagementIcon,
   ForwardIcon,
+  EyeIcon,
+  PenIcon,
+  BinIcon,
+  DownIcon,
 };

@@ -1,32 +1,30 @@
 // pages/index.tsx
 "use client";
-import React from "react";
-import Card from "./card";
-import Table from "./table";
-import { Button } from "rizzui";
-import { useState } from "react";
+import FileStats from "@/app/shared/file/dashboard/file-stats";
+import FilterIcon from "@/components/icons/FilterIcon";
 import LeftIcon from "@/components/icons/LeftIcon";
 import RightArrowIcon from "@/components/icons/RightIcon";
-import FilterIcon from "@/components/icons/FilterIcon";
-import SearchIcon from "@/components/icons/SearchIcon";
-import TableCard from "./TableCard";
-import FileStats from "./records";
-
-// Add more driver data objects as needed
+import TableCard from "@/components/pages/pickup-schedule/TableCard";
+import React, { useState } from "react";
+import { Button } from "rizzui";
 
 const Home: React.FC = () => {
   const [tabIndex, setTabIndex] = useState<number>(0);
 
   return (
     <>
-    
-      <div className="bg-gray-100 p-5">
-      <h1 className="font-semibold text-md text-[#706F6F]">Pickup Schedule </h1>
-      <p className=" text-sm text-[#706F6F] pb-4 mt-2"> Manage Pickup Schedule</p>
-     <div className="mt-2 pb-3">
-     <FileStats/>
-     </div>
-      
+      <div className="bg-gray-100 py-5">
+        <h1 className="font-semibold text-md text-[#706F6F]">
+          Pickup Schedule{" "}
+        </h1>
+        <p className=" text-sm text-[#706F6F] pb-4 mt-2">
+          {" "}
+          Manage Pickup Schedule
+        </p>
+        <div className="mt-2 pb-3">
+          <FileStats />
+        </div>
+
         <h1 className="font-semibold text-md mt-4">Pickup Schedule Table</h1>
         <div className="flex gap-3 w-full items-center   mt-2">
           <input
@@ -111,10 +109,9 @@ const Home: React.FC = () => {
             <p className="font-semibold text-sm  pl-10 ">Date: dd/mm/yy</p>
           </div>
           <TableCard />
-            <TableCard />
-            <TableCard />
+          <TableCard />
+          <TableCard />
         </div>
-        
       </div>
     </>
   );

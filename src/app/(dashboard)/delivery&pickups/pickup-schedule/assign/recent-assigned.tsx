@@ -1,4 +1,4 @@
-import RecentAssignedPickupCard from "../recent-assigned-pickup-card";
+import RecentAssignedPickupCard from "./recent-assigned-pickup-card";
 
 const data = [
   {

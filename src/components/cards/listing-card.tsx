@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import { Title, Text } from '@/components/ui/text';
 import cn from '@/utils/class-names';

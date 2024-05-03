@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Title, Text } from '@/components/ui/text';
@@ -90,3 +91,4 @@ export default function MetricCard({
     </div>
   );
 }
+

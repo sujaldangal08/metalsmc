@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import { CountDown } from '@/components/ui/count-down';
 import cn from '@/utils/class-names';
@@ -89,3 +90,4 @@ export function NftCard({ nft, className }: NFTProps) {
     </div>
   );
 }
+

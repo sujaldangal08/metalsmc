@@ -1,3 +1,4 @@
+
 'use client';
 
 import cn from '@/utils/class-names';
@@ -83,3 +84,4 @@ export default function TransactionCard({
     </div>
   );
 }
+

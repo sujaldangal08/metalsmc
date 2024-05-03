@@ -59,15 +59,17 @@ const data = [
 
 export default function RecentAssigned() {
   return (
-    <div className="flex flex-col w-1/4 gap-5">
+    <div className="xl:w-1/5 w-1/4 lg:flex hidden flex-col  h-[calc(100vh-110px)] gap-5 fixed right-2 top-[100px] transition-all delay-200 ease-in">
       <h3 className="text-md font-medium">
         Recently Assigned
         <br />
         <span>Pickup Schedule</span>
       </h3>
-      {data?.map((curr, indx) => (
-        <RecentAssignedPickupCard curr={curr} key={indx} />
-      ))}
+      <div className="h-full flex flex-col gap-5 overflow-y-auto">
+        {data?.map((curr, indx) => (
+          <RecentAssignedPickupCard curr={curr} key={indx} />
+        ))}
+      </div>
     </div>
   );
 }

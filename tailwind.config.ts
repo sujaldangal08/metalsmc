@@ -4,7 +4,7 @@ import plugin from "tailwindcss/plugin";
 export default {
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/rizzui/dist/*.{js,ts,jsx,tsx}", // must use this line to compile and generate our RizzUI components style
+    "./node_modules/rizzui/dist/*.{js,ts,jsx,tsx}",
   ],
   darkMode: ["class", '[data-theme="dark"]'],
   theme: {
@@ -22,7 +22,8 @@ export default {
       fontSize: {
         xl: "35px",
         lg: "24px",
-        md: "20px",
+        rg: "20px",
+        md: "16px",
         sm: "14px",
         xs: "12px",
       },
@@ -54,9 +55,9 @@ export default {
         muted: "rgb(var(--muted) / <alpha-value>)",
         "muted-foreground": "rgb(var(--muted-foreground) / <alpha-value>)",
         primary: {
-          lighter: "rgb(var(--primary-lighter) / <alpha-value>)",
-          DEFAULT: "rgb(var(--primary-default) / <alpha-value>)",
-          dark: "rgb(var(--primary-dark) / <alpha-value>)",
+          lighter: "rgb(var(--green-lighter) / <alpha-value>)",
+          DEFAULT: "rgb(var(--green-default) / <alpha-value>)",
+          dark: "rgb(var(--green-dark) / <alpha-value>)",
           foreground: "rgb(var(--primary-foreground) / <alpha-value>)",
         },
         secondary: {

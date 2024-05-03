@@ -1,5 +1,5 @@
 import Image, { StaticImageData } from "next/image";
-import MetalIcon from "@public/assets/Icons/MetalIcon";
+import MetalIcon from "@public/assets/Icons/metal-icon";
 import React, { ReactNode } from "react";
 
 interface SideImageProps {

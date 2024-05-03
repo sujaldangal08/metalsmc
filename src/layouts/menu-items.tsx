@@ -1,57 +1,15 @@
-import { routes } from "@/config/routes";
-import { DUMMY_ID } from "@/config/constants";
+import { Route } from "@/lib/enums/routes.enums";
 import {
-  PiShoppingCartDuotone,
-  PiHeadsetDuotone,
-  PiPackageDuotone,
-  PiChartBarDuotone,
-  PiCurrencyDollarDuotone,
-  PiSquaresFourDuotone,
-  PiGridFourDuotone,
-  PiFeatherDuotone,
-  PiChartLineUpDuotone,
-  PiMapPinLineDuotone,
-  PiUserGearDuotone,
-  PiBellSimpleRingingDuotone,
-  PiUserDuotone,
-  PiEnvelopeSimpleOpenDuotone,
-  PiStepsDuotone,
-  PiCreditCardDuotone,
-  PiTableDuotone,
-  PiBrowserDuotone,
-  PiHourglassSimpleDuotone,
-  PiUserCircleDuotone,
-  PiShootingStarDuotone,
-  PiRocketLaunchDuotone,
-  PiFolderLockDuotone,
-  PiBinocularsDuotone,
-  PiHammerDuotone,
-  PiNoteBlankDuotone,
-  PiUserPlusDuotone,
-  PiShieldCheckDuotone,
-  PiLockKeyDuotone,
-  PiChatCenteredDotsDuotone,
-  PiCalendarPlusDuotone,
-  PiEnvelopeDuotone,
-  PiCurrencyCircleDollarDuotone,
-  PiBriefcaseDuotone,
-  PiHouseLineDuotone,
-  PiAirplaneTiltDuotone,
-  PiFolderNotchDuotone,
-  PiCaretCircleUpDownDuotone,
-  PiListNumbersDuotone,
-  PiCoinDuotone,
-  PiUserSquareDuotone,
-} from "react-icons/pi";
-
-import DashboardIcon from "@public/assets/Icons/DashboardIcon";
+  DashboardIcon,
+  AdminManagementIcon,
+  UserIcon,
+  DriverManagementIcon,
+  StaffManagementIcon,
+  InventoryManagementIcon,
+} from "@public/assets/Icons";
 
 // Note: do not add href in the label object, it is rendering as label
 export const menuItems = [
-  // label start
-  {
-    name: "Overview",
-  },
   // label end
   {
     name: "Dashboard",
@@ -59,18 +17,95 @@ export const menuItems = [
     icon: DashboardIcon,
   },
   {
-    name: "E-Commerce",
+    name: "Admin Management",
     href: "#",
-    icon: PiShoppingCartDuotone,
+    icon: AdminManagementIcon,
+  },
+  {
+    name: "Customer Management",
+    icon: UserIcon,
+    href: "/customer",
+  },
+  {
+    name: "Driver Management",
+    href: "/driver",
+    icon: DriverManagementIcon,
+    dropdownItems: [{ name: "Driver Management", href: "/driver/management" }],
+  },
+  {
+    name: "Staff Management",
+    href: "/",
+    icon: StaffManagementIcon,
+    dropdownItems: [],
+  },
+  {
+    name: "Inventory Management",
+    href: "#",
+    icon: InventoryManagementIcon,
+    dropdownItems: [],
+  },
+  {
+    name: "Assets Management",
+    href: "/",
+    icon: DashboardIcon,
+    dropdownItems: [],
+  },
+  {
+    name: "Ticket Management",
+    href: "#",
+    icon: AdminManagementIcon,
+    dropdownItems: [],
+  },
+  {
+    name: "Delivery & Pickups",
+    href: "/",
+    icon: DashboardIcon,
     dropdownItems: [
-      {
-        name: "Products",
-        href: routes.eCommerce.products,
-      },
-      {
-        name: "Product Details",
-        href: routes.eCommerce.productDetails(DUMMY_ID),
-      },
+      { name: "Delivery Schedule", href: "/driver/management" },
+      { name: "Pickup Schedule", href: Route.PickupSchedule },
     ],
+  },
+  {
+    name: "Sales",
+    href: "#",
+    icon: AdminManagementIcon,
+    dropdownItems: [],
+  },
+  {},
+  {
+    name: "About",
+    href: "/about",
+    icon: DashboardIcon,
+  },
+  {
+    name: "Communication",
+    href: "#",
+    icon: AdminManagementIcon,
+  },
+  {
+    name: "FAQs",
+    href: "/FAQ",
+    icon: DashboardIcon,
+  },
+  {
+    name: "Social Media Management",
+    href: "#",
+    icon: AdminManagementIcon,
+  },
+  {
+    name: "Settings",
+    href: "#",
+    icon: AdminManagementIcon,
+  },
+  {},
+  {
+    name: "Logout",
+    href: "#",
+    icon: AdminManagementIcon,
+  },
+  {
+    name: "Terms & Condition",
+    href: "#",
+    icon: AdminManagementIcon,
   },
 ];

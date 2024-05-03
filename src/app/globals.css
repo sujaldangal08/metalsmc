@@ -20,7 +20,7 @@
     /* For rgb(227 227 227 / <alpha-value>) = #e3e3e3 */
     --gray-200: 227 227 227;
     /* For rgb(223 223 223 / <alpha-value>) = #dfdfdf */
-    --gray-300: 220 220 220;
+    --gray-300: 223 223 223;
     /* For rgb(146 146 146 / <alpha-value>) = #929292 */
     --gray-400: 146 146 146;
     /* For rgb(102 102 102 / <alpha-value>) = #666666 */
@@ -50,16 +50,16 @@
     /* ----------------------------------- */
     /* primary/brand colors */
     /* ----------------------------------- */
-    --primary-lighter: 55 140 95; /* #e3e3e3 */
-    --primary-default: 55 160 95; /* #111111 */
-    --primary-dark: 55 140 95; /* #000000 */
+    --primary-lighter: 55 120 45; /* #e3e3e3 */
+    --primary-default: 55 160 83; /* #111111 */
+    --primary-dark: 0 0 0; /* #000000 */
     --primary-foreground: 255 255 255; /* #ffffff */
 
     /* ----------------------------------- */
     /* secondary colors */
     /* ----------------------------------- */
     --secondary-lighter: 221 227 255; /* #dde3ff */
-    --secondary-default: 78 54 245; /* #4e36f5 */
+    --secondary-default: 55 160 95; /* #4e36f5 */
     --secondary-dark: 67 42 216; /* #432ad8 */
     --secondary-foreground: 255 255 255; /* #ffffff */
 
@@ -87,10 +87,10 @@
     /* ----------------------------------- */
     /* green/success colors */
     /* ----------------------------------- */
-    --green-lighter: 185 249 207; /* #b9f9cf */
-    --green-default: 55 160 95; /* #11a849 */
-    --green-dark: 17 132 60; /* #11843c */
-    
+    --green-lighter: 55 140 95; /* #b9f9cf */
+    --green-default: 55 160 83; /* #11a849 */
+    --green-dark: 0 0 0; /* #11843c */
+
     /* ----------------------------------- */
     /* success colors */
     /* ----------------------------------- */

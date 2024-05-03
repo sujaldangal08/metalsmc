@@ -1,6 +1,7 @@
 import cn from "@/utils/class-names";
+import IconProps from "@public/assets/Icons/icon.type";
 import Link from "next/link";
-import { Fragment } from "react";
+import { Fragment, JSXElementConstructor } from "react";
 import { PiCaretDownBold } from "react-icons/pi";
 import { Collapse, Title } from "rizzui";
 
@@ -10,24 +11,25 @@ export default function SideTile({
   isDropdownOpen,
   isActive,
   pathname,
+  openDrawer,
 }: {
-  item:
-    | { name: string }
-    | { name: string; href: string; icon: any }
-    | {
-        name: string;
-        href: string;
-        icon: any;
-        dropdownItems: { name: string; href: string }[];
-      };
+  item: {
+    name: string;
+    href?: string;
+    icon?: JSXElementConstructor<IconProps>;
+    dropdownItems?: { name: string; href: string }[];
+  };
   index: number;
   isDropdownOpen: boolean;
   isActive: boolean;
   pathname: string;
+  openDrawer: boolean;
 }) {
+  const Icon: JSXElementConstructor<IconProps> | undefined = item?.icon;
+
   return (
     <Fragment key={item.name + "-" + index}>
-      {item?.href && (
+      {item?.name && item?.href ? (
         <>
           {item?.dropdownItems ? (
             <Collapse
@@ -36,33 +38,37 @@ export default function SideTile({
                 <div
                   onClick={toggle}
                   className={cn(
-                    "group relative mx-3 flex cursor-pointer items-center justify-between rounded-md px-3 py-2 font-medium lg:my-1 2xl:mx-5 2xl:my-2",
+                    "transition-colors duration-200 ease-in group relative mx-3 flex cursor-pointer items-center justify-between rounded-md px-3 py-2 font-medium lg:my-1 2xl:mx-5 2xl:my-2",
                     isDropdownOpen
-                      ? "before:top-2/5 text-primary before:absolute before:-start-3 before:block before:h-4/5 before:w-1 before:rounded-ee-md before:rounded-se-md before:bg-primary 2xl:before:-start-5"
-                      : "text-gray-700 transition-colors duration-200 hover:bg-gray-100 dark:text-gray-700/90 dark:hover:text-gray-700"
+                      ? "text-green bg-white"
+                      : "text-white hover:bg-green-dark"
                   )}
                 >
-                  <span className="flex items-center">
-                    {item?.icon && (
-                      <span
+                  <div className="flex items-center truncate gap-3">
+                    {Icon && (
+                      <Icon
+                        w="22"
+                        h="22"
                         className={cn(
-                          "me-2 inline-flex h-5 w-5 items-center justify-center rounded-md [&>svg]:h-[20px] [&>svg]:w-[20px]",
                           isDropdownOpen
-                            ? "text-primary"
-                            : "text-gray-800 dark:text-gray-500 dark:group-hover:text-gray-700"
+                            ? "stroke-green fill-green"
+                            : "stroke-white fill-white"
                         )}
-                      >
-                        {item?.icon({ color: "red" })}
+                      />
+                    )}
+                    {openDrawer && (
+                      <span className="truncate text-sm font-medium">
+                        {item.name}
                       </span>
                     )}
-                    {item.name}
-                  </span>
+                  </div>
 
                   <PiCaretDownBold
                     strokeWidth={3}
                     className={cn(
-                      "h-3.5 w-3.5 -rotate-90 text-gray-500 transition-transform duration-200 rtl:rotate-90",
-                      open && "rotate-0 rtl:rotate-0"
+                      "h-3.5 w-3.5 -rotate-90 transition-transform duration-200 rtl:rotate-90",
+                      open && "rotate-0 rtl:rotate-0",
+                      isDropdownOpen ? "text-green" : "text-white"
                     )}
                   />
                 </div>
@@ -79,7 +85,7 @@ export default function SideTile({
                     className={cn(
                       "mx-3.5 mb-0.5 flex items-center justify-between rounded-md px-3.5 py-2 font-medium capitalize last-of-type:mb-1 lg:last-of-type:mb-2 2xl:mx-5",
                       isChildActive
-                        ? "text-primary"
+                        ? "text-white bg-white"
                         : "text-gray-500 transition-colors duration-200 hover:bg-gray-100 hover:text-gray-900"
                     )}
                   >
@@ -102,40 +108,38 @@ export default function SideTile({
             <Link
               href={item?.href}
               className={cn(
-                "group relative mx-3 my-0.5 flex items-center justify-between rounded-md px-3 py-2 font-medium capitalize lg:my-1 2xl:mx-5 2xl:my-2",
+                "group transition-colors duration-200 relative mx-3 my-0.5 flex items-center justify-between rounded-md px-3 py-[10px] font-medium capitalize lg:my-1 2xl:mx-5 2xl:my-2",
                 isActive
-                  ? "before:top-2/5 text-primary before:absolute before:-start-3 before:block before:h-4/5 before:w-1 before:rounded-ee-md before:rounded-se-md before:bg-primary 2xl:before:-start-5"
-                  : "text-gray-700 transition-colors duration-200 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-700/90"
+                  ? "text-green bg-white"
+                  : "text-white hover:bg-green-dark"
               )}
             >
-              <div className="flex items-center truncate">
-                {item?.icon && (
-                  <span
+              <div className="flex items-center justify-center truncate gap-3">
+                {Icon && (
+                  <Icon
+                    w="22"
+                    h="22"
                     className={cn(
-                      "me-2 inline-flex h-5 w-5 items-center justify-center rounded-md [&>svg]:h-[20px] [&>svg]:w-[20px]",
                       isActive
-                        ? "text-primary"
-                        : "text-gray-800 dark:text-gray-500 dark:group-hover:text-gray-700"
+                        ? "stroke-green fill-green"
+                        : "stroke-white fill-white"
                     )}
-                  >
-                    {item?.icon({ color: "red" })}
-                  </span>
+                  />
                 )}
-                <span className="truncate">{item.name}</span>
+                <span
+                  className={cn(
+                    "truncate text-sm font-medium transition-all delay-200 ease-in",
+                    openDrawer ? "w-full" : "w-0"
+                  )}
+                >
+                  {item.name}
+                </span>
               </div>
             </Link>
           )}
         </>
       ) : (
-        <Title
-          as="h6"
-          className={cn(
-            "mb-2 truncate px-6 text-xs font-normal uppercase tracking-widest text-gray-500 2xl:px-8",
-            index !== 0 && "mt-6 3xl:mt-7"
-          )}
-        >
-          {item.name}
-        </Title>
+        <div className="w-full h-[1px] bg-gray-300 my-5 opacity-50"></div>
       )}
     </Fragment>
   );

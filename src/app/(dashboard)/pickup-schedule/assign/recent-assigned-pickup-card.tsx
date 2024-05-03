@@ -12,7 +12,7 @@ interface Props {
 
 export default function RecentAssignedPickupCard({ curr }: Props) {
   return (
-    <div className="bg-white flex flex-col items-center p-4 rounded-[6px]">
+    <div className="bg-white flex flex-col items-center p-4 mr-2 rounded-[6px]">
       <Avatar
         src={curr.avatar}
         name="John Doe"

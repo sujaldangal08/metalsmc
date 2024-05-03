@@ -1,8 +1,8 @@
 import { useState, useMemo } from "react";
 import cn from "@/utils/class-names";
-import { Input } from "rizzui";
+import { Input, InputProps } from "rizzui";
 
-interface Props<T> {
+interface Props<T> extends InputProps {
   value: string;
   setValue: (value: string) => void;
   filterFunction: (value: string) => T[];
@@ -20,6 +20,7 @@ export default function SearchInput<T>({
   placeholder = "Search",
   label = "",
   render,
+  ...props
 }: Props<T>) {
   const [isFocus, setFocus] = useState(false);
 
@@ -43,6 +44,7 @@ export default function SearchInput<T>({
         onBlur={() => {
           setFocus(false);
         }}
+        {...props}
       />
       {isFocus && (
         <div className="bg-white w-full mt-2 rounded-md shadow-sm flex flex-col z-50 absolute">

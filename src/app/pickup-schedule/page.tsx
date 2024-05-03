@@ -10,6 +10,7 @@ import RightArrowIcon from "@/components/icons/RightIcon";
 import FilterIcon from "@/components/icons/FilterIcon";
 import SearchIcon from "@/components/icons/SearchIcon";
 import TableCard from "./TableCard";
+import FileStats from "./records";
 
 // Add more driver data objects as needed
 
@@ -18,9 +19,16 @@ const Home: React.FC = () => {
 
   return (
     <>
+    
       <div className="bg-gray-100 p-5">
-        <h1 className="font-semibold text-md">PickUp Schedule Table</h1>
-        <div className="flex gap-3 items-center   mt-2">
+      <h1 className="font-semibold text-md text-[#706F6F]">Pickup Schedule </h1>
+      <p className=" text-sm text-[#706F6F] pb-4 mt-2"> Manage Pickup Schedule</p>
+     <div className="mt-2 pb-3">
+     <FileStats/>
+     </div>
+      
+        <h1 className="font-semibold text-md mt-4">Pickup Schedule Table</h1>
+        <div className="flex gap-3 w-full items-center   mt-2">
           <input
             className="bg-white h-10 text-sm focus:outline-none rounded-md outline-none"
             placeholder="Search by name,phone or email"
@@ -29,10 +37,10 @@ const Home: React.FC = () => {
             }}
           />
         </div>
-        <div className="flex justify-between mt-3 pb-2">
+        <div className="flex justify-between mt-4 pb-2">
           <div className="flex gap-5 items-start">
             <Button
-              className="py-5 bg-gray-200 rounded-3xl text-black text-sm font-semibold"
+              className="py-5 bg-white rounded-3xl text-black text-sm font-semibold"
               type="submit"
             >
               <div className="flex items-center">
@@ -54,11 +62,11 @@ const Home: React.FC = () => {
               Day
             </button>
             <button
-              className={`px-[40px] h-10 text-base font-regular e shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-xl ${
+              className={`px-[20px] h-10 text-base font-regular e shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-xl ${
                 tabIndex == 1
                   ? " text-white focus-visible:outline-primary bg-primary"
                   : " text-primary focus-visible:outline-white bg-white"
-              } rounded-md`}
+              } rounded-2xl`}
               onClick={() => {
                 setTabIndex(1);
               }}
@@ -99,13 +107,14 @@ const Home: React.FC = () => {
           </div>
         </div>
         <div className=" rounded-md bg-white">
-          <div className="mt-2">
-            <p className="font-semibold text-sm pb-3 pl-10 ">Date: dd/mm/yy</p>
+          <div className="py-2">
+            <p className="font-semibold text-sm  pl-10 ">Date: dd/mm/yy</p>
           </div>
           <TableCard />
             <TableCard />
             <TableCard />
         </div>
+        
       </div>
     </>
   );

@@ -41,7 +41,7 @@ export default function SideTile({
                     isDropdownOpen
                       ? "text-green bg-white"
                       : "text-white hover:bg-white hover:text-green", // Applied hover styles here
-                      open && "lg:justify-center lg:px-0" 
+                     
                   )}
                 >
 
@@ -64,18 +64,16 @@ export default function SideTile({
                     )}
                   </div>
 
-                  {!open && (
+                 
                   <PiCaretDownBold
                     strokeWidth={3}
                     className={cn(
                       "h-3.5 w-3.5 -rotate-90 transition-transform duration-200 rtl:rotate-90",
                       open && "rotate-0 rtl:rotate-0",
-                      isDropdownOpen
-                        ? "text-green"
-                        : "text-white group-hover:text-green" // Added group-hover class for PiCaretDownBold
+                      isDropdownOpen ? "text-green" : "text-white group-hover:text-green" // Added group-hover class for PiCaretDownBold
                     )}
                   />
-                )}
+              
                 </div>
               )}
             >
@@ -93,17 +91,17 @@ export default function SideTile({
                         ? "text-green bg-white"
                         : "text-white hover:bg-white hover:text-green" // Moved hover classes here
                     )}
-                  >
-                    <div className="flex items-center truncate">
+                  > 
+                    <div className="flex items-center truncate gap-3" >
                       <span
                         className={cn(
-                          "me-[18px] ms-1 inline-flex h-3 w-3 rounded-full bg-current transition-all duration-200",
+                          "inline-flex h-3 w-3 rounded-full bg-current transition-all duration-200",
                           isChildActive
                             ? "bg-white ring-[1px] ring-white"
                             : "opacity-40 hover:bg-white hover:opacity-100" // Added hover classes for the dot
                         )}
                       />
-                      <span className="truncate">{dropdownItem?.name}</span>
+                      <span className="truncate sm:text-sm">{dropdownItem?.name}</span>
                     </div>
                   </Link>
                 );
@@ -122,8 +120,8 @@ export default function SideTile({
             <div className="flex items-center justify-center truncate gap-3">
               {Icon && (
                 <Icon
-                  w="32"
-                  h="32"
+                  w="28"
+                  h="28"
                   className={cn(
                     isActive
                       ? "stroke-green fill-green"

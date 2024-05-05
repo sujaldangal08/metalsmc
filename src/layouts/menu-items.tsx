@@ -60,7 +60,8 @@ export const menuItems = [
     name: "Delivery & Pickups",
     href: "/",
     icon: DashboardIcon,
-    dropdownItems: [],
+    dropdownItems: [{ name: "pickup schedule", href: "/driver/management" }],
+
   },
   {
     name: "Sales",

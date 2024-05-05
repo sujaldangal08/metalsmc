@@ -1,8 +1,8 @@
 import IconProps from "./icon.type";
 
 export default function DashboardIcon({
-  w = "30",
-  h = "30",
+  w = "28",
+  h = "28",
   className = "",
 }: IconProps) {
   return (

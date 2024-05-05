@@ -6,11 +6,12 @@ import { UserLoginBody } from "@/features/api/auth/types";
 import { setSessionCookie } from "@/lib/auth";
 import { Route } from "@/lib/enums/routes.enums";
 import useMutation from "@/lib/hooks/useMutation";
+import { handleGoogleSignin } from "@/lib/oauth-helpers";
 import { formatErrorMessage } from "@/utils/format-errors";
 import { LoginSchema, loginSchema } from "@/utils/validators/login.schema";
+import FacebookLogin from "@greatsumini/react-facebook-login";
 import FacebookIcon from "@public/assets/facebook_icon.png";
-import GoogleIcon from "@public/assets/google_icon.png";
-import { signIn } from "next-auth/react";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -45,6 +46,19 @@ export default function SignInForm() {
     } catch (err: any) {
       toast.error(formatErrorMessage(err));
     }
+  };
+
+  const handleGoogleAuthResponse = async (res: CredentialResponse) => {
+    try {
+      await handleGoogleSignin(res.credential!);
+      router.push(Route.Home);
+    } catch (err: any) {
+      toast.error(formatErrorMessage(err));
+    }
+  };
+
+  const handleFacebookResponse = (res: any) => {
+    console.log(res);
   };
 
   return (
@@ -100,52 +114,51 @@ export default function SignInForm() {
                 <span>Sign in</span>
               )}
             </Button>
-            {/* <p className="text-primary sm:text-sm text-xs">
-              Dont' have an Account ?
-              <Link href={Route.Register}>
-                <span className="ml-2 text-text font-semibold cursor-pointer">
-                  Sign up
-                </span>
-              </Link>
-            </p> */}
+
             <div className="flex w-full items-center gap-4">
               <div className="w-1/2 h-[1px] bg-gray-light"></div>
               <p className="text-xs text-gray">or</p>
               <div className="w-1/2 h-[1px] bg-gray-light"></div>
             </div>
             <div className="flex md:flex-row flex-col w-full justify-between md:gap-10 gap-3">
-              <Button
-                onClick={() => signIn("google")}
-                variant="outline"
-                className="md:w-1/2 w-full"
-              >
-                <div className="flex items-center md:gap-4 gap-8 py-5">
-                  <Image
-                    src={GoogleIcon}
-                    alt="Google Photo"
-                    width={200}
-                    height={200}
-                    className="w-[25px]"
-                  />
-                  <h3 className="text-sm font-normal text-gray-dark ">
-                    Sign up with Google
-                  </h3>
-                </div>
-              </Button>
-              <Button variant="outline" className="md:w-1/2 w-full">
-                <div className="flex items-center md:gap-4 gap-8 py-5">
-                  <Image
-                    src={FacebookIcon}
-                    alt="Google Photo"
-                    width={200}
-                    height={200}
-                    className="w-[25px]"
-                  />
-                  <h3 className="text-sm font-normal text-gray-dark">
-                    Sign up with Facebook
-                  </h3>
-                </div>
-              </Button>
+              <div className="flex-1">
+                <GoogleLogin
+                  onSuccess={handleGoogleAuthResponse}
+                  onError={() => toast.error("Google signin failed!!")}
+                  containerProps={{
+                    style: {
+                      width: "100% !important",
+                    },
+                  }}
+                />
+              </div>
+
+              <FacebookLogin
+                appId={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID}
+                fields="name,email,picture"
+                scope="public_profile,email"
+                onSuccess={handleFacebookResponse}
+                render={({ onClick }) => (
+                  <Button
+                    onClick={onClick}
+                    variant="outline"
+                    className="md:w-1/2 w-full"
+                  >
+                    <div className="flex items-center md:gap-4 gap-8 py-5">
+                      <Image
+                        src={FacebookIcon}
+                        alt="Google Photo"
+                        width={200}
+                        height={200}
+                        className="w-[25px]"
+                      />
+                      <h3 className="text-sm font-normal text-gray-dark">
+                        Sign up with Facebook
+                      </h3>
+                    </div>
+                  </Button>
+                )}
+              />
             </div>
           </div>
         </div>

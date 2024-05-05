@@ -25,6 +25,7 @@ export const menuItems = [
     name: "Customer Management",
     icon: UserIcon,
     href: "/customer",
+
   },
   {
     name: "Driver Management",
@@ -34,9 +35,9 @@ export const menuItems = [
   },
   {
     name: "Staff Management",
-    href: "/",
+    href: "/staff",
     icon: StaffManagementIcon,
-    dropdownItems: [],
+       dropdownItems: [{ name: "Staff Management", href: "/staff/management" }],
   },
   {
     name: "Inventory Management",

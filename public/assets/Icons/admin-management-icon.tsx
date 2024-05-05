@@ -1,15 +1,15 @@
 import IconProps from "./icon.type";
 
 export default function AdminManagementIcon({
-  w = "19",
-  h = "21",
+  w = "32",
+  h = "32",
   className = "",
 }: IconProps) {
   return (
     <svg
       width={w}
       height={h}
-      viewBox="0 0 24 24"
+      viewBox="0 0 28 28"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >

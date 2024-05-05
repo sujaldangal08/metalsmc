@@ -29,7 +29,8 @@ export default function Sidebar({
         className={cn(
           "fixed bottom-0 start-0 z-50 h-full w-[270px] border-e-2 border-gray-100 bg-green transition-all delay-200 ease-in",
           className,
-          openDrawer ? "2xl:w-[300px]" : "2xl:w-[120px]"
+          openDrawer      ? "w-[270px] 2xl:w-[300px]"
+          : "w-[120px] 2xl:w-[80px]"
         )}
       >
         {/* Header for Sidebar */}
@@ -68,6 +69,7 @@ export default function Sidebar({
 
               return (
                 <SideTile
+                  key={item.name}
                   openDrawer={openDrawer}
                   item={item}
                   index={index}
@@ -83,7 +85,7 @@ export default function Sidebar({
       <div
         className={cn(
           "transition-all delay-200 ease-in p-3 bg-green-dark rounded-full cursor-pointer z-[999] fixed top-8 w-10",
-          openDrawer ? "start-60" : "start-[95px]"
+          openDrawer ? "start-60" : "start-[95px] 2xl:start-[40px]"
         )}
         onClick={() => {
           setOpenDrawer(!openDrawer);

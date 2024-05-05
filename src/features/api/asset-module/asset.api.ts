@@ -6,6 +6,10 @@ import {
   PermanentDeleteAssetResponse,
   RestoreAssetBody,
   RestoreAssetResponse,
+  UpdateAssetBody,
+  UpdateAssetResponse,
+  GetOneAsset,
+  GetAllAssetResponse 
 } from "./asset.type";
 
 const baseEnd = "/asset";
@@ -51,4 +55,33 @@ export async function createAsset({ body }: { body: CreateAssetBody }) {
 }
 
 //Patch: Update Asset
-export async function updateAsset() {}
+export async function updateAsset({
+  id,
+  body,
+
+}:{
+  id:string;
+  body:UpdateAssetBody
+}) {
+  const response = await api.request<UpdateAssetResponse, UpdateAssetBody>({
+    endpoint: `${baseEnd}/${id}`,
+    body,
+    method: "PATCH",
+  });
+  return response.data;
+}
+
+
+//Get: Get All Assets
+export async function getAllAssets(){
+  const response = await api.get<GetAllAssetResponse>(`${baseEnd}`);
+  return response.data;
+}
+
+//Get: Get One Asset
+
+export async function getOneAsset({ id }: { id: string }) {
+  const response = await api.get<GetOneAsset>(`${baseEnd}/${id}`);
+  return response.data;
+} 
+

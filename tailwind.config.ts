@@ -55,9 +55,9 @@ export default {
         muted: "rgb(var(--muted) / <alpha-value>)",
         "muted-foreground": "rgb(var(--muted-foreground) / <alpha-value>)",
         primary: {
-          lighter: "rgb(var(--green-lighter) / <alpha-value>)",
-          DEFAULT: "rgb(var(--green-default) / <alpha-value>)",
-          dark: "rgb(var(--green-dark) / <alpha-value>)",
+          lighter: "rgb(var(--primary-lighter) / <alpha-value>)",
+          DEFAULT: "rgb(var(--primary-default) / <alpha-value>)",
+          dark: "rgb(var(--primary-dark) / <alpha-value>)",
           foreground: "rgb(var(--primary-foreground) / <alpha-value>)",
         },
         secondary: {

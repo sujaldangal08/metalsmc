@@ -30,3 +30,9 @@ export interface UpdateAssetBody {
   };
   fuel_tank: string;
 }
+export interface GetAllAssetResponse {}
+
+
+
+export interface GetOneAsset {}
+

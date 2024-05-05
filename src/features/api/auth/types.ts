@@ -1,4 +1,5 @@
 import { LoginSchema } from "@/utils/validators/login.schema";
+import { CommonApiResponse } from "../types";
 
 export interface LoginResponse {
     status: string,
@@ -9,10 +10,6 @@ export interface LoginResponse {
     token_type: string
 }
 
-export interface CommonApiResponse {
-    status: string;
-    message: string;
-}
 
 export interface UserRegisterBody {
     name: string;

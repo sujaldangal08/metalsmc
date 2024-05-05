@@ -379,6 +379,11 @@
   dependencies:
     fast-deep-equal "^3.1.3"
 
+"@greatsumini/react-facebook-login@^3.3.3":
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/@greatsumini/react-facebook-login/-/react-facebook-login-3.3.3.tgz#466d3f0c55d10b962a06e30d7a445a15769f7498"
+  integrity sha512-Y5D7EncR3iy/X/OfWwjjpM5OW0XV6PCE08RZUV/yhAE413PEBIlML7S6z69BcpUPWO5XzEt7cytHChUdwXO4Dw==
+
 "@headlessui/react@^1.7.17":
   version "1.7.19"
   resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.7.19.tgz#91c78cf5fcb254f4a0ebe96936d48421caf75f40"
@@ -838,6 +843,11 @@
     react "18.2.0"
     react-dom "18.2.0"
 
+"@react-oauth/google@^0.12.1":
+  version "0.12.1"
+  resolved "https://registry.yarnpkg.com/@react-oauth/google/-/google-0.12.1.tgz#b76432c3a525e9afe076f787d2ded003fcc1bee9"
+  integrity sha512-qagsy22t+7UdkYAiT5ZhfM4StXi9PPNvw0zuwNmabrWyMKddczMtBIOARflbaIj+wHiQjnMAsZmzsUYuXeyoSg==
+
 "@restart/hooks@^0.4.7":
   version "0.4.16"
   resolved "https://registry.yarnpkg.com/@restart/hooks/-/hooks-0.4.16.tgz#95ae8ac1cc7e2bd4fed5e39800ff85604c6d59fb"
@@ -1092,6 +1102,13 @@
     "@types/react" "*"
     date-fns "^2.0.1"
     react-popper "^2.2.5"
+
+"@types/react-facebook-login@^4.1.11":
+  version "4.1.11"
+  resolved "https://registry.yarnpkg.com/@types/react-facebook-login/-/react-facebook-login-4.1.11.tgz#e4a699e26f5af503210cba0f5a278207d2f9a113"
+  integrity sha512-7S/qzQMrS/zyJupX1RTiP9YV8qA0RyjS+up19G28XM6C9IN3NYfkrbKJEHOAfc79HdFYgpt9qQd1IHNZxuH+eA==
+  dependencies:
+    "@types/react" "*"
 
 "@types/react-scroll@^1.8.10":
   version "1.8.10"
@@ -4685,6 +4702,11 @@ react-email@1.10.0:
     read-pkg "5.2.0"
     shelljs "0.8.5"
     tree-cli "0.6.7"
+
+react-facebook-login@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/react-facebook-login/-/react-facebook-login-4.1.1.tgz#005121236a6ac0dee02099976fb1a3265f9d633e"
+  integrity sha512-COnHEHlYGTKipz4963safFAK9PaNTcCiXfPXMS/yxo8El+/AJL5ye8kMJf23lKSSGGPgqFQuInskIHVqGqTvSw==
 
 react-fast-compare@^3.0.1:
   version "3.2.2"

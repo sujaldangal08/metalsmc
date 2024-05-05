@@ -4,6 +4,7 @@ import SideImage from "@/components/ui/Signup/signup";
 import withoutAuth from "@/lib/hoc/withoutAuth";
 import LoginPhoto from "@public/assets/login_photo.svg";
 import SignInForm from "./signin-form";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function Loginpage() {
   return (
@@ -16,7 +17,11 @@ function Loginpage() {
         sideDescription="Loorem Ipsum Loorem IpsumLoorem IpsumLoorem IpsumLoorem IpsumLoorem IpsumLoorem IpsumLoorem Ipsum"
         sideTitle="The simplest way to manage your workspace."
       >
-        <SignInForm />
+        <GoogleOAuthProvider
+          clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+        >
+          <SignInForm />
+        </GoogleOAuthProvider>
       </SideImage>
     </>
   );

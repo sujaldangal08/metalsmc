@@ -11,7 +11,7 @@ interface CardProps {}
 
 const Card: React.FC<CardProps> = ({}) => {
   return (
-    <div className="bg-white  shadow-md overflow-hidden w-1/4 h-80 border-r border-gray-300">
+    <div className="bg-white  overflow-hidden w-1/4 h-80 pt-3 border-r border-gray-300">
       <div className="flex flex-col items-center px-6 py-2">
         <Avatar
           className="w-40 h-40 mt-2"

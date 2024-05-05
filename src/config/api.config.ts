@@ -75,7 +75,10 @@ class ApiService {
     withHeaders
   }: RequestOptions<S>) {
     // Get headers with access token
-    const headers = await this.getHeadersWithAccessToken();
+    let headers;
+    if (withHeaders) {
+      headers = await this.getHeadersWithAccessToken();
+    }
     const customHeaders = withHeaders ? { ...headers, ...options?.headers } : { ...options?.headers };
 
     // Determine whether the request involves file upload

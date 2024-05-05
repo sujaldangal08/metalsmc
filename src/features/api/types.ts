@@ -1,5 +1,4 @@
-export type ApiResponseType<T> = {
-    status: string
-    message: string
-    data: T
+export interface CommonApiResponse {
+    status: string;
+    message: string;
 }

@@ -1,25 +1,24 @@
 import { api } from "@/config/api.config";
 
 import {
-  CreatePickupRouteBody,
-  CreatePickupRouteResponse,
-  UpdatePickupRouteResponse,
-  updatePickupRouteBody,
-  PermanentDeletePickupRouteResponse,
-  DeletePickupRouteResponse,
   GetAllPickupResponse,
-  GetOneRoute,
+  GetOnePickupRouteResponse
 } from "./pickupRoute.type";
 
 const baseEnd = "/route"
 
 //Get All Routes
-
-export async function getAllRoutes(){
-    const response = await api.get <GetAllPickupResponse>(`${baseEnd}`)
+export async function getAllPickupRoutes() {
+  const response = await api.get<GetAllPickupResponse>(`${baseEnd}`);
+  return response.data;
 }
 
 //Get One Route
+export async function getOnePickupRoute(id: number) {
+  const response = await api.get<GetOnePickupRouteResponse>(`${baseEnd}/${id}`)
+
+  return response.data;
+}
 
 //create a route
 

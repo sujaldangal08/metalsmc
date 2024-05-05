@@ -47,7 +47,7 @@ export default function SearchInput<T>({
         {...props}
       />
       {isFocus && (
-        <div className="bg-white w-full mt-2 rounded-md shadow-sm flex flex-col z-50 absolute">
+        <div className="bg-white w-full mt-2 rounded-md shadow-md flex flex-col z-50 absolute outline-gray-600 outline-solid">
           {render(filteredData)}
         </div>
       )}

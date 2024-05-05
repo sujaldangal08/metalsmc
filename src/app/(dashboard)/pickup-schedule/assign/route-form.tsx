@@ -4,11 +4,12 @@ import { Badge } from "rizzui";
 import { Fragment, useState } from "react";
 import cn from "@/utils/class-names";
 import SearchInput from "@/components/input/search-input";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import assignPickupSchedule, {
   AssignPickupSchedule,
 } from "@/utils/schema/delivery-pickups/asignPickupSchedule.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Status from "@/components/status/status";
 
 const data = [
   {
@@ -68,10 +69,12 @@ const data = [
 ];
 
 interface Props {
-  deleteComponent: React.ReactNode;
+  onDelete: (indx: number) => void;
+  indx: number;
+  isDeleteDisable: boolean;
 }
 
-export default function RouteForm({ deleteComponent }: Props) {
+export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
   const {
     handleSubmit,
     register,
@@ -103,9 +106,16 @@ export default function RouteForm({ deleteComponent }: Props) {
       .slice(0, 5);
   };
 
+  const deleteSchedule = (indx: number) => {
+    if (schedule.length > 1) {
+      // removeSchedule(indx);
+      setSchedule((prev) => prev.filter((_, i) => i !== indx));
+    }
+  };
+
   return (
     <form
-      className="flex flex-col w-full rounded-md overflow-clip shadow-sm py-4"
+      className="flex flex-col w-full overflow-clip shadow-sm rounded-t-md"
       onSubmit={handleSubmit(() => {
         console.log("o");
       })}
@@ -114,12 +124,11 @@ export default function RouteForm({ deleteComponent }: Props) {
         <h2 className="font-medium text-md">Route Name :</h2>
         <Input
           placeholder="Enter route...."
-          className="ml-4 w-1/3"
-          inputClassName="bg-white ring-white"
+          className="ml-4 w-1/3 [&>div]:hidden"
+          inputClassName="bg-white ring-gray-dark bg-white"
           {...register("route_name")}
           error={errors?.route_name?.message}
         />
-        {deleteComponent}
         <span
           className={cn(
             "absolute right-4 cursor-pointer",
@@ -140,20 +149,29 @@ export default function RouteForm({ deleteComponent }: Props) {
         )}
       >
         <div className="flex w-full">
-          <div className="flex flex-col w-full gap-4">
+          <div className="flex flex-col w-full gap-3">
             <div className="flex w-full items-center justify-between">
-              <div>
-                <h2 className="text-md font-normal">
-                  Driver's Name : <span className="text-gray">Jhon Doe</span>
-                </h2>
-                <h2 className="text-md font-normal">
-                  Truck License Plate no :{" "}
-                  <span className="text-gray">123456</span>
-                </h2>
+              <div className="flex items-end gap-6">
+                <div>
+                  <h2 className="text-md font-normal leading-none">
+                    Driver's Name : <span className="text-gray">Jhon Doe</span>
+                  </h2>
+                  <h2 className="text-md font-normal">
+                    Truck License Plate no :{" "}
+                    <span className="text-gray">123456</span>
+                  </h2>
+                </div>
+                <Status className="pb-1" isAvailable />
               </div>
-              <Badge className="text-md font-normal text-black px-8 bg-yellow-500">
-                Available for Pickup
-              </Badge>
+              <Button
+                className="bg-red-500 hover:bg-red-600 disabled:bg-red-400 disabled:text-white"
+                onClick={() => {
+                  onDelete(indx);
+                }}
+                disabled={isDeleteDisable}
+              >
+                Delete Route
+              </Button>
             </div>
             <div className="w-full bg-gray-300 h-[1px]" />
             {schedule.map((_, indx) => (
@@ -169,18 +187,15 @@ export default function RouteForm({ deleteComponent }: Props) {
                         : "opacity-100 cursor-pointer"
                     )}
                     onClick={() => {
-                      if (schedule.length > 1) {
-                        setSchedule((prev) =>
-                          prev.filter((_, i) => i !== indx)
-                        );
-                      }
+                      //Function to delete schedule from schedule list
+                      deleteSchedule(indx);
                     }}
                   >
                     <BinIcon className="fill-red-500" />
                   </span>
                 </div>
-                <div className="flex w-full gap-4">
-                  <div className="flex flex-col w-1/3 gap-4">
+                <div className="flex w-full gap-3 key={indx}">
+                  <div className="flex flex-col w-1/3 gap-2">
                     <h2 className="text-md font-medium">Customer's Details</h2>
                     <SearchInput<{
                       avatar: string;
@@ -228,7 +243,7 @@ export default function RouteForm({ deleteComponent }: Props) {
                     />
                   </div>
                   <div className="w-[1px] h-full bg-gray-300"></div>
-                  <div className="flex flex-col w-2/3 gap-4">
+                  <div className="flex flex-col w-2/3 gap-2">
                     <div className="flex w-full items-center justify-between">
                       <div>
                         <h2 className="text-md font-medium">
@@ -252,7 +267,7 @@ export default function RouteForm({ deleteComponent }: Props) {
                         </span>
                       </Button>
                     </div>
-                    <div className="grid grid-cols-3 gap-4 max-h-[220px] overflow-y-auto">
+                    <div className="grid grid-cols-3 gap-3 max-h-[220px] overflow-y-auto">
                       {material.map((_, indx) => (
                         <Fragment key={indx}>
                           <Select

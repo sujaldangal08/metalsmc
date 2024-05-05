@@ -1,3 +1,5 @@
+"use client";
+
 import { api } from "@/config/api.config";
 import { Account } from "next-auth";
 import { setRefreshTokenCookie, setSessionCookie } from "./auth";
@@ -5,6 +7,7 @@ import { setRefreshTokenCookie, setSessionCookie } from "./auth";
 export interface GoogleOAuthResponse {
     access_token: string;
     refresh_token: string;
+    "expires_at": string
 }
 /**
  * Handles the Google Sign-in process and sets the session and refresh token cookies.
@@ -12,13 +15,11 @@ export interface GoogleOAuthResponse {
  * @param {Account} account - The account object obtained from the Google Sign-in process.
  * @returns {Promise<boolean>} A promise that resolves to true if the operation is successful.
  */
-export const handleGoogleSignin = async (account: Account) => {
-    const id_token = account?.id_token;
-
+export const handleGoogleSignin = async (id_token: string) => {
     try {
         const response = await api.request<GoogleOAuthResponse, { token: string }>({
             endpoint: "/oauth/google",
-            body: { token: id_token! },
+            body: { token: id_token },
             method: "POST",
             withHeaders: false
         });
@@ -29,14 +30,13 @@ export const handleGoogleSignin = async (account: Account) => {
         setRefreshTokenCookie(refresh_token);
 
     } catch (err: any) {
-        console.log(err);
-        return false;
+        throw new Error(err.response.data.message);
     }
-
-    return true;
 };
 
 export const handleFacebookSignin = async (account: Account) => {
     // Haven't got endpoint for it ====================
+    console.log("Facebook: " + account);
+
     return true;
 }

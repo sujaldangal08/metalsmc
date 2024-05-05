@@ -9,6 +9,9 @@ declare global {
             NEXT_PUBLIC_GOOGLE_CLIENT_ID: string
             NEXT_PUBLIC_GOOGLE_CLIENT_SECRET: string
 
+            NEXT_PUBLIC_FACEBOOK_APP_ID: string
+            NEXT_PUBLIC_FACEBOOK_APP_SECRET: string
+
             NEXT_PUBLIC_VITE_REACT_VERSION: string
             NEXT_PUBLIC_VITE_REACT_API_URL: string
 

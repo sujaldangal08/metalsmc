@@ -26,48 +26,6 @@ type FileStatsType = {
   data: FileStatsData[];
 };
 
-const filesStatData = [
-  {
-    id: 1,
-    title: "Total Pickups",
-    metric: "1260",
-    fill: "#37A05F",
-    percentage: 12,
-    increased: true,
-    decreased: false,
-    value: "+32.40",
-  },
-  {
-    id: 2,
-    title: "Total Deliveries",
-    metric: "1260",
-    fill: "#0A68EF",
-    percentage: 12,
-    increased: true,
-    decreased: false,
-    value: "+32.40",
-  },
-  {
-    id: 3,
-    title: "Total Customers",
-    metric: "1260",
-    fill: "#FF6464",
-    percentage: 12,
-    increased: true,
-    decreased: false,
-    value: "+32.40",
-  },
-  {
-    id: 4,
-    title: "Total Drivers",
-    metric: "1260",
-    fill: "#FFAB00",
-    percentage: 12,
-    increased: true,
-    decreased: false,
-    value: "+32.40",
-  },
-];
 
 export function FileStatGrid({ className, data }: FileStatsType) {
   return (

@@ -1,32 +1,39 @@
-'use client';
+"use client";
 
-import { Avatar } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { Popover } from '@/components/ui/popover';
-import { Title, Text } from '@/components/ui/text';
-import { routes } from '@/config/routes';
-import cn from '@/utils/class-names';
-import { signOut } from 'next-auth/react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Avatar } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Popover } from "@/components/ui/popover";
+import { Title, Text } from "@/components/ui/text";
+import { routes } from "@/config/routes";
+import { logout } from "@/lib/auth";
+import cn from "@/utils/class-names";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const menuItems = [
   {
-    name: 'My Profile',
+    name: "My Profile",
     href: routes.profile,
   },
   {
-    name: 'Account Settings',
+    name: "Account Settings",
     href: routes.forms.profileSettings,
   },
   {
-    name: 'Activity Log',
-    href: '#',
+    name: "Activity Log",
+    href: "#",
   },
 ];
 
 function DropdownMenu() {
+  const router = useRouter();
+
+  const handleSignout = () => {
+    router.push("/login");
+    logout();
+  };
+
   return (
     <div className="w-64 text-left rtl:text-right">
       <div className="flex items-center border-b border-gray-300 px-6 pb-5 pt-6">
@@ -56,7 +63,7 @@ function DropdownMenu() {
         <Button
           className="h-auto w-full justify-start p-0 font-medium text-gray-700 outline-none focus-within:text-gray-600 hover:text-gray-900 focus-visible:ring-0"
           variant="text"
-          onClick={() => signOut()}
+          onClick={() => handleSignout()}
         >
           Sign Out
         </Button>
@@ -89,14 +96,14 @@ export default function ProfileMenu({
       <Popover.Trigger>
         <button
           className={cn(
-            'w-9 shrink-0 rounded-full outline-none focus-visible:ring-[1.5px] focus-visible:ring-gray-400 focus-visible:ring-offset-2 active:translate-y-px sm:w-10',
+            "w-9 shrink-0 rounded-full outline-none focus-visible:ring-[1.5px] focus-visible:ring-gray-400 focus-visible:ring-offset-2 active:translate-y-px sm:w-10",
             buttonClassName
           )}
         >
           <Avatar
             src="https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-11.webp"
             name="John Doe"
-            className={cn('!h-9 w-9 sm:!h-10 sm:w-10', avatarClassName)}
+            className={cn("!h-9 w-9 sm:!h-10 sm:w-10", avatarClassName)}
           />
         </button>
       </Popover.Trigger>

@@ -47,6 +47,10 @@ export default function SignInForm() {
     }
   };
 
+  const handleOAuthSign = async (provider: string) => {
+    await signIn(provider);
+  };
+
   return (
     <Form<LoginSchema>
       validationSchema={loginSchema}
@@ -115,7 +119,7 @@ export default function SignInForm() {
             </div>
             <div className="flex md:flex-row flex-col w-full justify-between md:gap-10 gap-3">
               <Button
-                onClick={() => signIn("google")}
+                onClick={() => handleOAuthSign("google")}
                 variant="outline"
                 className="md:w-1/2 w-full"
               >
@@ -132,7 +136,11 @@ export default function SignInForm() {
                   </h3>
                 </div>
               </Button>
-              <Button variant="outline" className="md:w-1/2 w-full">
+              <Button
+                onClick={() => handleOAuthSign("facebook")}
+                variant="outline"
+                className="md:w-1/2 w-full"
+              >
                 <div className="flex items-center md:gap-4 gap-8 py-5">
                   <Image
                     src={FacebookIcon}

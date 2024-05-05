@@ -80,7 +80,7 @@ export function useApplyColorPreset<T extends Record<string, any>>(
     let colorDark = COLOR_PRESETS[0].colors.dark;
     let colorForeground = COLOR_PRESETS[0].colors.foreground;
 
-    if (colorPresets) {
+    if (colorPresets) {   
       colorLighter = colorPresets.lighter;
       colorLight = colorPresets.light;
       colorDefault = colorPresets.default;

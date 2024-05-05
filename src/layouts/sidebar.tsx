@@ -69,6 +69,7 @@ export default function Sidebar({
 
               return (
                 <SideTile
+                  key={item.name}
                   openDrawer={openDrawer}
                   item={item}
                   index={index}

@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import Image from 'next/image';
 import WishlistButton from '@/components/wishlist-button';
@@ -81,3 +82,4 @@ export default function ProductMinimalCard({
     </div>
   );
 }
+

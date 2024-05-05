@@ -1,7 +1,7 @@
 "use client";
 
 import cn from "@/utils/class-names";
-import { Button } from "@/components/ui/button";
+import { Button } from "rizzui";
 import { Text } from "@/components/ui/text";
 import { useScrollableSlider } from "@/hooks/use-scrollable-slider";
 import { PiCaretLeftBold, PiCaretRightBold } from "react-icons/pi";
@@ -10,57 +10,69 @@ import CircleProgressBar from "@/components/charts/circle-progressbar";
 import TrendingUpIcon from "@/components/icons/trending-up";
 import TrendingDownIcon from "@/components/icons/trending-down";
 
+type FileStatsData = {
+  id: number;
+  title: string;
+  metric: string;
+  fill: string;
+  percentage: number;
+  increased: boolean;
+  decreased: boolean;
+  value: string;
+};
+
 type FileStatsType = {
   className?: string;
+  data: FileStatsData[];
 };
 
 const filesStatData = [
   {
     id: 1,
-    title: "Total Images",
-    metric: "36,476 GB",
-    fill: "#3872FA",
-    percentage: 32,
+    title: "Total Pickups",
+    metric: "1260",
+    fill: "#37A05F",
+    percentage: 12,
     increased: true,
     decreased: false,
     value: "+32.40",
   },
   {
     id: 2,
-    title: "Total Videos",
-    metric: "53,406 GB",
-    fill: "#3872FA",
-    percentage: 48,
-    increased: false,
-    decreased: true,
-    value: "-18.45",
+    title: "Total Deliveries",
+    metric: "1260",
+    fill: "#0A68EF",
+    percentage: 12,
+    increased: true,
+    decreased: false,
+    value: "+32.40",
   },
   {
     id: 3,
-    title: "Total Documents",
-    metric: "90,875 GB",
-    fill: "#EE0000",
-    percentage: 89,
+    title: "Total Customers",
+    metric: "1260",
+    fill: "#FF6464",
+    percentage: 12,
     increased: true,
     decreased: false,
-    value: "+20.34",
+    value: "+32.40",
   },
   {
     id: 4,
-    title: "Total Musics",
-    metric: "63,076 GB",
-    fill: "#3872FA",
-    percentage: 54,
+    title: "Total Drivers",
+    metric: "1260",
+    fill: "#FFAB00",
+    percentage: 12,
     increased: true,
     decreased: false,
-    value: "+14.45",
+    value: "+32.40",
   },
 ];
 
-export function FileStatGrid({ className }: { className?: string }) {
+export function FileStatGrid({ className, data }: FileStatsType) {
   return (
     <>
-      {filesStatData.map((stat: any) => {
+      {data.map((stat: any) => {
         return (
           <MetricCard
             key={stat.id}
@@ -72,7 +84,7 @@ export function FileStatGrid({ className }: { className?: string }) {
               <CircleProgressBar
                 percentage={stat.percentage}
                 size={80}
-                stroke="#D7E3FE"
+                stroke={stat.fill + "33"}
                 strokeWidth={7}
                 progressColor={stat.fill}
                 useParentResponsive={true}
@@ -112,7 +124,7 @@ export function FileStatGrid({ className }: { className?: string }) {
   );
 }
 
-export default function FileStats({ className }: FileStatsType) {
+export default function FileStats({ className, data }: FileStatsType) {
   const {
     sliderEl,
     sliderPrevBtn,
@@ -142,7 +154,7 @@ export default function FileStats({ className }: FileStatsType) {
           ref={sliderEl}
           className="custom-scrollbar-x grid grid-flow-col gap-5 overflow-x-auto scroll-smooth 2xl:gap-6 3xl:gap-8"
         >
-          <FileStatGrid className="min-w-[292px]" />
+          <FileStatGrid className="min-w-[292px]" data={data} />
         </div>
       </div>
       <Button

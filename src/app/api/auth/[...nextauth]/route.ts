@@ -1,4 +1,4 @@
-import { handleFacebookSignin, handleGoogleSignin } from "@/lib/auth";
+import { handleFacebookSignin, handleGoogleSignin } from "@/lib/oauth-helpers";
 import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
@@ -8,8 +8,8 @@ const authOptions: NextAuthOptions = {
     secret: "super-secret",
     providers: [
         GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID!,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+            clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET!,
             authorization: {
                 params: {
                     prompt: "consent",
@@ -25,10 +25,11 @@ const authOptions: NextAuthOptions = {
 
     callbacks: {
         async signIn({ account }) {
+            console.log(account);
             if (account?.provider === 'google') {
-                return await handleGoogleSignin(account);
+                return handleGoogleSignin(account);
             } else if (account?.provider === 'facebook') {
-                return await handleFacebookSignin(account);
+                return handleFacebookSignin(account);
             }
 
             return false;

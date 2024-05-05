@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
 import { getAllPickupRoutes } from "@/features/api/schedule-module/pickupRoute.api";
 import React, { useState } from "react";
+import { Input } from "rizzui";
+import { SearchIcon } from "@public/assets/Icons";
 import useSWR from "swr";
 
 const pickupStatsData = [
@@ -68,22 +70,21 @@ const PickupSchedulePage: React.FC = () => {
   return (
     <>
       <div className="bg-gray-100 py-5">
-        <h1 className="font-semibold text-lg text-[#706F6F]">
-          Pickup Schedule{" "}
+        <h1 className="font-semibold text-lg text-[#434343]">
+          Pickup Schedule
         </h1>
-        <p className=" text-sm text-[#706F6F] pb-4 mt-2">
-          {" "}
-          Manage Pickup Schedule
-        </p>
-        <div className="mt-2 pb-3">
+        <p className="text-md text-[#434343]">Manage Pickup Schedule</p>
+        <div className="mt-4 pb-3">
           <FileStats data={pickupStatsData} />
         </div>
 
         <h1 className="font-semibold text-md mt-4">Pickup Schedule Table</h1>
-        <div className="flex gap-3 w-full items-center   mt-2">
-          <input
-            className="bg-white h-10 text-sm focus:outline-none rounded-md outline-none"
-            placeholder="Search by name,phone or email"
+        <div className="flex gap-3 w-full items-center  mt-2">
+          <Input
+            prefix={<SearchIcon />}
+            placeholder="Search by name, phone or email"
+            className="w-1/3"
+            inputClassName="bg-white ring-gray-dark"
             onChange={(e) => {
               // searchHandler(e.target.value);
             }}

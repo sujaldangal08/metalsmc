@@ -1,12 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "rizzui";
+import { Button, Input } from "rizzui";
 import SearchInput from "@/components/input/search-input";
 import RecentAssigned from "./recent-assigned";
 import RouteForm from "./route-form";
-import cn from "@/utils/class-names";
-import BinIcon from "@public/assets/Icons/bin-icon";
 
 export default function Page() {
   const [searched_driver, setSearchedDriver] = useState("");
@@ -80,6 +78,12 @@ export default function Page() {
       .slice(0, 5);
   };
 
+  const onDelete = (indx: number) => {
+    if (route.length > 1) {
+      setRoute((prev) => prev.filter((_, i) => i !== indx));
+    }
+  };
+
   return (
     <div className="flex flex-col py-4 gap-4 w-full">
       <div className="space-y-1">
@@ -91,8 +95,14 @@ export default function Page() {
         </h4>
       </div>
       <div className="w-full flex relative">
-        <div className="flex flex-col lg:w-3/4 w-full gap-4 lg:pr-5 pr-0">
-          <div className="flex items-end gap-6 relative">
+        <div className="flex flex-col lg:w-4/5 w-full gap-4 lg:pr-5 pr-0">
+          <div className="flex items-end gap-4 relative">
+            <Input
+              inputClassName="bg-white ring-gray-dark"
+              type="date"
+              label="Date"
+              className="w-1/4"
+            />
             <SearchInput<{
               avatar: string;
               name: string;
@@ -105,6 +115,7 @@ export default function Page() {
                 setSearchedDriver(value.toString());
               }}
               filterFunction={filterFunction}
+              className="w-1/4"
               render={(data) => (
                 <>
                   {data?.map((driver, indx) => (
@@ -127,6 +138,7 @@ export default function Page() {
               truckNumber: string;
             }>
               placeholder="Choose Truck"
+              className="w-1/4"
               label="Truck"
               value={searched_driver}
               setValue={(value: string | number) => {
@@ -158,24 +170,10 @@ export default function Page() {
           </div>
           {route?.map((_, indx) => (
             <RouteForm
-              key={indx}
-              deleteComponent={
-                <span
-                  className={cn(
-                    "absolute right-14",
-                    route.length === 1
-                      ? "opacity-50 cursor-not-allowed"
-                      : "opacity-100 cursor-pointer"
-                  )}
-                  onClick={() => {
-                    if (route.length > 1) {
-                      setRoute((prev) => prev.filter((_, i) => i !== indx));
-                    }
-                  }}
-                >
-                  <BinIcon className="fill-red-500" />
-                </span>
-              }
+              indx={indx}
+              onDelete={onDelete}
+              key={"Route Form - " + indx}
+              isDeleteDisable={route.length <= 1}
             />
           ))}
         </div>

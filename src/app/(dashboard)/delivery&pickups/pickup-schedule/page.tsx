@@ -5,13 +5,14 @@ import FilterIcon from "@/components/icons/FilterIcon";
 import LeftIcon from "@/components/icons/LeftIcon";
 import RightArrowIcon from "@/components/icons/RightIcon";
 import TableCard from "@/components/pages/pickup-schedule/table-card";
-import { Button } from "@/components/ui/button";
+import { Button } from "rizzui";
 import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
 import { getAllPickupRoutes } from "@/features/api/schedule-module/pickupRoute.api";
 import React, { useState } from "react";
 import { Input } from "rizzui";
 import { SearchIcon } from "@public/assets/Icons";
 import useSWR from "swr";
+import Breadcrumb from "@/components/ui/breadcrumb";
 
 const pickupStatsData = [
   {
@@ -67,18 +68,19 @@ const PickupSchedulePage: React.FC = () => {
 
   return (
     <>
-      <div className="bg-gray-100 py-5">
-        <h1 className="font-semibold text-md text-[#706F6F]">
-          Pickup Schedule
-        </h1>
-        <p className=" text-sm text-[#706F6F] pb-4 mt-2">
-          Manage Pickup Schedule
-        </p>
+      <div className="py-5">
+        <Breadcrumb>
+          <Breadcrumb.Item href="/pickup-schedule">
+            Pickup Schedule
+          </Breadcrumb.Item>
+        </Breadcrumb>
         <div className="mt-2 pb-3">
           <FileStats data={pickupStatsData} />
         </div>
 
-        <h1 className="font-semibold text-md mt-4">Pickup Schedule Table</h1>
+        <h1 className="font-medium text-md mt-4 text-gray-dark">
+          Pickup Schedule Table
+        </h1>
         <div className="flex gap-3 w-full items-center  mt-2">
           <Input
             prefix={<SearchIcon />}
@@ -92,14 +94,17 @@ const PickupSchedulePage: React.FC = () => {
         </div>
         <div className="flex justify-between items-center my-4">
           <div className="flex gap-5">
-            <Button
-              className="!w-[200px] flex items-center rounded-3xl text-sm font-semibold"
-              type="submit"
-            >
-              <LeftIcon />
-              <span className="mx-2">December 2023</span>
-              <RightArrowIcon />
-            </Button>
+            <div className="px-8 bg-white text-black flex items-center rounded-full">
+              <Button className="bg-white :hover:bg-white">
+                <LeftIcon />
+              </Button>
+              <span className="mx-2 px-4 text-sm font-medium">
+                December 2023
+              </span>
+              <Button className="bg-white :hover:bg-white">
+                <RightArrowIcon />
+              </Button>
+            </div>
             <button
               className={`px-[40px] h-10 text-base font-regular e shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-lg ${
                 tabIndex == 0
@@ -158,11 +163,12 @@ const PickupSchedulePage: React.FC = () => {
             </Button>
           </div>
         </div>
-        <div className=" ">
+        <div className="">
           <div className="py-3 bg-white rounded-t-md">
-            <p className="font-semibold text-sm  pl-4">Date: dd/mm/yy</p>
+            <p className="font-normal text-sm pl-4 text-black">
+              Date: dd/mm/yy
+            </p>
           </div>
-
           <div className="flex flex-col gap-4">
             {data?.routes.data.map((routeData) => (
               <TableCard routeData={routeData} />

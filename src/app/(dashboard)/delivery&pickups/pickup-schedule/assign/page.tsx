@@ -5,6 +5,7 @@ import { Button, Input } from "rizzui";
 import SearchInput from "@/components/input/search-input";
 import RecentAssigned from "./recent-assigned";
 import RouteForm from "./route-form";
+import Breadcrumb from "@/components/ui/breadcrumb";
 
 export default function Page() {
   const [searched_driver, setSearchedDriver] = useState("");
@@ -86,17 +87,15 @@ export default function Page() {
 
   return (
     <div className="flex flex-col py-4 gap-4 w-full">
-      <div className="space-y-1">
-        <h2 className="text-gray-dark font-semibold text-lg">
+      <Breadcrumb>
+        <Breadcrumb.Item href="/pickup-schedule">
           Pickup Schedule
-        </h2>
-        <h4 className="text-gray-dark font-normal text-md">
-          Assign Pickup Schedule
-        </h4>
-      </div>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item href="/">Assign Schedule</Breadcrumb.Item>
+      </Breadcrumb>
       <div className="w-full flex relative">
         <div className="flex flex-col lg:w-4/5 w-full gap-4 lg:pr-5 pr-0">
-          <div className="flex items-end gap-4 relative">
+          <div className="flex items-end gap-4 relative flex-wrap">
             <Input
               inputClassName="bg-white ring-gray-dark"
               type="date"

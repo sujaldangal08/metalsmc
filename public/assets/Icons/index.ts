@@ -13,6 +13,7 @@ import BinIcon from "./bin-icon";
 import DownIcon from "./down-icon";
 import GrowthIcon from "./growth-icon";
 import SearchIcon from "./search-icon";
+import CloseIcon from "./close-icon";
 
 export {
   MetalIcon,
@@ -28,6 +29,7 @@ export {
   PenIcon,
   BinIcon,
   DownIcon,
+  CloseIcon,
   GrowthIcon,
   SearchIcon,
 };

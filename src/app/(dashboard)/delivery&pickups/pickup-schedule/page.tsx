@@ -68,11 +68,13 @@ const PickupSchedulePage: React.FC = () => {
   return (
     <>
       <div className="bg-gray-100 py-5">
-        <h1 className="font-semibold text-lg text-[#434343]">
+        <h1 className="font-semibold text-md text-[#706F6F]">
           Pickup Schedule
         </h1>
-        <p className="text-md text-[#434343]">Manage Pickup Schedule</p>
-        <div className="mt-4 pb-3">
+        <p className=" text-sm text-[#706F6F] pb-4 mt-2">
+          Manage Pickup Schedule
+        </p>
+        <div className="mt-2 pb-3">
           <FileStats data={pickupStatsData} />
         </div>
 

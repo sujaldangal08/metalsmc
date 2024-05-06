@@ -1,8 +1,8 @@
 import IconProps from "./icon.type";
 
 export default function StaffManagementIcon({
-  w = "29",
-  h = "28",
+  w = "28",
+  h = "29",
   className = "",
 }: IconProps) {
   return (

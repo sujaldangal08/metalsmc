@@ -1,5 +1,6 @@
 "use client";
 
+import cn from "@/utils/class-names";
 import { FC } from "react";
 import { Button as RizzuiButton, type ButtonProps } from "rizzui";
 
@@ -14,7 +15,10 @@ export const Button: FC<ButtonProps> = ({ children, ...props }) => {
   return (
     <RizzuiButton
       {...props}
-      className={colorVariants[props.color ? props.color : "default"]}
+      className={cn(
+        colorVariants[props.color ? props.color : "default"],
+        props.className
+      )}
     >
       {children}
     </RizzuiButton>

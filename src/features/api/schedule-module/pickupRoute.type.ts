@@ -40,6 +40,7 @@ interface PickupRoutes {
     total: number
 }
 
+
 export interface Link {
     url?: string
     label: string

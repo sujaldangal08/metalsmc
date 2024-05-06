@@ -13,7 +13,7 @@ function Table({ routeDetails }: TableProps) {
         type="submit"
       >
         <div className="flex items-center">
-          <span className="mx-2">{routeDetails.data.name}</span>
+          <span className="mx-2"></span>
         </div>
       </Button>
       <table className="w-full border border-gray-300  rounded-md relative border-separate border-spacing-0 ">

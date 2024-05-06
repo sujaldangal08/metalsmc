@@ -15,11 +15,6 @@ function TableCard({ routeData }: TableCardProps) {
     ([_, id]) => getOnePickupRoute(id)
   );
 
-  // const { data } = useSWR(
-  //   () => (routeData.id ? ["pickup-route-details", routeData.driver_id] : null),
-  //   ([_, id]) => getDriverDetails(id)
-  // );
-
   if (isLoading || !routeDetails) {
     return <LoadingSpinner />;
   }

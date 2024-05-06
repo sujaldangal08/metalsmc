@@ -58,8 +58,8 @@ export const menuItems = [
   },
   {
     name: "Delivery & Pickups",
-    href: "/",
-    icon: <DashboardIcon />,
+    href: "#",
+    icon: <InventoryManagementIcon />,
     dropdownItems: [
       { name: "Delivery Schedule", href: Route.DeliverySchedule },
       { name: "Pickup Schedule", href: Route.PickupSchedule },

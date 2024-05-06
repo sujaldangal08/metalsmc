@@ -22,7 +22,7 @@ export default function PickupRoute({
 }: PickupRouteProps) {
   const { data: routeDetails, isLoading } = useSWR(
     () => (id ? ["pickup-route-details", id] : null),
-    ([_, id]) => getOnePickupRoute(id)
+    ([_, id]) => getOnePickupRoute(id),
   );
 
   if (isLoading) {
@@ -32,7 +32,7 @@ export default function PickupRoute({
   return (
     <div className="rounded overflow-hidden">
       <div className="bg-[#C6E7D9] flex justify-between items-center px-6 py-1">
-        <h1 className="text-sm font-medium">Route Name : {route_name}</h1>
+        <h1 className="text-sm font-medium">{route_name}</h1>
         <DownArrowIcon
           height="20"
           width="20"

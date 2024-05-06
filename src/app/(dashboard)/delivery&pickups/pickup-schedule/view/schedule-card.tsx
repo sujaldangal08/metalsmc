@@ -1,17 +1,26 @@
 import { Badge } from "@/components/ui/badge";
-import { ScheduleDetails } from "@/features/api/schedule-module/pickupRoute.type";
+import { PickupScheduleDetails } from "@/features/api/schedule-module/pickupRoute.type";
 
 export interface ScheduleCardProps {
-  scheduleDetails: ScheduleDetails;
+  scheduleDetails: PickupScheduleDetails;
 }
 
 export default function ScheduleCard({ scheduleDetails }: ScheduleCardProps) {
-  const { id, customer, materials, coordinates,notes } = scheduleDetails;
+  const { id, customer, materials, coordinates, notes, rate, tare_weight } =
+    scheduleDetails;
+
+  const formattedTableData = materials.map((material, index) => {
+    return {
+      material,
+      rate: `$${rate[index]}`,
+      total_weight: `${tare_weight[index]} tons`,
+    };
+  });
 
   return (
     <div className="p-6 flex flex-col gap-5">
       <Badge className="bg-[#C6E7D9] w-fit text-black text-sm font-medium rounded px-2 py-1.5">
-        {id}
+        Schedule: {id}
       </Badge>
       <div className="flex gap-5">
         <div className="flex flex-col gap-5 w-1/4">
@@ -43,13 +52,15 @@ export default function ScheduleCard({ scheduleDetails }: ScheduleCardProps) {
                 </tr>
               </thead>
               <tbody>
-                {materials.map((material, index) => (
-                  <tr key={index} className="even:bg-[#C6E7D930]">
-                    <td className="px-5 py-2">{material.material}</td>
-                    <td className="px-5 py-2">${material.price_per_unit}</td>
-                    <td className="px-5 py-2">{material.total_weight} Tons</td>
-                  </tr>
-                ))}
+                {formattedTableData.map(
+                  ({ material, rate, total_weight }, index) => (
+                    <tr key={index} className="even:bg-[#C6E7D930]">
+                      <td className="px-5 py-2">{material}</td>
+                      <td className="px-5 py-2">{rate}</td>
+                      <td className="px-5 py-2">{total_weight}</td>
+                    </tr>
+                  )
+                )}
               </tbody>
             </table>
           </div>

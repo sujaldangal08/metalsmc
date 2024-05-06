@@ -15,10 +15,9 @@ const Home: React.FC = () => {
     <>
       <div className="bg-gray-100 py-5">
         <h1 className="font-semibold text-md text-[#706F6F]">
-          Pickup Schedule{" "}
+          Pickup Schedule
         </h1>
         <p className=" text-sm text-[#706F6F] pb-4 mt-2">
-          {" "}
           Manage Pickup Schedule
         </p>
         <div className="mt-2 pb-3">

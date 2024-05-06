@@ -4,7 +4,7 @@ import { Badge } from "rizzui";
 import { Fragment, useState } from "react";
 import cn from "@/utils/class-names";
 import SearchInput from "@/components/input/search-input";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import assignPickupSchedule, {
   AssignPickupSchedule,
 } from "@/utils/schema/delivery-pickups/asignPickupSchedule.schema";
@@ -151,17 +151,15 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
         <div className="flex w-full">
           <div className="flex flex-col w-full gap-3">
             <div className="flex w-full items-center justify-between">
-              <div className="flex items-end gap-6">
-                <div>
-                  <h2 className="text-md font-normal leading-none">
-                    Driver's Name : <span className="text-gray">Jhon Doe</span>
-                  </h2>
-                  <h2 className="text-md font-normal">
-                    Truck License Plate no :{" "}
-                    <span className="text-gray">123456</span>
-                  </h2>
-                </div>
-                <Status className="pb-1" isAvailable />
+              <div className="flex items-end gap-14">
+                <h2 className="text-md font-normal">
+                  Driver's Name : <span className="text-gray">Jhon Doe</span>
+                </h2>
+                <h2 className="text-md font-normal">
+                  Truck License Plate no :{" "}
+                  <span className="text-gray">123456</span>
+                </h2>
+                <Status className="pb-1" status="success" title="Available" />
               </div>
               <Button
                 className="bg-red-500 hover:bg-red-600 disabled:bg-red-400 disabled:text-white"
@@ -194,8 +192,8 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
                     <BinIcon className="fill-red-500" />
                   </span>
                 </div>
-                <div className="flex w-full gap-3 key={indx}">
-                  <div className="flex flex-col w-1/3 gap-2">
+                <div className="flex w-full gap-3 flex-col">
+                  <div className="flex flex-col w-1/2 gap-2">
                     <h2 className="text-md font-medium">Customer's Details</h2>
                     <SearchInput<{
                       avatar: string;
@@ -234,16 +232,9 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
                         errors?.schedules?.[indx]?.customer?.location?.message
                       }
                     />
-                    <Textarea
-                      maxLength={80}
-                      textareaClassName="resize-none h-[150px] ring-gray-dark"
-                      placeholder="Note"
-                      {...register(`schedules.${indx}.customer.note`)}
-                      error={errors?.schedules?.[indx]?.customer?.note?.message}
-                    />
                   </div>
-                  <div className="w-[1px] h-full bg-gray-300"></div>
-                  <div className="flex flex-col w-2/3 gap-2">
+                  <div className="w-full h-[1px] bg-gray-300 my-2" />
+                  <div className="flex flex-col w-full gap-2">
                     <div className="flex w-full items-center justify-between">
                       <div>
                         <h2 className="text-md font-medium">
@@ -267,51 +258,64 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
                         </span>
                       </Button>
                     </div>
-                    <div className="grid grid-cols-3 gap-3 max-h-[220px] overflow-y-auto">
+                    <div className="grid grid-cols-7 gap-3 max-h-[220px] overflow-y-auto">
                       {material.map((_, indx) => (
                         <Fragment key={indx}>
-                          <Select
-                            label="Material"
-                            options={material_options}
-                            placeholder="Select Material"
-                            {...register(
-                              `schedules.${indx}.materials.${indx}.material`
-                            )}
-                            error={
-                              errors?.schedules?.[indx]?.materials?.[indx]
-                                ?.material?.message
-                            }
-                          />
-                          <Input
-                            placeholder="Price / Unit"
-                            type="number"
-                            label="Rate"
-                            {...register(
-                              `schedules.${indx}.materials.${indx}.rate`
-                            )}
-                            error={
-                              errors?.schedules?.[indx]?.materials?.[indx]?.rate
-                                ?.message
-                            }
-                          />
-                          <Input
-                            placeholder="Weight"
-                            type="number"
-                            prefix="Tons"
-                            label="Weight"
-                            prefixClassName="text-xs"
-                            {...register(
-                              `schedules.${indx}.materials.${indx}.weight`
-                            )}
-                            error={
-                              errors?.schedules?.[indx]?.materials?.[indx]
-                                ?.weight?.message
-                            }
-                          />
+                          <div className="col-span-2">
+                            <Select
+                              label="Material"
+                              options={material_options}
+                              placeholder="Select Material"
+                              {...register(
+                                `schedules.${indx}.materials.${indx}.material`
+                              )}
+                              error={
+                                errors?.schedules?.[indx]?.materials?.[indx]
+                                  ?.material?.message
+                              }
+                            />
+                          </div>
+                          <div className="col-span-2">
+                            <Input
+                              placeholder="Price / Unit"
+                              type="number"
+                              label="Rate"
+                              {...register(
+                                `schedules.${indx}.materials.${indx}.rate`
+                              )}
+                              error={
+                                errors?.schedules?.[indx]?.materials?.[indx]
+                                  ?.rate?.message
+                              }
+                            />
+                          </div>
+                          <div className="col-span-2">
+                            <Input
+                              placeholder="Weight"
+                              type="number"
+                              prefix="Tons"
+                              label="Weight"
+                              prefixClassName="text-xs"
+                              {...register(
+                                `schedules.${indx}.materials.${indx}.weight`
+                              )}
+                              error={
+                                errors?.schedules?.[indx]?.materials?.[indx]
+                                  ?.weight?.message
+                              }
+                            />
+                          </div>
                         </Fragment>
                       ))}
                     </div>
                   </div>
+                  <Textarea
+                    maxLength={80}
+                    textareaClassName="resize-none h-[100px] ring-gray-dark"
+                    placeholder="Note"
+                    {...register(`schedules.${indx}.customer.note`)}
+                    error={errors?.schedules?.[indx]?.customer?.note?.message}
+                  />
                 </div>
                 <div className="w-full bg-gray-300 h-[1px]" />
               </Fragment>

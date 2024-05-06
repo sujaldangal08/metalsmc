@@ -93,12 +93,9 @@ export default function Page() {
         </Breadcrumb.Item>
         <Breadcrumb.Item href="/">Assign Schedule</Breadcrumb.Item>
       </Breadcrumb>
-      <h4 className="text-gray-dark font-normal text-md">
-        Assign Pickup Schedule
-      </h4>
       <div className="w-full flex relative">
         <div className="flex flex-col lg:w-4/5 w-full gap-4 lg:pr-5 pr-0">
-          <div className="flex items-end gap-4 relative">
+          <div className="flex items-end gap-4 relative flex-wrap">
             <Input
               inputClassName="bg-white ring-gray-dark"
               type="date"

@@ -8,7 +8,7 @@ import TableCard from "@/components/pages/pickup-schedule/table-card";
 import { Button } from "rizzui";
 import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
 import { getAllPickupRoutes } from "@/features/api/schedule-module/pickupRoute.api";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "rizzui";
 import { SearchIcon } from "@public/assets/Icons";
 import useSWR from "swr";
@@ -58,10 +58,52 @@ const pickupStatsData = [
   },
 ];
 
+async function getLocationFromCoordinates(latitude: number, longitude: number) {
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // Check if the response status is OK
+    if (data.status === "OK") {
+      // Extract the formatted address from the first result
+      return data;
+    } else {
+      // Handle error
+      console.error(
+        "Geocoding request failed:",
+        data.error_message || data.status
+      );
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching geocoding data:", error);
+    return null;
+  }
+}
+
 const PickupSchedulePage: React.FC = () => {
-  const [tabIndex, setTabIndex] = useState<number>(0);
+  const [time, setTime] = useState<"day" | "month" | "year">("day");
 
   const { data, error, isLoading } = useSWR("pickup-data", getAllPickupRoutes);
+
+  // Example usage
+  const latitude = 27.712094; // Example latitude
+  const longitude = 85.3281912; // Example longitude
+
+  useEffect(() => {
+    getLocationFromCoordinates(latitude, longitude)
+      .then((location) => {
+        console.log("Location:", location);
+      })
+      .catch((error) => {
+        console.error("Error getting location:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -109,43 +151,45 @@ const PickupSchedulePage: React.FC = () => {
             <Button
               className={cn(
                 `w-[100px] font-regular rounded-full text-md ${
-                  tabIndex == 0
+                  time === "day"
                     ? "text-white bg-primary hover:bg-primary-dark"
                     : " text-primary bg-white hover:bg-gray-50"
                 }`
               )}
               onClick={() => {
-                setTabIndex(0);
+                setTime("day");
               }}
             >
               Day
             </Button>
             <Button
               className={cn(
-                `w-[100px] hover:bg-gray-50 text-base font-regular shadow-sm rounded-full ${
-                  tabIndex == 1
+                `w-[100px] font-regular rounded-full text-md ${
+                  time === "month"
                     ? "text-white bg-primary hover:bg-primary-dark"
-                    : " text-primary bg-white hover:bg-primary-dark"
+                    : " text-primary bg-white hover:bg-gray-50"
                 }`
               )}
               onClick={() => {
-                setTabIndex(1);
+                setTime("month");
               }}
             >
               Month
             </Button>
-            <button
-              className={`px-[40px] h-10 text-base font-regular e shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-lg ${
-                tabIndex == 2
-                  ? " text-white focus-visible:outline-primary bg-primary"
-                  : " text-primary focus-visible:outline-white bg-white"
-              } rounded-md`}
+            <Button
+              className={cn(
+                `w-[100px] font-regular rounded-full text-md ${
+                  time === "year"
+                    ? "text-white bg-primary hover:bg-primary-dark"
+                    : " text-primary bg-white hover:bg-gray-50"
+                }`
+              )}
               onClick={() => {
-                setTabIndex(2);
+                setTime("year");
               }}
             >
               Year
-            </button>
+            </Button>
           </div>
           <div className="flex gap-5 ">
             <Button
@@ -168,12 +212,7 @@ const PickupSchedulePage: React.FC = () => {
             </Button>
           </div>
         </div>
-        <div className="">
-          <div className="py-3 bg-white rounded-t-md">
-            <p className="font-normal text-sm pl-4 text-black">
-              Date: dd/mm/yy
-            </p>
-          </div>
+        <div>
           <div className="flex flex-col gap-4">
             {data?.routes.data.map((routeData) => (
               <TableCard routeData={routeData} />

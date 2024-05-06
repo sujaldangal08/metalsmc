@@ -1,5 +1,5 @@
 import { Button, Input, Select, Textarea } from "rizzui";
-import { DownIcon, BinIcon, CloseIcon } from "@public/assets/Icons/index";
+import { DownIcon, BinIcon, CloseIcon } from "@public/assets/Icons";
 import { Badge } from "rizzui";
 import { Fragment, useState } from "react";
 import cn from "@/utils/class-names";

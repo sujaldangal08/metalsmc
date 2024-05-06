@@ -10,6 +10,10 @@ import ForwardIcon from "./forward-icon";
 import GrowthIcon from "./growth-icon";
 import SearchIcon from "./search-icon";
 import CloseIcon from "./close-icon";
+import BinIcon from "./bin-icon";
+import DownIcon from "./down-icon";
+import PenIcon from "./pen-icon";
+import EyeIcon from "./eye-icon";
 
 export {
   MetalIcon,
@@ -24,4 +28,8 @@ export {
   GrowthIcon,
   SearchIcon,
   CloseIcon,
+  BinIcon,
+  DownIcon,
+  PenIcon,
+  EyeIcon,
 };

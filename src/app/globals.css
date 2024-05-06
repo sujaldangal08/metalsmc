@@ -4,6 +4,36 @@
 
 @import "react-big-calendar/lib/css/react-big-calendar.css";
 
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar:hover {
+  width: 10px;
+}
+.scroll::-webkit-scrollbar {
+  width: 6px !important;
+}
+.scroll::-webkit-scrollbar:hover {
+  width: 8px !important;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 0px #f7f7f7;
+  border-radius: 10px;
+  background-color: #f7f7f7;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #c8c8c8;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(141, 141, 141);
+}
+
 @layer base {
   /* default theme */
   :root {
@@ -52,7 +82,7 @@
     /* ----------------------------------- */
     --primary-lighter: 55 120 45 !important; /* #e3e3e3 */
     --primary-default: 55 160 83 !important; /* #111111 */
-    --primary-dark: 0 0 0 !important; /* #000000 */
+    --primary-dark: 14 153 72 !important; /* #000000 */
     --primary-foreground: 255 255 255 !important; /* #ffffff */
 
     /* ----------------------------------- */

@@ -10,7 +10,7 @@ export default function DashboardIcon({
       width={w}
       height={h}
       viewBox="0 0 30 30"
-      fill="none"
+      fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

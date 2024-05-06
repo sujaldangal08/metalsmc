@@ -7,6 +7,7 @@ import EditIcon from "@/components/icons/EditIcon";
 import ViewIcon from "@/components/icons/viewIcon";
 import { GetOnePickupRouteResponse } from "@/features/api/schedule-module/pickupRoute.type";
 import Link from "next/link";
+import { Route } from "@/lib/enums/routes.enums";
 
 interface CardProps {
   driverDetails: GetOnePickupRouteResponse["data"];
@@ -45,8 +46,8 @@ const Card: React.FC<CardProps> = ({
           <span>Reassign</span>
         </Button>
       </div>
-      <div className="flex justify-center gap-5 mx-auto bg-gray-100 rounded-3xl py-2 px-3 [&>svg]:w-5 [&>svg]:h-5 w-3/5 mt-3">
-        <Link href={`/pickup-schedule/view/${id}`}>
+      <div className="flex justify-center items-center gap-5 mx-auto bg-gray-100 rounded-3xl py-2 px-3 [&>a>svg]:w-6 [&>a>svg]:h-6 w-3/5 mt-3">
+        <Link href={`${Route.ViewPickupSchedule}/${id}`}>
           <ViewIcon />
         </Link>
         <EditIcon />

@@ -60,7 +60,9 @@ export default function SideTile({
                     strokeWidth={3}
                     className={cn(
                       "h-3.5 w-3.5 -rotate-90 group-hover:text-gray-700 text-white transition-transform duration-200 rtl:rotate-90",
-                      open && "rotate-0 rtl:rotate-0 group-hover:text-gray-700"
+                      open &&
+                        "rotate-0 rtl:rotate-0 text-white group-hover:text-gray-700",
+                      isDropdownOpen && "text-gray-700"
                     )}
                   />
                 </div>
@@ -81,7 +83,7 @@ export default function SideTile({
                         : "text-white transition-colors duration-200 hover:bg-gray-100 hover:text-gray-900"
                     )}
                   >
-                    <div className="flex items-center truncate gap-3">
+                    <div className="flex items-center truncate gap-3 pl-2">
                       <span
                         className={cn(
                           "inline-flex h-2 w-2 rounded-full bg-current transition-all duration-200",

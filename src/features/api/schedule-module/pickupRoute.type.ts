@@ -59,7 +59,7 @@ export interface GetOnePickupRouteResponse extends CommonApiResponse {
             rego_number: string
             image: string
         }
-        schedule: ScheduleDetails[]
+        schedule: PickupScheduleDetails[]
     }
 }
 
@@ -76,7 +76,7 @@ export interface PickupRouteData {
     updated_at: string
 }
 
-export interface ScheduleDetails {
+export interface PickupScheduleDetails {
     id: number
     route_id: number
     driver_id: number

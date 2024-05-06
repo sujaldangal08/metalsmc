@@ -63,8 +63,6 @@ const PickupSchedulePage: React.FC = () => {
     return <LoadingSpinner />;
   }
 
-  console.log(data);
-
   return (
     <>
       <div className="bg-gray-100 py-5">

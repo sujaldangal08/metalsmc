@@ -1,8 +1,10 @@
 "use client";
 
-import { ScheduleCardProps } from "./schedule-card";
-import PickupRoute from "./pickup-route";
+import { ScheduleCardProps } from "../schedule-card";
+import PickupRoute from "../pickup-route";
 import { useState } from "react";
+import useSWR from "swr";
+import { getAllPickupRoutes } from "@/features/api/schedule-module/pickupRoute.api";
 
 interface Routes {
   route_name: string;
@@ -121,7 +123,8 @@ const routes: Routes[] = [
 ];
 
 export default function ViewPickupSchedulePage() {
-  const [currentAccordion, setCurrentAccordion] = useState<number | null>(null);
+  const [currentAccordion, setCurrentAccordion] = useState<number | null>(0);
+  const { data: allPickupRoutes } = useSWR("pickup-data", getAllPickupRoutes);
 
   const handleAccordionClick = (index: number) => {
     if (currentAccordion === index) {
@@ -139,13 +142,11 @@ export default function ViewPickupSchedulePage() {
         </h1>
         <p>View Pickup Schedule</p>
       </div>
-      {routes.map((route, index) => (
+      {allPickupRoutes?.routes.data.map((route, index) => (
         <PickupRoute
           key={index}
-          route_name={route.route_name}
-          driver_name={route.driver_name}
-          truck_license_plate_no={route.truck_license_plate_no}
-          schedules={route.schedules}
+          id={route.id}
+          route_name={route.name}
           isOpen={currentAccordion === index}
           onClick={() => handleAccordionClick(index)}
         />

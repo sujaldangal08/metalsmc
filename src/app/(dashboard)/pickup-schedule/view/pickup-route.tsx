@@ -3,24 +3,32 @@ import DownArrowIcon from "@public/assets/Icons/downarrow-icon";
 import ScheduleCard, { ScheduleCardProps } from "./schedule-card";
 import DisLikeIcon from "@public/assets/Icons/dislike-icon";
 import { Badge } from "@/components/ui/badge";
+import useSWR from "swr";
+import { getOnePickupRoute } from "@/features/api/schedule-module/pickupRoute.api";
+import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
 
 interface PickupRouteProps {
+  id: number;
   route_name: string;
-  driver_name: string;
-  truck_license_plate_no: string;
-  schedules: ScheduleCardProps[];
   isOpen: boolean;
   onClick: () => void;
 }
 
 export default function PickupRoute({
+  id,
   route_name,
-  driver_name,
-  truck_license_plate_no,
-  schedules,
   isOpen,
   onClick,
 }: PickupRouteProps) {
+  const { data: routeDetails, isLoading } = useSWR(
+    () => (id ? ["pickup-route-details", id] : null),
+    ([_, id]) => getOnePickupRoute(id)
+  );
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <div className="rounded overflow-hidden">
       <div className="bg-[#C6E7D9] flex justify-between items-center px-6 py-1">
@@ -41,11 +49,15 @@ export default function PickupRoute({
             <div className="flex flex-col gap-2">
               <p className="text-black">
                 Driver’s Name :{" "}
-                <span className="text-[#706F6F]">{driver_name}</span>
+                <span className="text-[#706F6F]">
+                  {routeDetails?.data.driver.name}
+                </span>
               </p>
               <p className="text-black">
                 Truck License Plate no :{" "}
-                <span className="text-[#706F6F]">{truck_license_plate_no}</span>
+                <span className="text-[#706F6F]">
+                  {routeDetails?.data.asset.rego_number}
+                </span>
               </p>
             </div>
             <Badge className="bg-[#DADADA] text-black text-sm font-normal flex gap-2 w-fit px-5 py-2">
@@ -53,16 +65,10 @@ export default function PickupRoute({
               <p>Unavailable for Pickup</p>
             </Badge>
           </div>
-          {schedules.map((schedule, index) => (
+          {routeDetails?.data.schedule.map((schedule, index) => (
             <div key={index}>
               <hr />
-              <ScheduleCard
-                schedule_name={schedule.schedule_name}
-                customer_name={schedule.customer_name}
-                pickup_location={schedule.pickup_location}
-                note={schedule.note}
-                materials={schedule.materials}
-              />
+              <ScheduleCard scheduleDetails={schedule} />
             </div>
           ))}
         </div>

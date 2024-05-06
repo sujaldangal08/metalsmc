@@ -21,6 +21,7 @@ export enum Route {
 
   //Delivery and Pickups
   //Pickups Shedule
+  DeliverySchedule = "/delivery-schedule",
   PickupSchedule = "/pickup-schedule",
   AssignPickupSchedule = "/pickup-schedule/assign",
 }

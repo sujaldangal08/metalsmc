@@ -14,7 +14,6 @@ import { SearchIcon } from "@public/assets/Icons";
 import useSWR from "swr";
 import Breadcrumb from "@/components/ui/breadcrumb";
 
-
 const pickupStatsData = [
   {
     id: 1,

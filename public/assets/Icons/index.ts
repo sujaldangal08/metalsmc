@@ -7,15 +7,6 @@ import DriverManagementIcon from "./driver-management-icon";
 import StaffManagementIcon from "./staff-management-icon";
 import InventoryManagementIcon from "./inventory-management-icon";
 import ForwardIcon from "./forward-icon";
-import EyeIcon from "./eye-icon";
-import PenIcon from "./pen-icon";
-import BinIcon from "./bin-icon";
-import DownIcon from "./down-icon";
-import CloseIcon from "./close-icon";
-import EyeIcon from "./eye-icon";
-import PenIcon from "./pen-icon";
-import BinIcon from "./bin-icon";
-import DownIcon from "./down-icon";
 import GrowthIcon from "./growth-icon";
 import SearchIcon from "./search-icon";
 import CloseIcon from "./close-icon";
@@ -30,16 +21,7 @@ export {
   StaffManagementIcon,
   InventoryManagementIcon,
   ForwardIcon,
-  EyeIcon,
-  PenIcon,
-  BinIcon,
-  DownIcon,
-  CloseIcon,
-  EyeIcon,
-  PenIcon,
-  BinIcon,
-  DownIcon,
-  CloseIcon,
   GrowthIcon,
   SearchIcon,
+  CloseIcon,
 };

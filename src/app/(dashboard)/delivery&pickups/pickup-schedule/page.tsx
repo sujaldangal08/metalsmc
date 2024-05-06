@@ -14,6 +14,7 @@ import { SearchIcon } from "@public/assets/Icons";
 import useSWR from "swr";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import cn from "@/utils/class-names";
+import getLocationFromCoordinates from "@/lib/getLocationFromCoordinates";
 
 const pickupStatsData = [
   {
@@ -58,30 +59,6 @@ const pickupStatsData = [
   },
 ];
 
-async function getLocationFromCoordinates(latitude: number, longitude: number) {
-  const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`;
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-
-    // Check if the response status is OK
-    if (data.status === "OK") {
-      // Extract the formatted address from the first result
-      return data;
-    } else {
-      // Handle error
-      console.error(
-        "Geocoding request failed:",
-        data.error_message || data.status
-      );
-      return null;
-    }
-  } catch (error) {
-    console.error("Error fetching geocoding data:", error);
-    return null;
-  }
-}
-
 const PickupSchedulePage: React.FC = () => {
   const [time, setTime] = useState<"day" | "month" | "year">("day");
 
@@ -92,14 +69,14 @@ const PickupSchedulePage: React.FC = () => {
   const longitude = 85.3281912; // Example longitude
 
   useEffect(() => {
-    getLocationFromCoordinates(latitude, longitude)
-      .then((location) => {
-        console.log("Location:", location);
+    getLocationFromCoordinates({ latitude, longitude })
+      .then((data) => {
+        console.log(data);
       })
       .catch((error) => {
         console.error("Error getting location:", error);
       });
-  }, []);
+  }, [latitude,longitude]);
 
   useEffect(() => {
     console.log(data);

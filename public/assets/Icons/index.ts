@@ -11,6 +11,7 @@ import EyeIcon from "./eye-icon";
 import PenIcon from "./pen-icon";
 import BinIcon from "./bin-icon";
 import DownIcon from "./down-icon";
+import CloseIcon from "./close-icon";
 
 export {
   MetalIcon,
@@ -26,4 +27,5 @@ export {
   PenIcon,
   BinIcon,
   DownIcon,
+  CloseIcon,
 };

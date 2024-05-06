@@ -1,5 +1,5 @@
 import { Button, Input, Select, Textarea } from "rizzui";
-import { DownIcon, BinIcon } from "@public/assets/Icons/index";
+import { DownIcon, BinIcon, CloseIcon } from "@public/assets/Icons/index";
 import { Badge } from "rizzui";
 import { Fragment, useState } from "react";
 import cn from "@/utils/class-names";
@@ -113,6 +113,13 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
     }
   };
 
+  const deleteMaterial = (indx: number) => {
+    if (material.length > 1) {
+      // removeSchedule(indx);
+      setMaterial((prev) => prev.filter((_, i) => i !== indx));
+    }
+  };
+
   return (
     <form
       className="flex flex-col w-full overflow-clip shadow-sm rounded-t-md"
@@ -124,7 +131,7 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
         <h2 className="font-medium text-md">Route Name :</h2>
         <Input
           placeholder="Enter route...."
-          className="ml-4 w-1/3 [&>div]:hidden"
+          className="ml-4 sm:w-1/3 w-2/3 [&>div]:hidden"
           inputClassName="bg-white ring-gray-dark bg-white"
           {...register("route_name")}
           error={errors?.route_name?.message}
@@ -151,7 +158,7 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
         <div className="flex w-full">
           <div className="flex flex-col w-full gap-3">
             <div className="flex w-full items-center justify-between">
-              <div className="flex items-end gap-14">
+              <div className="flex md:flex-row flex-col md:items-end items-start md:gap-14 gap-1">
                 <h2 className="text-md font-normal">
                   Driver's Name : <span className="text-gray">Jhon Doe</span>
                 </h2>
@@ -161,22 +168,13 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
                 </h2>
                 <Status className="pb-1" status="success" title="Available" />
               </div>
-              <Button
-                className="bg-red-500 hover:bg-red-600 disabled:bg-red-400 disabled:text-white"
-                onClick={() => {
-                  onDelete(indx);
-                }}
-                disabled={isDeleteDisable}
-              >
-                Delete Route
-              </Button>
             </div>
-            <div className="w-full bg-gray-300 h-[1px]" />
-            {schedule.map((_, indx) => (
-              <Fragment key={indx}>
+            {schedule.map((_, scheduleIndex) => (
+              <Fragment key={scheduleIndex}>
+                <div className="w-full bg-gray-300 h-[1px]" />
                 <div className="w-full justify-between items-center flex">
                   <Badge className="bg-[#C6E7D9] text-md font-normal text-black w-36 rounded-md">
-                    Schedule {indx + 1}
+                    Schedule {scheduleIndex + 1}
                   </Badge>
                   <span
                     className={cn(
@@ -193,7 +191,7 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
                   </span>
                 </div>
                 <div className="flex w-full gap-3 flex-col">
-                  <div className="flex flex-col w-1/2 gap-2">
+                  <div className="flex flex-col md:w-1/2 w-full gap-2">
                     <h2 className="text-md font-medium">Customer's Details</h2>
                     <SearchInput<{
                       avatar: string;
@@ -215,7 +213,7 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
                               key={indx}
                               className="text-sm font-medium text-gray-dark px-4 py-1 hover:bg-gray-50 cursor-pointer"
                               onClick={() => {
-                                alert(driver.name);
+                                setSearchedDriver(driver.name);
                               }}
                             >
                               {driver.name}
@@ -227,9 +225,12 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
                     <Input
                       placeholder="Delivery Location"
                       inputClassName="ring-gray-dark"
-                      {...register(`schedules.${indx}.customer.location`)}
+                      {...register(
+                        `schedules.${scheduleIndex}.customer.location`
+                      )}
                       error={
-                        errors?.schedules?.[indx]?.customer?.location?.message
+                        errors?.schedules?.[scheduleIndex]?.customer?.location
+                          ?.message
                       }
                     />
                   </div>
@@ -258,28 +259,27 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
                         </span>
                       </Button>
                     </div>
-                    <div className="grid grid-cols-7 gap-3 max-h-[220px] overflow-y-auto">
-                      {material.map((_, indx) => (
-                        <Fragment key={indx}>
-                          <div className="col-span-2">
+                    <div className="grid grid-cols-7 gap-3 items-center max-h-[150px] overflow-y-auto">
+                      {material.map((_, materialIndex) => (
+                        <Fragment key={materialIndex}>
+                          <div className="sm:col-span-2 col-span-6">
                             <Select
-                              label="Material"
                               options={material_options}
                               placeholder="Select Material"
                               {...register(
-                                `schedules.${indx}.materials.${indx}.material`
+                                `schedules.${scheduleIndex}.materials.${materialIndex}.material`
                               )}
                               error={
-                                errors?.schedules?.[indx]?.materials?.[indx]
-                                  ?.material?.message
+                                errors?.schedules?.[scheduleIndex]?.materials?.[
+                                  materialIndex
+                                ]?.material?.message
                               }
                             />
                           </div>
-                          <div className="col-span-2">
+                          <div className="sm:col-span-2 col-span-6">
                             <Input
                               placeholder="Price / Unit"
                               type="number"
-                              label="Rate"
                               {...register(
                                 `schedules.${indx}.materials.${indx}.rate`
                               )}
@@ -289,12 +289,23 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
                               }
                             />
                           </div>
-                          <div className="col-span-2">
+                          <div className="sm:hidden block col-span-1">
+                            <button
+                              type="button"
+                              disabled={material.length == 1}
+                              className="mx-auto col-span-1 bg-gray-light rounded-full w-7 h-7 flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-50"
+                              onClick={() => {
+                                deleteMaterial(materialIndex);
+                              }}
+                            >
+                              <CloseIcon />
+                            </button>
+                          </div>
+                          <div className="sm:col-span-2 col-span-6">
                             <Input
                               placeholder="Weight"
                               type="number"
                               prefix="Tons"
-                              label="Weight"
                               prefixClassName="text-xs"
                               {...register(
                                 `schedules.${indx}.materials.${indx}.weight`
@@ -305,6 +316,18 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
                               }
                             />
                           </div>
+                          <div className="sm:block hidden col-span-1">
+                            <button
+                              type="button"
+                              disabled={material.length == 1}
+                              className="mx-auto col-span-1 bg-gray-light rounded-full w-7 h-7 flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-50"
+                              onClick={() => {
+                                deleteMaterial(materialIndex);
+                              }}
+                            >
+                              <CloseIcon />
+                            </button>
+                          </div>
                         </Fragment>
                       ))}
                     </div>
@@ -313,29 +336,40 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
                     maxLength={80}
                     textareaClassName="resize-none h-[100px] ring-gray-dark"
                     placeholder="Note"
-                    {...register(`schedules.${indx}.customer.note`)}
-                    error={errors?.schedules?.[indx]?.customer?.note?.message}
+                    {...register(`schedules.${scheduleIndex}.customer.note`)}
+                    error={
+                      errors?.schedules?.[scheduleIndex]?.customer?.note
+                        ?.message
+                    }
                   />
                 </div>
-                <div className="w-full bg-gray-300 h-[1px]" />
               </Fragment>
             ))}
-
+            <Button
+              className="w-1/3 mx-auto"
+              variant="outline"
+              onClick={() => {
+                setSchedule([...schedule, schedule.length]);
+              }}
+            >
+              <span className="bg-primary py-1/2 px-[6px] mr-3 text-white rounded-md text-md">
+                +
+              </span>
+              <span className="text-md font-medium text-black">
+                Add New Schedule
+              </span>
+            </Button>
             <div className="flex w-full justify-end gap-5">
               <Button
-                variant="outline"
+                className="bg-red-500 hover:bg-red-600 disabled:bg-red-400 disabled:text-white w-1/4"
                 onClick={() => {
-                  setSchedule([...schedule, schedule.length]);
+                  onDelete(indx);
                 }}
+                disabled={isDeleteDisable}
               >
-                <span className="bg-primary py-1/2 px-[6px] mr-3 text-white rounded-md text-md">
-                  +
-                </span>
-                <span className="text-md font-medium text-black">
-                  Add New Schedule
-                </span>
+                Delete Route
               </Button>
-              <Button className="text-md font-semibold" type="submit">
+              <Button className="w-1/4" type="submit">
                 Assign Pickup Task
               </Button>
             </div>

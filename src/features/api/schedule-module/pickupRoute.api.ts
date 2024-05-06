@@ -16,7 +16,7 @@ export async function getAllPickupRoutes() {
 //Get One Route
 export async function getOnePickupRoute(id: number) {
   const response = await api.get<GetOnePickupRouteResponse>(`${baseEnd}/${id}`)
-
+  
   return response.data;
 }
 

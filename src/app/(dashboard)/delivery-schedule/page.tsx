@@ -4,9 +4,10 @@ import FileStats from "@/app/shared/file/dashboard/file-stats";
 import FilterIcon from "@/components/icons/FilterIcon";
 import LeftIcon from "@/components/icons/LeftIcon";
 import RightArrowIcon from "@/components/icons/RightIcon";
-import TableCard from "@/components/pages/pickup-schedule/table-card";
+import TableCard from "@/components/pages/delivery-schedule/table-card";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
+import { getAllDeliverySchedule } from "@/features/api/schedule-module/deliverySchedule.api";
 import { getAllPickupRoutes } from "@/features/api/schedule-module/pickupRoute.api";
 import React, { useState } from "react";
 import useSWR from "swr";
@@ -58,27 +59,29 @@ const pickupStatsData = [
 const PickupSchedulePage: React.FC = () => {
   const [tabIndex, setTabIndex] = useState<number>(0);
 
-  const { data, error, isLoading } = useSWR("pickup-data", getAllPickupRoutes);
+  const { data: allDeliverySchedule, error, isLoading } = useSWR("delivery-data", getAllDeliverySchedule);
 
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
+  console.log(allDeliverySchedule);
+
   return (
     <>
       <div className="bg-gray-100 py-5">
         <h1 className="font-semibold text-lg text-[#706F6F]">
-          Pickup Schedule{" "}
+          Delivery Schedule{" "}
         </h1>
         <p className=" text-sm text-[#706F6F] pb-4 mt-2">
           {" "}
-          Manage Pickup Schedule
+          Manage Delivery Schedule
         </p>
         <div className="mt-2 pb-3">
           <FileStats data={pickupStatsData} />
         </div>
 
-        <h1 className="font-semibold text-md mt-4">Pickup Schedule Table</h1>
+        <h1 className="font-semibold text-md mt-4">Delivery Schedule Table</h1>
         <div className="flex gap-3 w-full items-center   mt-2">
           <input
             className="bg-white h-10 text-sm focus:outline-none rounded-md outline-none"
@@ -162,8 +165,8 @@ const PickupSchedulePage: React.FC = () => {
           </div>
 
           <div className="flex flex-col gap-4">
-            {data?.routes.data.map((routeData) => (
-              <TableCard routeData={routeData} />
+            {allDeliverySchedule?.data.schedule.map((schedule) => (
+              <TableCard scheduleData={schedule} />
             ))}
           </div>
         </div>

@@ -23,7 +23,7 @@ function TableCard({ routeData }: TableCardProps) {
     <div className="flex shadow-md first:rounded-t-none rounded-md overflow-hidden bg-white flex-row gap-8 border-t border-gray-200 ">
       <Card driverDetails={routeDetails.data} />
 
-      <Table routeDetails={routeDetails} />
+      <Table routeDetails={routeDetails}/>
     </div>
   );
 }

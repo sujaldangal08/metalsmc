@@ -6,7 +6,7 @@ function MetalIcon() {
       xmlns="http://www.w3.org/2000/svg"
       width="102"
       height="100"
-      fill="none"
+      fill="currentColor"
       viewBox="0 0 102 102"
     >
       <mask

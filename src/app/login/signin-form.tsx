@@ -51,6 +51,7 @@ export default function SignInForm() {
   const handleGoogleAuthResponse = async (res: CredentialResponse) => {
     try {
       await handleGoogleSignin(res.credential!);
+      console.log(res.credential);
       router.push(Route.Home);
     } catch (err: any) {
       toast.error(formatErrorMessage(err));

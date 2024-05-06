@@ -34,8 +34,6 @@
   background: rgb(141, 141, 141);
 }
 
-
-
 @layer base {
   /* default theme */
   :root {
@@ -82,15 +80,9 @@
     /* ----------------------------------- */
     /* primary/brand colors */
     /* ----------------------------------- */
-<<<<<<< HEAD
     --primary-lighter: 55 120 45 !important; /* #e3e3e3 */
     --primary-default: 55 160 83 !important; /* #111111 */
     --primary-dark: 14 153 72 !important; /* #000000 */
-=======
-    --primary-lighter: 55 140 95 !important;  /* #e3e3e3 */
-    --primary-default: 55 160 95 !important; /* #111111 */
-    --primary-dark: 55 140 95 !important; /* #000000 */
->>>>>>> 6a904de (adding accordian)
     --primary-foreground: 255 255 255 !important; /* #ffffff */
 
     /* ----------------------------------- */

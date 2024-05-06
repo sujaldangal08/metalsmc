@@ -6,6 +6,7 @@ import SearchInput from "@/components/input/search-input";
 import RecentAssigned from "./recent-assigned";
 import RouteForm from "./route-form";
 import Breadcrumb from "@/components/ui/breadcrumb";
+import { Route } from "@/lib/enums/routes.enums";
 
 export default function Page() {
   const [searched_driver, setSearchedDriver] = useState("");
@@ -88,18 +89,20 @@ export default function Page() {
   return (
     <div className="flex flex-col py-4 gap-4 w-full">
       <Breadcrumb>
-        <Breadcrumb.Item href="/pickup-schedule">
+        <Breadcrumb.Item href={Route.PickupSchedule}>
           Pickup Schedule
         </Breadcrumb.Item>
-        <Breadcrumb.Item href="/">Assign Schedule</Breadcrumb.Item>
+        <Breadcrumb.Item href={Route.AssignPickupSchedule}>
+          Assign Schedule
+        </Breadcrumb.Item>
       </Breadcrumb>
-      <div className="w-full flex relative">
+      <div className="w-full flex relative mt-4">
         <div className="flex flex-col lg:w-4/5 w-full gap-4 lg:pr-5 pr-0">
           <div className="flex items-end gap-4 relative flex-wrap">
             <Input
               inputClassName="bg-white ring-gray-dark"
               type="date"
-              label="Date"
+              label=""
               className="w-1/4"
             />
             <SearchInput<{
@@ -108,7 +111,7 @@ export default function Page() {
               truckNumber: string;
             }>
               placeholder="Choose Driver"
-              label="Driver"
+              label=""
               value={searched_driver}
               setValue={(value: string | number) => {
                 setSearchedDriver(value.toString());
@@ -138,7 +141,7 @@ export default function Page() {
             }>
               placeholder="Choose Truck"
               className="w-1/4"
-              label="Truck"
+              label=""
               value={searched_driver}
               setValue={(value: string | number) => {
                 setSearchedDriver(value.toString());
@@ -158,13 +161,13 @@ export default function Page() {
               )}
             />
             <Button
-              className="absolute right-0"
+              className="absolute right-0 font-normal"
               onClick={() => {
                 setRoute([...route, route.length]);
               }}
             >
-              <span className="text-rg font-normal mr-2">+</span>
-              <span className="text-md font-normal">Add Route</span>
+              <span className="text-rg mr-2">+</span>
+              <span className="text-sm ">Add Route</span>
             </Button>
           </div>
           {route?.map((_, indx) => (

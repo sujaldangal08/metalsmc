@@ -49,17 +49,6 @@ export interface Link {
 
 export interface GetOnePickupRouteResponse extends CommonApiResponse {
     data: PickupRouteData & {
-        driver: {
-            id: number
-            name: string
-            image: string
-        }
-        asset: {
-            id: number
-            title: string
-            rego_number: string
-            image: string
-        }
         schedule: PickupScheduleDetails[]
     }
 }
@@ -75,6 +64,32 @@ export interface PickupRouteData {
     deleted_at: any
     created_at: string
     updated_at: string
+    driver: {
+        id: number
+        name: string
+        image: string
+    }
+    asset: {
+        id: number
+        title: string
+        rego_number: string
+        image: string
+    }
+    schedule: PickupSchedule[]
+}
+
+export interface PickupSchedule {
+    id: number
+    route_id: number
+    customer_id: number
+    materials: string[]
+    amount: number[]
+    rate: number[]
+    status: string
+    customer: {
+        id: number
+        name: string
+    }
 }
 
 export interface PickupScheduleDetails {

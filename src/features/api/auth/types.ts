@@ -17,7 +17,7 @@ export interface UserRegisterBody {
     password: string;
 }
 
-export interface UserLoginBody extends LoginSchema { }
+export interface UserLoginBody extends LoginSchema { token: string }
 
 export interface VerifyOtpBody {
     email: string;

@@ -1,15 +1,19 @@
 "use client";
 
 import { Avatar } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
 import { Popover } from "@/components/ui/popover";
-import { Title, Text } from "@/components/ui/text";
+import { Text, Title } from "@/components/ui/text";
 import { routes } from "@/config/routes";
+import { getUserDetails } from "@/features/api/user";
+import { UserResponse } from "@/features/api/user/types";
 import { logout } from "@/lib/auth";
+import { Route } from "@/lib/enums/routes.enums";
 import cn from "@/utils/class-names";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 const menuItems = [
   {
@@ -26,26 +30,25 @@ const menuItems = [
   },
 ];
 
-function DropdownMenu() {
+function DropdownMenu({ user }: { user: UserResponse["data"] }) {
   const router = useRouter();
 
   const handleSignout = () => {
-    router.push("/login");
     logout();
+    router.push(Route.Login);
   };
 
   return (
     <div className="w-64 text-left rtl:text-right">
       <div className="flex items-center border-b border-gray-300 px-6 pb-5 pt-6">
-        <Avatar
-          src="https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-11.webp"
-          name="Albert Flores"
-        />
+        <Avatar src={user.image} name={user.name} />
         <div className="ms-3">
           <Title as="h6" className="font-semibold">
-            Albert Flores
+            {user?.name}
           </Title>
-          <Text className="text-gray-600">flores@doe.io</Text>
+          <Text className="text-gray-600">
+            {user.email.replace(/^(.)(.*?)(..)@/, "$1...$3@")}
+          </Text>
         </div>
       </div>
       <div className="grid px-3.5 py-3.5 font-medium text-gray-700">
@@ -59,15 +62,12 @@ function DropdownMenu() {
           </Link>
         ))}
       </div>
-      <div className="border-t border-gray-300 px-6 pb-6 pt-5">
-        <Button
-          className="h-auto w-full justify-start p-0 font-medium text-gray-700 outline-none focus-within:text-gray-600 hover:text-gray-900 focus-visible:ring-0"
-          variant="text"
-          onClick={() => handleSignout()}
-        >
-          Sign Out
-        </Button>
-      </div>
+      <button
+        onClick={() => handleSignout()}
+        className="block w-full font-medium hover:text-black border-t border-gray-300 text-left px-6 pt-3 pb-4"
+      >
+        Sign Out
+      </button>
     </div>
   );
 }
@@ -81,10 +81,17 @@ export default function ProfileMenu({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const { data: user, isLoading } = useSWR("user", getUserDetails);
+
+  console.log(user);
 
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <Popover
@@ -101,15 +108,15 @@ export default function ProfileMenu({
           )}
         >
           <Avatar
-            src="https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-11.webp"
-            name="John Doe"
+            src={user?.data.image}
+            name={user?.data.name || "user"}
             className={cn("!h-9 w-9 sm:!h-10 sm:w-10", avatarClassName)}
           />
         </button>
       </Popover.Trigger>
 
       <Popover.Content className="z-[9999] p-0 dark:bg-gray-100 [&>svg]:dark:fill-gray-100">
-        <DropdownMenu />
+        <DropdownMenu user={user?.data!} />
       </Popover.Content>
     </Popover>
   );

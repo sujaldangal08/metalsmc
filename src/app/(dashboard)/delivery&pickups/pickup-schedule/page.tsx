@@ -8,9 +8,10 @@ import TableCard from "@/components/pages/pickup-schedule/table-card";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
 import { getAllPickupRoutes } from "@/features/api/schedule-module/pickupRoute.api";
+import { Route } from "@/lib/enums/routes.enums";
+import Link from "next/link";
 import React, { useState } from "react";
 import useSWR from "swr";
-
 
 const pickupStatsData = [
   {
@@ -58,7 +59,9 @@ const pickupStatsData = [
 const PickupSchedulePage: React.FC = () => {
   const [tabIndex, setTabIndex] = useState<number>(0);
 
-  const { data, error, isLoading } = useSWR("pickup-data", getAllPickupRoutes);
+  const { data, error, isLoading } = useSWR("pickup-data", () =>
+    getAllPickupRoutes()
+  );
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -68,10 +71,9 @@ const PickupSchedulePage: React.FC = () => {
     <>
       <div className="bg-gray-100 py-5">
         <h1 className="font-semibold text-lg text-[#706F6F]">
-          Pickup Schedule{" "}
+          Pickup Schedule
         </h1>
         <p className=" text-sm text-[#706F6F] pb-4 mt-2">
-          {" "}
           Manage Pickup Schedule
         </p>
         <div className="mt-2 pb-3">
@@ -150,13 +152,11 @@ const PickupSchedulePage: React.FC = () => {
               className="py-5 rounded-lg w-full text-white text-sm font-semibold"
               type="submit"
             >
-              <div className="flex items-center">
-                <span className="">+Assign New Task</span>
-              </div>
+              <Link href={Route.AssignPickupSchedule}>+Assign New Task</Link>
             </Button>
           </div>
         </div>
-        <div className=" ">
+        <div>
           <div className="py-3 bg-white rounded-t-md">
             <p className="font-semibold text-sm  pl-4">Date: dd/mm/yy</p>
           </div>

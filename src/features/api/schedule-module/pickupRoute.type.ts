@@ -40,6 +40,7 @@ interface PickupRoutes {
     total: number
 }
 
+
 export interface Link {
     url?: string
     label: string
@@ -50,6 +51,7 @@ export interface Link {
 export interface GetOnePickupRouteResponse extends CommonApiResponse {
     data: PickupRouteData
     pickup: PickupDetails[]
+    
 }
 
 export interface PickupRouteData {
@@ -86,3 +88,5 @@ export interface PickupDetails {
     created_at: string
     updated_at: string
 }
+
+

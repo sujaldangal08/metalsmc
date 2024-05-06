@@ -15,7 +15,7 @@ export async function getAllDeliverySchedule() {
 }
 
 //Get: Get One Delivery Schedule
-export async function getOneDeliverySchedule(id: string) {
+export async function getOneDeliverySchedule(id:number) {
   const response = await api.get<GetOneDeliveryScheduleResponse>(
     `${baseEnd}/${id}`
   );

@@ -27,9 +27,9 @@ function TableCard({ routeData }: TableCardProps) {
 
   return (
     <div className="flex shadow-md first:rounded-t-none rounded-md overflow-hidden bg-white flex-row gap-8 border-t border-gray-200 ">
-      <Card />
+      <Card/>
 
-      <Table routeDetails={routeDetails} />
+      <Table routeDetails={routeDetails}/>
     </div>
   );
 }

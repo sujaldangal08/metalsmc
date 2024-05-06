@@ -13,6 +13,7 @@ import { Input } from "rizzui";
 import { SearchIcon } from "@public/assets/Icons";
 import useSWR from "swr";
 import Breadcrumb from "@/components/ui/breadcrumb";
+import cn from "@/utils/class-names";
 
 const pickupStatsData = [
   {
@@ -94,41 +95,45 @@ const PickupSchedulePage: React.FC = () => {
         </div>
         <div className="flex justify-between items-center my-4">
           <div className="flex gap-5">
-            <div className="px-8 bg-white text-black flex items-center rounded-full">
-              <Button className="bg-white :hover:bg-white">
+            <div className="px-3 bg-white text-black flex items-center rounded-full">
+              <Button className="bg-white hover:bg-white">
                 <LeftIcon />
               </Button>
               <span className="mx-2 px-4 text-sm font-medium">
                 December 2023
               </span>
-              <Button className="bg-white :hover:bg-white">
+              <Button className="bg-white hover:bg-white">
                 <RightArrowIcon />
               </Button>
             </div>
-            <button
-              className={`px-[40px] h-10 text-base font-regular e shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-lg ${
-                tabIndex == 0
-                  ? " text-white focus-visible:outline-primary bg-primary"
-                  : " text-primary focus-visible:outline-white bg-white"
-              } rounded-md`}
+            <Button
+              className={cn(
+                `w-[100px] font-regular rounded-full text-md ${
+                  tabIndex == 0
+                    ? "text-white bg-primary hover:bg-primary-dark"
+                    : " text-primary bg-white hover:bg-gray-50"
+                }`
+              )}
               onClick={() => {
                 setTabIndex(0);
               }}
             >
               Day
-            </button>
-            <button
-              className={`px-[20px] h-10 text-base font-regular e shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-lg ${
-                tabIndex == 1
-                  ? " text-white focus-visible:outline-primary bg-primary"
-                  : " text-primary focus-visible:outline-white bg-white"
-              } rounded-2xl`}
+            </Button>
+            <Button
+              className={cn(
+                `w-[100px] hover:bg-gray-50 text-base font-regular shadow-sm rounded-full ${
+                  tabIndex == 1
+                    ? "text-white bg-primary hover:bg-primary-dark"
+                    : " text-primary bg-white hover:bg-primary-dark"
+                }`
+              )}
               onClick={() => {
                 setTabIndex(1);
               }}
             >
               Month
-            </button>
+            </Button>
             <button
               className={`px-[40px] h-10 text-base font-regular e shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-lg ${
                 tabIndex == 2

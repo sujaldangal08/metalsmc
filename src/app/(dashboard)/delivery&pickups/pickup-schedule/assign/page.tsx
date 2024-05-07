@@ -3,9 +3,14 @@
 import CustomSelectBox from "@/components/input/select-box";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
+import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
 import { Input } from "@/components/ui/input";
 import { createPickupRoute } from "@/features/api/schedule-module/pickupRoute.api";
-import { CreatePickupRouteBody } from "@/features/api/schedule-module/pickupRoute.type";
+import {
+  CreatePickupRouteBody,
+  CreatePickupRouteResponse,
+} from "@/features/api/schedule-module/pickupRoute.type";
+import { getAllDrivers } from "@/features/api/user";
 import { Route } from "@/lib/enums/routes.enums";
 import useMutation from "@/lib/hooks/useMutation";
 import { formatErrorMessage } from "@/utils/format-errors";
@@ -18,65 +23,9 @@ import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { PiPlus } from "react-icons/pi";
+import useSWR from "swr";
 import RecentAssigned from "./recent-assigned";
 import RouteForm from "./route-form";
-
-const data = [
-  {
-    avatar:
-      "https://cdn3d.iconscout.com/3d/premium/thumb/boy-avatar-6299533-5187865.png",
-    name: "Joe Doe",
-    truckNumber: "123455A5v",
-  },
-  {
-    avatar:
-      "https://cdn3d.iconscout.com/3d/premium/thumb/woman-avatar-6299541-5187873.png",
-    name: "Emily Johnson",
-    truckNumber: "6789ABC",
-  },
-  {
-    avatar:
-      "https://getillustrations.b-cdn.net//photos/pack/3d-avatar-male_lg.png",
-    name: "John Smith",
-    truckNumber: "XYZ123",
-  },
-  {
-    avatar:
-      "https://cdn3d.iconscout.com/3d/premium/thumb/boy-avatar-6299533-5187865.png",
-    name: "Joe Doe",
-    truckNumber: "123455A5v",
-  },
-  {
-    avatar:
-      "https://cdn3d.iconscout.com/3d/premium/thumb/woman-avatar-6299541-5187873.png",
-    name: "Emily Johnson",
-    truckNumber: "6789ABC",
-  },
-  {
-    avatar:
-      "https://getillustrations.b-cdn.net//photos/pack/3d-avatar-male_lg.png",
-    name: "John Smith",
-    truckNumber: "XYZ123",
-  },
-  {
-    avatar:
-      "https://cdn3d.iconscout.com/3d/premium/thumb/boy-avatar-6299533-5187865.png",
-    name: "Joe Doe",
-    truckNumber: "123455A5v",
-  },
-  {
-    avatar:
-      "https://cdn3d.iconscout.com/3d/premium/thumb/woman-avatar-6299541-5187873.png",
-    name: "Emily Johnson",
-    truckNumber: "6789ABC",
-  },
-  {
-    avatar:
-      "https://getillustrations.b-cdn.net//photos/pack/3d-avatar-male_lg.png",
-    name: "John Smith",
-    truckNumber: "XYZ123",
-  },
-];
 
 export default function PickupAssignPage() {
   const {
@@ -88,12 +37,16 @@ export default function PickupAssignPage() {
     resolver: zodResolver(createPickupRouteSchema),
   });
 
-  const { mutate: createPickupMn, isLoading } =
-    useMutation<CreatePickupRouteBody>({
-      mutateFn: (body) => createPickupRoute(body),
-    });
+  const { data: listOfDrivers, isLoading: fetchingListOfDrivers } = useSWR(
+    "drivers-list",
+    getAllDrivers
+  );
 
-  const [routes, setRoutes] = useState<CreatePickupRouteBody[]>([]);
+  const { mutate: createPickupMn, isLoading } = useMutation({
+    mutateFn: (body: CreatePickupRouteBody) => createPickupRoute(body),
+  });
+
+  const [routes, setRoutes] = useState<CreatePickupRouteResponse["data"][]>([]);
 
   const onDelete = (indx: number) => {
     if (routes.length > 1) {
@@ -103,12 +56,20 @@ export default function PickupAssignPage() {
 
   const onSubmit: SubmitHandler<CreatePickupRouteSchema> = async (data) => {
     try {
-      // const res = await createPickupMn(data);
-      console.log(data);
+      const res = await createPickupMn({
+        ...data,
+        status: "active",
+        description: "hello",
+      });
+
+      console.log(res);
+      setRoutes([...routes, res.data.data]);
     } catch (err: any) {
       toast.error(formatErrorMessage(err));
     }
   };
+
+  if (fetchingListOfDrivers) return <LoadingSpinner />;
 
   return (
     <div className="flex flex-col py-4 gap-4 w-full">
@@ -134,6 +95,7 @@ export default function PickupAssignPage() {
                 error={errors.name}
                 hideErrorMessage
               />
+
               <Input
                 type="date"
                 label=""
@@ -142,16 +104,23 @@ export default function PickupAssignPage() {
                 error={errors.start_date}
                 hideErrorMessage
               />
+
               <Controller
                 name="driver_id"
                 control={control}
-                render={({ field: { onChange, value } }) => (
+                render={({
+                  field: { onChange, value },
+                  formState: { errors },
+                }) => (
                   <CustomSelectBox
-                    items={data}
+                    items={listOfDrivers?.data!}
                     placeholder="Choose driver"
-                    value={value}
-                    setValue={onChange}
-                    getItemString={(item) => item.name}
+                    value={
+                      listOfDrivers?.data.filter((data) => data.id === value)[0]
+                    }
+                    setValue={(value) => onChange(value?.id)}
+                    getDisplayItem={(item) => item?.name!}
+                    error={errors.driver_id}
                   />
                 )}
               />
@@ -159,13 +128,19 @@ export default function PickupAssignPage() {
               <Controller
                 name="asset_id"
                 control={control}
-                render={({ field: { onChange, value } }) => (
+                render={({
+                  field: { onChange, value },
+                  formState: { errors },
+                }) => (
                   <CustomSelectBox
-                    items={data}
+                    items={listOfDrivers?.data!}
                     placeholder="Choose asset"
-                    value={value}
-                    setValue={onChange}
-                    getItemString={(item) => item.name}
+                    value={
+                      listOfDrivers?.data.filter((data) => data.id === value)[0]
+                    }
+                    setValue={(value) => onChange(value?.id)}
+                    getDisplayItem={(item) => item?.name!}
+                    error={errors.asset_id}
                   />
                 )}
               />
@@ -180,16 +155,16 @@ export default function PickupAssignPage() {
               <span className="text-sm pl-2">Add Route</span>
             </Button>
           </div>
-
-          {routes?.map((_, indx) => (
-            <RouteForm
-              indx={indx}
-              onDelete={onDelete}
-              key={"Route Form - " + indx}
-              isDeleteDisable={routes.length <= 1}
-            />
-          ))}
         </form>
+
+        {routes?.map((_, indx) => (
+          <RouteForm
+            indx={indx}
+            onDelete={onDelete}
+            key={"Route Form - " + indx}
+            isDeleteDisable={routes.length <= 1}
+          />
+        ))}
         <RecentAssigned />
       </div>
     </div>

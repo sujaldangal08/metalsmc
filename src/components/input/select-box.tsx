@@ -8,6 +8,7 @@ import {
   Transition,
 } from "@headlessui/react";
 import { useState } from "react";
+import { FieldError } from "react-hook-form";
 import { FaCheck, FaChevronDown } from "react-icons/fa";
 
 interface CustomSelectBoxProps<T> {
@@ -15,7 +16,8 @@ interface CustomSelectBoxProps<T> {
   placeholder: string;
   value: T | null;
   setValue: (value: T) => void;
-  getItemString: (item: T) => string;
+  getDisplayItem: (item: T) => string;
+  error?: FieldError;
 }
 
 export default function CustomSelectBox<T>({
@@ -23,7 +25,8 @@ export default function CustomSelectBox<T>({
   placeholder,
   value,
   setValue,
-  getItemString,
+  getDisplayItem,
+  error,
 }: CustomSelectBoxProps<T>) {
   const [query, setQuery] = useState("");
 
@@ -31,20 +34,21 @@ export default function CustomSelectBox<T>({
     query === ""
       ? items
       : items.filter((item) =>
-          getItemString(item).toLowerCase().includes(query.toLowerCase())
+          getDisplayItem(item).toLowerCase().includes(query.toLowerCase())
         );
 
   return (
     <div className="mx-auto h-screen w-52 ">
-      <Combobox value={value} onChange={(value) => setValue(value!)} __demoMode>
+      <Combobox value={value} onChange={(value) => setValue(value!)}>
         <div className="relative">
           <ComboboxInput
             placeholder={placeholder}
             className={cn(
               "w-full rounded-md border border-gray-300 bg-white py-[7px] pr-8 pl-3 text-sm/6 ",
-              "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25"
+              "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25",
+              error?.message && "border-red-400"
             )}
-            displayValue={getItemString}
+            displayValue={getDisplayItem}
             onChange={(event) => setQuery(event.target.value)}
           />
           <ComboboxButton className="group absolute inset-y-0 right-0 px-2.5">
@@ -61,15 +65,15 @@ export default function CustomSelectBox<T>({
             anchor="bottom"
             className="w-[var(--input-width)] rounded-md border border-gray-300 bg-white p-1 mt-1 [--anchor-gap:var(--spacing-1)] empty:hidden"
           >
-            {filteredItems.map((item) => (
+            {filteredItems.map((item, idx) => (
               <ComboboxOption
-                key={getItemString(item)}
+                key={getDisplayItem(item) + idx}
                 value={item}
                 className="group flex cursor-default items-center gap-2 rounded-md py-1.5 px-3 select-none data-[focus]:bg-gray-100"
               >
-                <FaCheck className="invisible size-4 fill-black group-data-[selected]:visible" />
+                <FaCheck className="invisible size-3 fill-black group-data-[selected]:visible" />
                 <div className="text-sm/6 text-gray-700">
-                  {getItemString(item)}
+                  {getDisplayItem(item)}
                 </div>
               </ComboboxOption>
             ))}

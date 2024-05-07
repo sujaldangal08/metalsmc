@@ -8,6 +8,7 @@ import {
 } from "@/features/api/auth/types";
 import withAuth from "@/lib/hoc/withAuth";
 import useMutation from "@/lib/hooks/useMutation";
+import { formatErrorMessage } from "@/utils/format-errors";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -17,50 +18,42 @@ function SetupTwoFactorAuthPage() {
     secret_key: "",
   });
   const [openModal, setOpenModal] = useState(false);
-  const { mutate: generateQrCodeMn, isLoading: qrGenerating } =
-    useMutation<GenerateQrRequestBody>({
-      mutateFn: (body) => generateQrCodeFn(body),
-    });
+  const { mutate: generateQrCodeMn, isLoading: qrGenerating } = useMutation({
+    mutateFn: (body: GenerateQrRequestBody) => generateQrCodeFn(body),
+  });
 
   const { mutate: disableTwoFactorAuthMn, isLoading: disabling2Fa } =
-    useMutation<DisableTwoFactorAuthRequestBody>({
-      mutateFn: (body) => disableTwoFactorFn(body),
+    useMutation({
+      mutateFn: (body: DisableTwoFactorAuthRequestBody) =>
+        disableTwoFactorFn(body),
     });
 
   const generateQrCode = async ({ user_id }: { user_id: number }) => {
     try {
       const response = await generateQrCodeMn({ user: user_id });
 
-      if (response?.status === 200) {
-        if (response.data.message === "2FA already enabled") {
-          setOpenModal(false);
-          toast.success(response?.data.message!);
-        } else {
-          setOpenModal(true);
-          setSecret({
-            secret_key: response.data.secret_key,
-            qr_code_url: response.data.qr_code_url,
-          });
-        }
+      if (response.data.message === "2FA already enabled") {
+        setOpenModal(false);
+        toast.success(response?.data.message!);
+      } else {
+        setOpenModal(true);
+        setSecret({
+          secret_key: response.data.secret_key,
+          qr_code_url: response.data.qr_code_url,
+        });
       }
     } catch (error: any) {
-      const resMessage = error.response && error.response.data;
-      toast.error(resMessage, {
-        position: "top-right",
-      });
+      toast.error(formatErrorMessage(error));
     }
   };
 
   const disableTwoFactorAuth = async (user_id: number) => {
     try {
-      const response = await disableTwoFactorAuthMn({ user: user_id });
+      await disableTwoFactorAuthMn({ user: user_id });
 
-      if (response?.status === 200) {
-        toast.success("Two Factor Authentication Disabled");
-      }
+      toast.success("Two Factor Authentication Disabled");
     } catch (error: any) {
-      const resMessage = error.response && error.response.data;
-      toast.error(resMessage);
+      toast.error(formatErrorMessage(error));
     }
   };
 

@@ -11,7 +11,7 @@ import { getAllPickupRoutes } from "@/features/api/schedule-module/pickupRoute.a
 import { Route } from "@/lib/enums/routes.enums";
 import withAuth from "@/lib/hoc/withAuth";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import useSWR from "swr";
 import getLocationFromCoordinates from "@/lib/getLocationFromCoordinates";
 import { SearchIcon } from "@public/assets/Icons";
@@ -84,8 +84,8 @@ const PickupSchedulePage: React.FC = () => {
   // }, [latitude, longitude]);
 
   useEffect(() => {
-    console.log(data);
-  }, [data]);
+    console.log(allDriverPickupRoutes);
+  }, [allDriverPickupRoutes]);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -193,16 +193,10 @@ const PickupSchedulePage: React.FC = () => {
             </Button>
           </div>
         </div>
-        <div>
-          <div className="py-3 bg-white rounded-t-md">
-            <p className="font-semibold text-sm  pl-4">Date: dd/mm/yy</p>
-          </div>
-
-          <div className="flex flex-col gap-4">
-            {allDriverPickupRoutes?.data.map((driverData) => (
-              <TableCard driverData={driverData} />
-            ))}
-          </div>
+        <div className="flex flex-col w-full gap-6">
+          {allDriverPickupRoutes?.data.map((driverData, indx) => (
+            <TableCard driverData={driverData} key={indx} />
+          ))}
         </div>
       </div>
     </>

@@ -20,7 +20,8 @@ function Table({ routeDetails }: TableProps) {
                   key={route.id}
                   className={cn(
                     "py-5 bg-gray-200 w-fit rounded-b-none rounded-t-md text-gray-700 text-sm font-medium hover:bg-gray-300",
-                    selected && "bg-primary text-white focus:ring-0 hover:bg-primary"
+                    selected &&
+                      "bg-primary text-white focus:ring-0 hover:bg-primary"
                   )}
                   type="submit"
                 >
@@ -74,13 +75,14 @@ function Table({ routeDetails }: TableProps) {
                       </td>
                       <td className="px-2 py-4">
                         {schedule.materials
-                          .map((material) => '$' +material.rate)
+                          .map((material) => "$" + material.rate)
                           .join(", ")}
                       </td>
                       <td className="px-2 py-4">
                         {schedule.materials
                           .map((material) => material.amount)
-                          .join(", ")} (tons)
+                          .join(", ")}{" "}
+                        (tons)
                       </td>
 
                       <td className="px-2 py-4">{schedule?.status}</td>

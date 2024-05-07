@@ -23,7 +23,7 @@ export default function RecentAssignedPickupCard({ curr }: Props) {
       <h3 className="text-sm font-medium mt-1 text-gray-dark">
         Truck Number: {curr.truckNumber}
       </h3>
-      <div className="flex items-center  justify-between bg-gray-100 w-2/3 h-10 rounded-full mt-4 px-5">
+      <div className="flex items-center  justify-between bg-gray-100 w-[55%] h-10 rounded-full mt-4 px-5 [&>svg]:w-5 [&>svg]:h-5">
         <EyeIcon />
         <PenIcon />
         <BinIcon />

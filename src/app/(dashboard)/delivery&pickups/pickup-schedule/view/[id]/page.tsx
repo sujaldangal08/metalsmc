@@ -1,13 +1,18 @@
 "use client";
 
-import { getAllPickupRoutes } from "@/features/api/schedule-module/pickupRoute.api";
+import { getOnePickupRoute } from "@/features/api/schedule-module/pickupRoute.api";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 import useSWR from "swr";
 import PickupRoute from "../pickup-route";
 
 export default function ViewPickupSchedulePage() {
   const [currentAccordion, setCurrentAccordion] = useState<number | null>(0);
-  const { data: allPickupRoutes } = useSWR("pickup-data", getAllPickupRoutes);
+  const params = useParams();
+  const { data: pickupRoutes } = useSWR(
+    params.id ? ["pickup-route-details", params.id] : null,
+    ([_, id]) => getOnePickupRoute(Number(id))
+  );
 
   const handleAccordionClick = (index: number) => {
     if (currentAccordion === index) {
@@ -25,11 +30,11 @@ export default function ViewPickupSchedulePage() {
         </h1>
         <p>View Pickup Schedule</p>
       </div>
-      {allPickupRoutes?.routes.data.map((route, index) => (
+      {pickupRoutes?.data.schedule.map((route, index) => (
         <PickupRoute
           key={index}
           id={route.id}
-          route_name={route.name}
+          route_name={route.status}
           isOpen={currentAccordion === index}
           onClick={() => handleAccordionClick(index)}
         />

@@ -5,16 +5,16 @@ import FilterIcon from "@/components/icons/FilterIcon";
 import LeftIcon from "@/components/icons/LeftIcon";
 import RightArrowIcon from "@/components/icons/RightIcon";
 import TableCard from "@/components/pages/pickup-schedule/table-card";
-import { Button } from "rizzui";
+import { Button, Input } from "rizzui";
 import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
 import { getAllPickupRoutes } from "@/features/api/schedule-module/pickupRoute.api";
+import { Route } from "@/lib/enums/routes.enums";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { Input } from "rizzui";
-import { SearchIcon } from "@public/assets/Icons";
 import useSWR from "swr";
-import Breadcrumb from "@/components/ui/breadcrumb";
-import cn from "@/utils/class-names";
 import getLocationFromCoordinates from "@/lib/getLocationFromCoordinates";
+import { SearchIcon } from "@public/assets/Icons";
+import cn from "@/utils/class-names";
 
 const pickupStatsData = [
   {
@@ -62,21 +62,23 @@ const pickupStatsData = [
 const PickupSchedulePage: React.FC = () => {
   const [time, setTime] = useState<"day" | "month" | "year">("day");
 
-  const { data, error, isLoading } = useSWR("pickup-data", getAllPickupRoutes);
+  const { data, error, isLoading } = useSWR("pickup-data", () =>
+    getAllPickupRoutes()
+  );
 
   // Example usage
   const latitude = 27.712094; // Example latitude
   const longitude = 85.3281912; // Example longitude
 
-  useEffect(() => {
-    getLocationFromCoordinates({ latitude, longitude })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("Error getting location:", error);
-      });
-  }, [latitude,longitude]);
+  // useEffect(() => {
+  //   getLocationFromCoordinates({ latitude, longitude })
+  //     .then((data) => {
+  //       console.log(data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error getting location:", error);
+  //     });
+  // }, [latitude, longitude]);
 
   useEffect(() => {
     console.log(data);
@@ -88,12 +90,13 @@ const PickupSchedulePage: React.FC = () => {
 
   return (
     <>
-      <div className="py-5">
-        <Breadcrumb>
-          <Breadcrumb.Item href="/pickup-schedule">
-            Pickup Schedule
-          </Breadcrumb.Item>
-        </Breadcrumb>
+      <div className="bg-gray-100 py-5">
+        <h1 className="font-semibold text-lg text-[#706F6F]">
+          Pickup Schedule
+        </h1>
+        <p className=" text-sm text-[#706F6F] pb-4 mt-2">
+          Manage Pickup Schedule
+        </p>
         <div className="mt-2 pb-3">
           <FileStats data={pickupStatsData} />
         </div>
@@ -183,13 +186,15 @@ const PickupSchedulePage: React.FC = () => {
               className="py-5 rounded-lg w-full text-white text-sm font-semibold"
               type="submit"
             >
-              <div className="flex items-center">
-                <span className="">+Assign New Task</span>
-              </div>
+              <Link href={Route.AssignPickupSchedule}>+Assign New Task</Link>
             </Button>
           </div>
         </div>
         <div>
+          <div className="py-3 bg-white rounded-t-md">
+            <p className="font-semibold text-sm  pl-4">Date: dd/mm/yy</p>
+          </div>
+
           <div className="flex flex-col gap-4">
             {data?.routes.data.map((routeData) => (
               <TableCard routeData={routeData} />

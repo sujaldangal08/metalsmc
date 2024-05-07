@@ -1,15 +1,15 @@
-import { Button, Input, Select, Textarea } from "rizzui";
-import { DownIcon, BinIcon, CloseIcon } from "@public/assets/Icons";
-import { Badge } from "rizzui";
-import { Fragment, useState } from "react";
-import cn from "@/utils/class-names";
 import SearchInput from "@/components/input/search-input";
-import { useForm } from "react-hook-form";
+import Status from "@/components/status/status";
+import cn from "@/utils/class-names";
 import assignPickupSchedule, {
   AssignPickupSchedule,
 } from "@/utils/schema/delivery-pickups/asignPickupSchedule.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Status from "@/components/status/status";
+import { BinIcon, CloseIcon, DownIcon } from "@public/assets/Icons/index";
+import { Fragment, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Badge, Button, Input, Select, Textarea } from "rizzui";
+import { PiPlus } from "react-icons/pi";
 
 const data = [
   {
@@ -128,7 +128,7 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
       })}
     >
       <div className="w-full flex bg-[#C6E7D9] px-4 py-3 items-center relative">
-        <h2 className="font-medium text-md">Route Name :</h2>
+        <h2 className="font-medium text-sm">Route Name :</h2>
         <Input
           placeholder="Enter route...."
           className="ml-4 sm:w-1/3 w-2/3 [&>div]:hidden"
@@ -158,15 +158,19 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
         <div className="flex w-full">
           <div className="flex flex-col w-full gap-3">
             <div className="flex w-full items-center justify-between">
-              <div className="flex md:flex-row flex-col md:items-end items-start md:gap-14 gap-1">
-                <h2 className="text-md font-normal">
+              <div className="flex *:!text-[15px] *:!font-normal md:flex-row flex-col md:items-end items-start md:gap-14 gap-1">
+                <h2>
                   Driver's Name : <span className="text-gray">Jhon Doe</span>
                 </h2>
-                <h2 className="text-md font-normal">
+                <h2>
                   Truck License Plate no :{" "}
                   <span className="text-gray">123456</span>
                 </h2>
-                <Status className="pb-1" status="success" title="Available" />
+                <Status
+                  className="pb-1 text-xs"
+                  status="success"
+                  title="Available"
+                />
               </div>
             </div>
             {schedule.map((_, scheduleIndex) => (
@@ -191,16 +195,16 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
                   </span>
                 </div>
                 <div className="flex w-full gap-3 flex-col">
-                  <div className="flex flex-col md:w-1/2 w-full gap-2">
-                    <h2 className="text-md font-medium">Customer's Details</h2>
+                  <h2 className="text-md font-medium">Customer's Details</h2>
+                  <div className="flex items-end gap-4">
                     <SearchInput<{
                       avatar: string;
                       name: string;
                       truckNumber: string;
                     }>
                       placeholder="Choose Customer"
-                      label="Customer"
-                      className="w-full"
+                      label=""
+                      className="w-[35%]"
                       value={searched_driver}
                       setValue={(value: string | number) => {
                         setSearchedDriver(value.toString());
@@ -251,10 +255,10 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
                           setMaterial([...material, material.length]);
                         }}
                       >
-                        <span className="bg-primary py-1/2 px-[6px] mr-3 text-white rounded-md text-md">
-                          +
+                        <span className="bg-primary py-1 px-[6px] mr-3 text-white rounded-md text-md">
+                          <PiPlus />
                         </span>
-                        <span className="text-md font-medium text-black">
+                        <span className="text-sm font-medium text-black">
                           Add Material
                         </span>
                       </Button>
@@ -346,16 +350,16 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
               </Fragment>
             ))}
             <Button
-              className="w-1/3 mx-auto"
+              className="w-1/4 ml-auto"
               variant="outline"
               onClick={() => {
                 setSchedule([...schedule, schedule.length]);
               }}
             >
-              <span className="bg-primary py-1/2 px-[6px] mr-3 text-white rounded-md text-md">
-                +
+              <span className="bg-primary py-1 px-[6px] mr-3 text-white rounded-md text-sm">
+                <PiPlus />
               </span>
-              <span className="text-md font-medium text-black">
+              <span className="text-sm font-medium text-black">
                 Add New Schedule
               </span>
             </Button>

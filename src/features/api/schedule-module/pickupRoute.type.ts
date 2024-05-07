@@ -2,42 +2,40 @@ import { CommonApiResponse } from "../types";
 
 export interface CreatePickupRouteBody {
     name: string;
-    description: string;
+    description?: string;
     status: string;
     start_date: string
+    driver_id: number;
+    asset_id: number;
 }
-export interface CreatePickupRouteResponse { }
-
-export interface UpdatePickupRouteResponse { }
-
-export interface updatePickupRouteBody {
-    name: string;
-    description: string;
-    status: string;
+export interface CreatePickupRouteResponse extends CommonApiResponse {
+    data: {
+        name: string
+        description: string
+        driver_id: number
+        asset_id: number
+        status: string
+        start_date: string
+        updated_at: string
+        created_at: string
+        id: number
+    }
 }
+
+export interface UpdatePickupRouteResponse extends CreatePickupRouteResponse { }
+
+export interface UpdatePickupRouteBody extends CreatePickupRouteBody { }
 
 export interface PermanentDeletePickupRouteResponse { }
-export interface DeletePickupRouteResponse { }
+export interface DeletePickupRouteResponse extends CommonApiResponse { }
 
 export interface GetAllPickupResponse extends CommonApiResponse {
-    total: number
-    routes: PickupRoutes
-}
-
-interface PickupRoutes {
-    current_page: number
-    data: PickupRouteData[]
-    first_page_url: string
-    from: number
-    last_page: number
-    last_page_url: string
-    links: Link[]
-    next_page_url: any
-    path: string
-    per_page: number
-    prev_page_url: any
-    to: number
-    total: number
+    data: {
+        id: number
+        name: string
+        image: string
+        routes: PickupRouteData[]
+    }[]
 }
 
 
@@ -48,7 +46,12 @@ export interface Link {
 }
 
 export interface GetOnePickupRouteResponse extends CommonApiResponse {
-    data: PickupRouteData & {
+    data: Omit<PickupRouteData, 'schedule'> & {
+        driver: {
+            id: string
+            name: string
+            image: string
+        },
         schedule: PickupScheduleDetails[]
     }
 }
@@ -64,11 +67,6 @@ export interface PickupRouteData {
     deleted_at: any
     created_at: string
     updated_at: string
-    driver: {
-        id: number
-        name: string
-        image: string
-    }
     asset: {
         id: number
         title: string
@@ -82,14 +80,20 @@ export interface PickupSchedule {
     id: number
     route_id: number
     customer_id: number
-    materials: string[]
-    amount: number[]
-    rate: number[]
+    materials: PickupMaterial[]
     status: string
     customer: {
         id: number
         name: string
     }
+}
+
+interface PickupMaterial {
+    name: string
+    amount: number
+    rate: number
+    weight: string
+    tare_weight: number
 }
 
 export interface PickupScheduleDetails {
@@ -101,12 +105,8 @@ export interface PickupScheduleDetails {
     pickup_date: string
     status: string
     notes: string
-    materials: string[]
-    rate: number[]
-    amount: number[]
-    weighing_type: string[]
+    materials: PickupMaterial[]
     n_bins: string
-    tare_weight: number[]
     image: string[]
     coordinates: string[]
     deleted_at: any

@@ -10,6 +10,7 @@ import { Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Badge, Button, Input, Select, Textarea } from "rizzui";
 import { PiPlus } from "react-icons/pi";
+import { Tab } from "@headlessui/react";
 
 const data = [
   {
@@ -129,13 +130,7 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
     >
       <div className="w-full flex bg-[#C6E7D9] px-4 py-3 items-center relative">
         <h2 className="font-medium text-sm">Route Name :</h2>
-        <Input
-          placeholder="Enter route...."
-          className="ml-4 sm:w-1/3 w-2/3 [&>div]:hidden"
-          inputClassName="bg-white ring-gray-dark bg-white"
-          {...register("route_name")}
-          error={errors?.route_name?.message}
-        />
+       
         <span
           className={cn(
             "absolute right-4 cursor-pointer",
@@ -173,182 +168,200 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
                 />
               </div>
             </div>
-            {schedule.map((_, scheduleIndex) => (
-              <Fragment key={scheduleIndex}>
-                <div className="w-full bg-gray-300 h-[1px]" />
-                <div className="w-full justify-between items-center flex">
-                  <Badge className="bg-[#C6E7D9] text-md font-normal text-black w-36 rounded-md">
-                    Schedule {scheduleIndex + 1}
-                  </Badge>
-                  <span
-                    className={cn(
-                      schedule.length === 1
-                        ? "opacity-50 cursor-not-allowed"
-                        : "opacity-100 cursor-pointer"
-                    )}
-                    onClick={() => {
-                      //Function to delete schedule from schedule list
-                      deleteSchedule(indx);
-                    }}
-                  >
-                    <BinIcon className="fill-red-500" />
-                  </span>
-                </div>
-                <div className="flex w-full gap-3 flex-col">
-                  <h2 className="text-md font-medium">Customer's Details</h2>
-                  <div className="flex items-end gap-4">
-                    <SearchInput<{
-                      avatar: string;
-                      name: string;
-                      truckNumber: string;
-                    }>
-                      placeholder="Choose Customer"
-                      label=""
-                      className="w-[35%]"
-                      value={searched_driver}
-                      setValue={(value: string | number) => {
-                        setSearchedDriver(value.toString());
-                      }}
-                      filterFunction={filterFunction}
-                      render={(data) => (
-                        <>
-                          {data?.map((driver, indx) => (
-                            <h2
-                              key={indx}
-                              className="text-sm font-medium text-gray-dark px-4 py-1 hover:bg-gray-50 cursor-pointer"
-                              onClick={() => {
-                                setSearchedDriver(driver.name);
-                              }}
-                            >
-                              {driver.name}
-                            </h2>
-                          ))}
-                        </>
+            <div className="w-full bg-gray-300 h-[1px]" />
+            <Tab.Group defaultIndex={0}>
+              <div className="flex justify-between items-center">
+                <Tab.List className="w-fit items-center flex gap-1.5 bg-primary-lighter/60 border border-primary p-1.5 rounded-md">
+                  {schedule.map((_, scheduleIndex) => (
+                    <Tab as={Fragment} key={scheduleIndex}>
+                      {({ selected }) => (
+                        <button
+                          className={cn(
+                            "text-[15px] font-normal py-1.5 px-5 text-black rounded-md hover:bg-primary/20",
+                            selected && "bg-primary text-white hover:bg-primary"
+                          )}
+                        >
+                          Schedule {scheduleIndex + 1}
+                        </button>
                       )}
-                    />
-                    <Input
-                      placeholder="Delivery Location"
-                      inputClassName="ring-gray-dark"
-                      {...register(
-                        `schedules.${scheduleIndex}.customer.location`
-                      )}
+                    </Tab>
+                  ))}
+                </Tab.List>
+
+                <span
+                  className={cn(
+                    schedule.length === 1
+                      ? "opacity-50 cursor-not-allowed"
+                      : "opacity-100 cursor-pointer"
+                  )}
+                  onClick={() => {
+                    //Function to delete schedule from schedule list
+                    deleteSchedule(indx);
+                  }}
+                >
+                  <BinIcon className="fill-red-500" />
+                </span>
+              </div>
+
+              <Tab.Panels>
+                {schedule.map((_, scheduleIndex) => (
+                  <Tab.Panel className="flex w-full gap-3 flex-col">
+                    <h2 className="text-md font-medium">Customer's Details</h2>
+                    <div className="flex items-end gap-4">
+                      <SearchInput<{
+                        avatar: string;
+                        name: string;
+                        truckNumber: string;
+                      }>
+                        placeholder="Choose Customer"
+                        label=""
+                        className="w-[35%]"
+                        value={searched_driver}
+                        setValue={(value: string | number) => {
+                          setSearchedDriver(value.toString());
+                        }}
+                        filterFunction={filterFunction}
+                        render={(data) => (
+                          <>
+                            {data?.map((driver, indx) => (
+                              <h2
+                                key={indx}
+                                className="text-sm font-medium text-gray-dark px-4 py-1 hover:bg-gray-50 cursor-pointer"
+                                onClick={() => {
+                                  setSearchedDriver(driver.name);
+                                }}
+                              >
+                                {driver.name}
+                              </h2>
+                            ))}
+                          </>
+                        )}
+                      />
+                      <Input
+                        placeholder="Delivery Location"
+                        inputClassName="ring-gray-dark"
+                        {...register(
+                          `schedules.${scheduleIndex}.customer.location`
+                        )}
+                        error={
+                          errors?.schedules?.[scheduleIndex]?.customer?.location
+                            ?.message
+                        }
+                      />
+                    </div>
+                    <div className="w-full h-[1px] bg-gray-300 my-2" />
+                    <div className="flex flex-col w-full gap-2">
+                      <div className="flex w-full items-center justify-between">
+                        <div>
+                          <h2 className="text-md font-medium">
+                            Material’s Details
+                          </h2>
+                          <h2 className="text-sm font-normal">
+                            Material Type & Weight
+                          </h2>
+                        </div>
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            setMaterial([...material, material.length]);
+                          }}
+                        >
+                          <span className="bg-primary py-1 px-[6px] mr-3 text-white rounded-md text-md">
+                            <PiPlus />
+                          </span>
+                          <span className="text-sm font-medium text-black">
+                            Add Material
+                          </span>
+                        </Button>
+                      </div>
+                      <div className="grid grid-cols-7 gap-3 items-center max-h-[150px] overflow-y-auto">
+                        {material.map((_, materialIndex) => (
+                          <Fragment key={materialIndex}>
+                            <div className="sm:col-span-2 col-span-6">
+                              <Select
+                                options={material_options}
+                                placeholder="Select Material"
+                                {...register(
+                                  `schedules.${scheduleIndex}.materials.${materialIndex}.material`
+                                )}
+                                error={
+                                  errors?.schedules?.[scheduleIndex]
+                                    ?.materials?.[materialIndex]?.material
+                                    ?.message
+                                }
+                              />
+                            </div>
+                            <div className="sm:col-span-2 col-span-6">
+                              <Input
+                                placeholder="Price / Unit"
+                                type="number"
+                                {...register(
+                                  `schedules.${indx}.materials.${indx}.rate`
+                                )}
+                                error={
+                                  errors?.schedules?.[indx]?.materials?.[indx]
+                                    ?.rate?.message
+                                }
+                              />
+                            </div>
+                            <div className="sm:hidden block col-span-1">
+                              <button
+                                type="button"
+                                disabled={material.length == 1}
+                                className="mx-auto col-span-1 bg-gray-light rounded-full w-7 h-7 flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-50"
+                                onClick={() => {
+                                  deleteMaterial(materialIndex);
+                                }}
+                              >
+                                <CloseIcon />
+                              </button>
+                            </div>
+                            <div className="sm:col-span-2 col-span-6">
+                              <Input
+                                placeholder="Weight"
+                                type="number"
+                                prefix="Tons"
+                                prefixClassName="text-xs"
+                                {...register(
+                                  `schedules.${indx}.materials.${indx}.weight`
+                                )}
+                                error={
+                                  errors?.schedules?.[indx]?.materials?.[indx]
+                                    ?.weight?.message
+                                }
+                              />
+                            </div>
+                            <div className="sm:block hidden col-span-1">
+                              <button
+                                type="button"
+                                disabled={material.length == 1}
+                                className="mx-auto col-span-1 bg-gray-light rounded-full w-7 h-7 flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-50"
+                                onClick={() => {
+                                  deleteMaterial(materialIndex);
+                                }}
+                              >
+                                <CloseIcon />
+                              </button>
+                            </div>
+                          </Fragment>
+                        ))}
+                      </div>
+                    </div>
+                    <Textarea
+                      maxLength={80}
+                      textareaClassName="resize-none h-[100px] ring-gray-dark"
+                      placeholder="Note"
+                      {...register(`schedules.${scheduleIndex}.customer.note`)}
                       error={
-                        errors?.schedules?.[scheduleIndex]?.customer?.location
+                        errors?.schedules?.[scheduleIndex]?.customer?.note
                           ?.message
                       }
                     />
-                  </div>
-                  <div className="w-full h-[1px] bg-gray-300 my-2" />
-                  <div className="flex flex-col w-full gap-2">
-                    <div className="flex w-full items-center justify-between">
-                      <div>
-                        <h2 className="text-md font-medium">
-                          Material’s Details
-                        </h2>
-                        <h2 className="text-sm font-normal">
-                          Material Type & Weight
-                        </h2>
-                      </div>
-                      <Button
-                        variant="outline"
-                        onClick={() => {
-                          setMaterial([...material, material.length]);
-                        }}
-                      >
-                        <span className="bg-primary py-1 px-[6px] mr-3 text-white rounded-md text-md">
-                          <PiPlus />
-                        </span>
-                        <span className="text-sm font-medium text-black">
-                          Add Material
-                        </span>
-                      </Button>
-                    </div>
-                    <div className="grid grid-cols-7 gap-3 items-center max-h-[150px] overflow-y-auto">
-                      {material.map((_, materialIndex) => (
-                        <Fragment key={materialIndex}>
-                          <div className="sm:col-span-2 col-span-6">
-                            <Select
-                              options={material_options}
-                              placeholder="Select Material"
-                              {...register(
-                                `schedules.${scheduleIndex}.materials.${materialIndex}.material`
-                              )}
-                              error={
-                                errors?.schedules?.[scheduleIndex]?.materials?.[
-                                  materialIndex
-                                ]?.material?.message
-                              }
-                            />
-                          </div>
-                          <div className="sm:col-span-2 col-span-6">
-                            <Input
-                              placeholder="Price / Unit"
-                              type="number"
-                              {...register(
-                                `schedules.${indx}.materials.${indx}.rate`
-                              )}
-                              error={
-                                errors?.schedules?.[indx]?.materials?.[indx]
-                                  ?.rate?.message
-                              }
-                            />
-                          </div>
-                          <div className="sm:hidden block col-span-1">
-                            <button
-                              type="button"
-                              disabled={material.length == 1}
-                              className="mx-auto col-span-1 bg-gray-light rounded-full w-7 h-7 flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-50"
-                              onClick={() => {
-                                deleteMaterial(materialIndex);
-                              }}
-                            >
-                              <CloseIcon />
-                            </button>
-                          </div>
-                          <div className="sm:col-span-2 col-span-6">
-                            <Input
-                              placeholder="Weight"
-                              type="number"
-                              prefix="Tons"
-                              prefixClassName="text-xs"
-                              {...register(
-                                `schedules.${indx}.materials.${indx}.weight`
-                              )}
-                              error={
-                                errors?.schedules?.[indx]?.materials?.[indx]
-                                  ?.weight?.message
-                              }
-                            />
-                          </div>
-                          <div className="sm:block hidden col-span-1">
-                            <button
-                              type="button"
-                              disabled={material.length == 1}
-                              className="mx-auto col-span-1 bg-gray-light rounded-full w-7 h-7 flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-50"
-                              onClick={() => {
-                                deleteMaterial(materialIndex);
-                              }}
-                            >
-                              <CloseIcon />
-                            </button>
-                          </div>
-                        </Fragment>
-                      ))}
-                    </div>
-                  </div>
-                  <Textarea
-                    maxLength={80}
-                    textareaClassName="resize-none h-[100px] ring-gray-dark"
-                    placeholder="Note"
-                    {...register(`schedules.${scheduleIndex}.customer.note`)}
-                    error={
-                      errors?.schedules?.[scheduleIndex]?.customer?.note
-                        ?.message
-                    }
-                  />
-                </div>
-              </Fragment>
-            ))}
+                  </Tab.Panel>
+                ))}
+              </Tab.Panels>
+            </Tab.Group>
+
             <Button
               className="w-1/4 ml-auto"
               variant="outline"

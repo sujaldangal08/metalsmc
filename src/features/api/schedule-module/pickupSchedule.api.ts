@@ -62,8 +62,11 @@ export async function updatePickupSchedule({
 
 //Delete: Delete Pickup Schedule
 export async function deletePickupSchedule(id: string) {
-  const response = await api.delete<DeletePickupScheduleResponse>(
-    `${baseEnd}/${id}`
+  const response = await api.request<DeletePickupScheduleResponse, any>({
+    method: "DELETE",
+    endpoint: `${baseEnd}/${id}`,
+    body: {}
+  }
   );
   return response.data;
 }
@@ -89,8 +92,8 @@ export async function restorePickupSchedule({
 
 //Delete: Permanent Delete Pickup Schedule
 export async function permanentDeletePickupSchedule(id: string) {
-  const response = await api.delete<PermanentDeletePickupScheduleResponse>(
-    `${baseEnd}/${id}`
+  const response = await api.request<PermanentDeletePickupScheduleResponse, any>(
+    { endpoint: `${baseEnd}/${id}`, method: "DELETE", body: {} }
   );
   return response.data;
 }

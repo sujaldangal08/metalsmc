@@ -59,7 +59,7 @@ const data = [
 
 export default function RecentAssigned() {
   return (
-    <div className="xl:w-1/6 w-1/5 lg:flex hidden flex-col  h-[calc(100vh-110px)] gap-5 fixed right-2 top-[100px] transition-all delay-200 ease-in">
+    <div className="hidden lg:flex flex-1 flex-col  h-[calc(100vh-110px)] gap-5 transition-all delay-200 ease-in">
       <h3 className="text-md font-medium">
         Recently Assigned
         <br />

@@ -1,5 +1,5 @@
-// pages/index.tsx
 "use client";
+
 import FileStats from "@/app/shared/file/dashboard/file-stats";
 import FilterIcon from "@/components/icons/FilterIcon";
 import LeftIcon from "@/components/icons/LeftIcon";
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
 import { getAllPickupRoutes } from "@/features/api/schedule-module/pickupRoute.api";
 import { Route } from "@/lib/enums/routes.enums";
+import withAuth from "@/lib/hoc/withAuth";
 import Link from "next/link";
 import React, { useState } from "react";
 import useSWR from "swr";
@@ -59,9 +60,11 @@ const pickupStatsData = [
 const PickupSchedulePage: React.FC = () => {
   const [tabIndex, setTabIndex] = useState<number>(0);
 
-  const { data, error, isLoading } = useSWR("pickup-data", () =>
-    getAllPickupRoutes()
-  );
+  const {
+    data: allDriverPickupRoutes,
+    error,
+    isLoading,
+  } = useSWR("pickup-data", () => getAllPickupRoutes());
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -162,8 +165,8 @@ const PickupSchedulePage: React.FC = () => {
           </div>
 
           <div className="flex flex-col gap-4">
-            {data?.routes.data.map((routeData) => (
-              <TableCard routeData={routeData} />
+            {allDriverPickupRoutes?.data.map((driverData) => (
+              <TableCard driverData={driverData} />
             ))}
           </div>
         </div>

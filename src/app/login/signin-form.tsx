@@ -40,7 +40,7 @@ export default function SignInForm() {
       const res = await signInMn({
         email: data.email,
         password: data.password,
-        token: "",
+        token: "asdas",
       });
 
       setSessionCookie(res.data.access_token);

@@ -48,8 +48,8 @@ const TwoFactorAuth: FC<TwoFactorAuthProps> = ({
     resolver: zodResolver(twoFactorAuthSchema),
   });
 
-  const { mutate: verifyQrMn } = useMutation<Verify2faRequestBody>({
-    mutateFn: (body) => verifyQrFn(body),
+  const { mutate: verifyQrMn } = useMutation({
+    mutateFn: (body: Verify2faRequestBody) => verifyQrFn(body),
   });
 
   const verifyOtp = async (otp: string) => {
@@ -59,11 +59,9 @@ const TwoFactorAuth: FC<TwoFactorAuthProps> = ({
         otp,
       });
 
-      if (response?.status === 200) {
-        setSessionCookie(response?.data.token!);
-        closeModal();
-        toast.success("Two-Factor Auth Enabled Successfully");
-      }
+      setSessionCookie(response?.data.token!);
+      closeModal();
+      toast.success("Two-Factor Auth Enabled Successfully");
     } catch (error: any) {
       toast.error(formatErrorMessage(error));
     }

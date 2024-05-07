@@ -37,3 +37,33 @@ export interface UpdateUserResponse {
         image: string
     }
 }
+
+export interface GetAllDriversResponse extends CommonApiResponse {
+    total: number
+    data: DriverData[]
+}
+
+export interface DriverData {
+    id: number
+    name: string
+    email: string
+    role_id: number
+    status: string
+    image: string
+    phone_number: any
+    city: any
+    state: any
+    country: any
+    zip_code: any
+    language: string
+    tfa_secret: any
+    is_tfa: number
+    otp_hash: any
+    device_token: any
+    created_at: string
+    updated_at: string
+}
+
+export interface GetAllCustomerResponse extends CommonApiResponse {
+    
+}

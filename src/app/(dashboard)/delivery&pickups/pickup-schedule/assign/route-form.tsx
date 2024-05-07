@@ -1,4 +1,4 @@
-import SearchInput from "@/components/input/search-input";
+import SearchInput from "@/components/input/select-box";
 import Status from "@/components/status/status";
 import cn from "@/utils/class-names";
 import assignPickupSchedule, {
@@ -130,7 +130,7 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
     >
       <div className="w-full flex bg-[#C6E7D9] px-4 py-3 items-center relative">
         <h2 className="font-medium text-sm">Route Name :</h2>
-       
+
         <span
           className={cn(
             "absolute right-4 cursor-pointer",

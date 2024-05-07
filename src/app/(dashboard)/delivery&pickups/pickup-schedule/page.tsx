@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
 import { getAllPickupRoutes } from "@/features/api/schedule-module/pickupRoute.api";
 import { Route } from "@/lib/enums/routes.enums";
-import withAuth from "@/lib/hoc/withAuth";
 import Link from "next/link";
 import React, { useState } from "react";
 import useSWR from "swr";

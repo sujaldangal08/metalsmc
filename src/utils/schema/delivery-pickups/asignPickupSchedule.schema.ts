@@ -1,9 +1,15 @@
 import { z } from "zod";
 
+const createPickupRouteSchema = z.object({
+  driver_id: z.number().min(1, "Driver ID is required"),
+  asset_id: z.number().min(1, "Truck ID is required"),
+  name: z.string().min(1, "Route Name is required"),
+  start_date: z.string().min(1, "Start Date is required"),
+  description: z.string().optional()
+})
+
+
 const assignPickupSchedule = z.object({
-  driver_id: z.string().min(1, "Driver ID is required"),
-  truck_id: z.string().min(1, "Truck ID is required"),
-  route_name: z.string().min(1, "Route Name is required"),
   schedules: z
     .array(
       z.object({
@@ -45,5 +51,6 @@ const assignPickupSchedule = z.object({
 });
 
 export type AssignPickupSchedule = z.infer<typeof assignPickupSchedule>;
+export type CreatePickupRouteSchema = z.infer<typeof createPickupRouteSchema>;
 
-export default assignPickupSchedule;
+export { assignPickupSchedule, createPickupRouteSchema };

@@ -3,7 +3,7 @@ import { useState } from "react";
 
 interface UseMutationOptions<T> {
   initialData?: any;
-  mutateFn: (body: T) => Promise<AxiosResponse<any, any>>;
+  mutateFn: (body: T) => Promise<AxiosResponse<any, any>> ;
 }
 
 const useMutation = <T,>({ initialData, mutateFn }: UseMutationOptions<T>) => {

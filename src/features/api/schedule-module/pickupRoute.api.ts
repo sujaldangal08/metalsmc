@@ -43,7 +43,7 @@ export async function createPickupRoute<T = CreatePickupRouteBody>(body: T) {
     body
   })
 
-  return response.data;
+  return response;
 }
 
 //update a route
@@ -54,14 +54,14 @@ export async function updatePickupRoute<T = UpdatePickupRouteBody>(id: number, b
     body
   })
 
-  return response.data;
+  return response;
 }
 
 // delete a route
 export async function deletePickupRoute(id: number) {
   const response = await api.request<DeletePickupRouteResponse, any>({ endpoint: `${baseEnd}/${id}`, method: "DELETE", body: {} })
 
-  return response.data;
+  return response;
 }
 
 //permanently delete a route

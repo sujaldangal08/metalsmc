@@ -1,8 +1,13 @@
 import { api } from "@/config/api.config";
 
 import {
+  CreatePickupRouteBody,
+  CreatePickupRouteResponse,
+  DeletePickupRouteResponse,
   GetAllPickupResponse,
-  GetOnePickupRouteResponse
+  GetOnePickupRouteResponse,
+  UpdatePickupRouteBody,
+  UpdatePickupRouteResponse
 } from "./pickupRoute.type";
 
 const baseEnd = "/route"
@@ -31,9 +36,32 @@ export async function getOnePickupRoute(id: number) {
 }
 
 //create a route
+export async function createPickupRoute<T = CreatePickupRouteBody>(body: T) {
+  const response = await api.request<CreatePickupRouteResponse, T>({
+    endpoint: `${baseEnd}`,
+    method: "POST",
+    body
+  })
+
+  return response.data;
+}
 
 //update a route
+export async function updatePickupRoute<T = UpdatePickupRouteBody>(id: number, body: T) {
+  const response = await api.request<UpdatePickupRouteResponse, T>({
+    endpoint: `${baseEnd}/${id}`,
+    method: "PATCH",
+    body
+  })
+
+  return response.data;
+}
 
 // delete a route
+export async function deletePickupRoute(id: number) {
+  const response = await api.request<DeletePickupRouteResponse, any>({ endpoint: `${baseEnd}/${id}`, method: "DELETE", body: {} })
+
+  return response.data;
+}
 
 //permanently delete a route

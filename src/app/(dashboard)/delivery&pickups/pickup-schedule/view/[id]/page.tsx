@@ -34,7 +34,6 @@ export default function ViewPickupSchedulePage() {
         <PickupRoute
           key={index}
           id={route.id}
-          route_name={route.status}
           isOpen={currentAccordion === index}
           onClick={() => handleAccordionClick(index)}
         />

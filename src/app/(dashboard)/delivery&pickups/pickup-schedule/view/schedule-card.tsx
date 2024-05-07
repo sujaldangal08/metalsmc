@@ -6,16 +6,7 @@ export interface ScheduleCardProps {
 }
 
 export default function ScheduleCard({ scheduleDetails }: ScheduleCardProps) {
-  const { id, customer, materials, coordinates, notes, rate, tare_weight } =
-    scheduleDetails;
-
-  const formattedTableData = materials.map((material, index) => {
-    return {
-      material,
-      rate: `$${rate[index]}`,
-      total_weight: `${tare_weight[index]} tons`,
-    };
-  });
+  const { id, customer, materials, coordinates, notes } = scheduleDetails;
 
   return (
     <div className="p-6 flex flex-col gap-5">
@@ -52,15 +43,13 @@ export default function ScheduleCard({ scheduleDetails }: ScheduleCardProps) {
                 </tr>
               </thead>
               <tbody>
-                {formattedTableData.map(
-                  ({ material, rate, total_weight }, index) => (
-                    <tr key={index} className="even:bg-[#C6E7D930]">
-                      <td className="px-5 py-2">{material}</td>
-                      <td className="px-5 py-2">{rate}</td>
-                      <td className="px-5 py-2">{total_weight}</td>
-                    </tr>
-                  )
-                )}
+                {materials.map(({ rate, weight, name }, index) => (
+                  <tr key={index} className="even:bg-[#C6E7D930]">
+                    <td className="px-5 py-2">{name}</td>
+                    <td className="px-5 py-2">{rate}</td>
+                    <td className="px-5 py-2">{weight}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

@@ -1,15 +1,11 @@
-import {
-  GetAllPickupResponse,
-  GetOnePickupRouteResponse,
-} from "@/features/api/schedule-module/pickupRoute.type";
+import { PickupRouteData } from "@/features/api/schedule-module/pickupRoute.type";
 import cn from "@/utils/class-names";
 import { Tab } from "@headlessui/react";
-import { curry } from "lodash";
 import { Fragment } from "react";
 import { Button } from "rizzui";
 
 interface TableProps {
-  routeDetails: GetAllPickupResponse["routes"];
+  routeDetails: PickupRouteData[];
 }
 
 function Table({ routeDetails }: TableProps) {
@@ -17,14 +13,14 @@ function Table({ routeDetails }: TableProps) {
     <div className="flex flex-col  bg-white w-full h-[250px] mt-10 rounded-md pr-4">
       <Tab.Group defaultIndex={0}>
         <Tab.List className="flex gap-2 ">
-          {routeDetails.data.map((route) => (
+          {routeDetails.map((route) => (
             <Tab as={Fragment}>
               {({ selected }) => (
                 <Button
                   key={route.id}
                   className={cn(
-                    "py-5 bg-gray-200 w-fit rounded-b-none rounded-t-md text-gray-700 text-sm font-medium hover:text-white",
-                    selected && "bg-primary text-white ring-0"
+                    "py-5 bg-gray-200 w-fit rounded-b-none rounded-t-md text-gray-700 text-sm font-medium hover:bg-gray-300",
+                    selected && "bg-primary text-white focus:ring-0 hover:bg-primary"
                   )}
                   type="submit"
                 >
@@ -37,7 +33,7 @@ function Table({ routeDetails }: TableProps) {
           ))}
         </Tab.List>
         <Tab.Panels>
-          {routeDetails.data.map((route) => (
+          {routeDetails.map((route) => (
             <Tab.Panel key={route.id}>
               <table className="w-full border border-gray-300  rounded-md relative border-separate border-spacing-0 ">
                 <thead>
@@ -72,11 +68,19 @@ function Table({ routeDetails }: TableProps) {
                     >
                       <td className="pl-5 py-4">{schedule.customer.name}</td>
                       <td className="px-2 py-4">
-                        {schedule.materials.join(", ")}
+                        {schedule.materials
+                          .map((material) => material.name)
+                          .join(", ")}
                       </td>
-                      <td className="px-2 py-4">{schedule.rate.join(", ")}</td>
                       <td className="px-2 py-4">
-                        {schedule.amount.join(", ")}
+                        {schedule.materials
+                          .map((material) => '$' +material.rate)
+                          .join(", ")}
+                      </td>
+                      <td className="px-2 py-4">
+                        {schedule.materials
+                          .map((material) => material.amount)
+                          .join(", ")} (tons)
                       </td>
 
                       <td className="px-2 py-4">{schedule?.status}</td>

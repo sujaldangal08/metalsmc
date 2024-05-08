@@ -9,6 +9,8 @@ import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
 import DeliveryTruckIcon from "@/components/icons/delivery-truck";
 ;
 import { Avatar } from "rizzui";
+import PhoneIcon from "@public/assets/Icons/phoneIcon";
+import EmailIcon from "@public/assets/Icons/emailIcon";
 
 interface PickupRouteProps {
   id: number;
@@ -52,6 +54,7 @@ export default function PickupRoute({ id, isOpen, onClick }: PickupRouteProps) {
             <div className="flex flex-col gap-2">
 
               <p className="text-black">
+                
                 Driver’s Name :{" "}
                 <span className="text-[#706F6F]">
                   {routeDetails?.data.driver.name}
@@ -66,18 +69,22 @@ export default function PickupRoute({ id, isOpen, onClick }: PickupRouteProps) {
             </div>
             <div className="flex flex-col gap-2">
 
-<p className="text-black">
+<div className=" flex items-center text-black">
+<div className=" bg-green-200 rounded-full p-1 mr-2">
+  <EmailIcon className="text-black" />
+  </div>
   Email :{" "}
   <span className="text-black text-normal">
     {routeDetails?.data.driver.name}
   </span>
-</p>
-<p className="text-black">
-  Phone :{" "}
-  <span className="text-[#706F6F]">
-    {routeDetails?.data.asset.rego_number}
-  </span>
-</p>
+</div>
+<div className="flex items-center text-black">
+  <div className=" bg-green-100 rounded-full p-1 mr-2">
+  <PhoneIcon className="text-black" />
+  </div>
+ 
+  Phone: <span className="text-[#706F6F]">{routeDetails?.data.asset.rego_number}</span>
+</div>
 </div>
 <div className="border-2 border-yellow-600 rounded-md p-3 bg-orange-400/20">
     <div className="flex flex-row">

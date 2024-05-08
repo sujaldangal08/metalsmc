@@ -1,6 +1,9 @@
 import { Badge } from "@/components/ui/badge";
 import { PickupScheduleDetails } from "@/features/api/schedule-module/pickupRoute.type";
 import { Avatar } from "rizzui";
+import EmailIcon from "@public/assets/Icons/emailIcon";
+import PhoneIcon from "@public/assets/Icons/phoneIcon";
+
 
 export interface ScheduleCardProps {
   scheduleDetails: PickupScheduleDetails;

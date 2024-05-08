@@ -9,14 +9,13 @@ import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
 import { getAllDeliverySchedule } from "@/features/api/schedule-module/deliverySchedule.api";
 import { getAllPickupRoutes } from "@/features/api/schedule-module/pickupRoute.api";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useSWR from "swr";
-
 
 const pickupStatsData = [
   {
     id: 1,
-    title: "Total Pickups",
+    title: "Total Deliveries",
     metric: "1260",
     fill: "#37A05F",
     percentage: 12,
@@ -26,7 +25,7 @@ const pickupStatsData = [
   },
   {
     id: 2,
-    title: "Pending Pickups",
+    title: "Pending Deliveries",
     metric: "1260",
     fill: "#0A68EF",
     percentage: 12,
@@ -36,7 +35,7 @@ const pickupStatsData = [
   },
   {
     id: 3,
-    title: "Completed Pickups",
+    title: "Completed Deliveries",
     metric: "1260",
     fill: "#FF6464",
     percentage: 12,
@@ -46,7 +45,7 @@ const pickupStatsData = [
   },
   {
     id: 4,
-    title: "Today's Pickups",
+    title: "Today's Deliveries",
     metric: "1260",
     fill: "#FFAB00",
     percentage: 12,
@@ -59,13 +58,17 @@ const pickupStatsData = [
 const PickupSchedulePage: React.FC = () => {
   const [tabIndex, setTabIndex] = useState<number>(0);
 
-  const { data: allDeliverySchedule, error, isLoading } = useSWR("delivery-data", getAllDeliverySchedule);
+  const {
+    data: allDeliverySchedule,
+    error,
+    isLoading,
+  } = useSWR("delivery-data", getAllDeliverySchedule);
 
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
-  console.log(allDeliverySchedule);
+  // useEffect(() => {}, []);
 
   return (
     <>
@@ -165,8 +168,8 @@ const PickupSchedulePage: React.FC = () => {
           </div>
 
           <div className="flex flex-col gap-4">
-            {allDeliverySchedule?.data.schedule.map((schedule) => (
-              <TableCard scheduleData={schedule} />
+            {allDeliverySchedule?.data?.map((deliveryData) => (
+              <TableCard deliveryData={deliveryData?.delivery[0]} />
             ))}
           </div>
         </div>

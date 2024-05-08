@@ -2,13 +2,14 @@
 
 import { FC } from "react";
 import { Button as RizzuiButton, type ButtonProps } from "rizzui";
-import Spinner from "./spinner";
+import Spinner, { SpinnerSizeTypes } from "./spinner";
 import cn from "@/utils/class-names";
 
-export const Button: FC<ButtonProps> = ({
+export const Button: FC<ButtonProps & { spinnerSize?: SpinnerSizeTypes }> = ({
   children,
   className,
   isLoading = false,
+  spinnerSize,
   ...props
 }) => {
   const colorVariants = {
@@ -27,7 +28,7 @@ export const Button: FC<ButtonProps> = ({
       )}
       disabled={isLoading}
     >
-      {isLoading ? <Spinner color="white" /> : children}
+      {isLoading ? <Spinner color="white" size={spinnerSize} /> : children}
     </RizzuiButton>
   );
 };

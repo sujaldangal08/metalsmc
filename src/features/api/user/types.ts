@@ -65,5 +65,23 @@ export interface DriverData {
 }
 
 export interface GetAllCustomerResponse extends CommonApiResponse {
-    
+
+}
+
+export interface GetAllVehiclesResponse extends CommonApiResponse {
+    total: number
+    data: VehicleData[]
+}
+
+export interface VehicleData {
+    id: number
+    title: string
+    image: string
+    rego_number: string
+    asset_type: string
+    meta: string
+    branch_id: number
+    deleted_at: any
+    created_at: string
+    updated_at: string
 }

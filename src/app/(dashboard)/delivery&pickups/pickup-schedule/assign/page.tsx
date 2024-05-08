@@ -1,5 +1,6 @@
 "use client";
 
+import NotFound from "@/app/not-found";
 import CustomSelectBox from "@/components/input/select-box";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
@@ -10,7 +11,7 @@ import {
   CreatePickupRouteBody,
   CreatePickupRouteResponse,
 } from "@/features/api/schedule-module/pickupRoute.type";
-import { getAllDrivers } from "@/features/api/user";
+import { getAllDrivers, getAllVehicles } from "@/features/api/user";
 import { Route } from "@/lib/enums/routes.enums";
 import useMutation from "@/lib/hooks/useMutation";
 import { formatErrorMessage } from "@/utils/format-errors";
@@ -25,7 +26,6 @@ import toast from "react-hot-toast";
 import { PiPlus } from "react-icons/pi";
 import useSWR from "swr";
 import RecentAssigned from "./recent-assigned";
-import RouteForm from "./route-form";
 
 export default function PickupAssignPage() {
   const {
@@ -37,10 +37,17 @@ export default function PickupAssignPage() {
     resolver: zodResolver(createPickupRouteSchema),
   });
 
-  const { data: listOfDrivers, isLoading: fetchingListOfDrivers } = useSWR(
-    "drivers-list",
-    getAllDrivers
-  );
+  const {
+    data: listOfDrivers,
+    isLoading: fetchingListOfDrivers,
+    error: driversError,
+  } = useSWR("drivers-list", getAllDrivers);
+
+  const {
+    data: listOfVehicles,
+    isLoading: fetchingListOfVehicles,
+    error: vehiclesError,
+  } = useSWR("vehicles-list", getAllVehicles);
 
   const { mutate: createPickupMn, isLoading } = useMutation({
     mutateFn: (body: CreatePickupRouteBody) => createPickupRoute(body),
@@ -62,14 +69,15 @@ export default function PickupAssignPage() {
         description: "hello",
       });
 
-      console.log(res);
       setRoutes([...routes, res.data.data]);
     } catch (err: any) {
       toast.error(formatErrorMessage(err));
     }
   };
 
-  if (fetchingListOfDrivers) return <LoadingSpinner />;
+  if (fetchingListOfDrivers || fetchingListOfVehicles)
+    return <LoadingSpinner />;
+  if (driversError || vehiclesError) return <NotFound />;
 
   return (
     <div className="flex flex-col py-4 gap-4 w-full">
@@ -133,13 +141,15 @@ export default function PickupAssignPage() {
                   formState: { errors },
                 }) => (
                   <CustomSelectBox
-                    items={listOfDrivers?.data!}
+                    items={listOfVehicles?.data!}
                     placeholder="Choose asset"
                     value={
-                      listOfDrivers?.data.filter((data) => data.id === value)[0]
+                      listOfVehicles?.data.filter(
+                        (data) => data.id === value
+                      )[0]
                     }
                     setValue={(value) => onChange(value?.id)}
-                    getDisplayItem={(item) => item?.name!}
+                    getDisplayItem={(item) => item?.rego_number!}
                     error={errors.asset_id}
                   />
                 )}
@@ -150,6 +160,7 @@ export default function PickupAssignPage() {
               isLoading={isLoading}
               color="primary"
               className="font-normal w-[180px] px-2 "
+              spinnerSize="sm"
             >
               <PiPlus className="text-rg" />
               <span className="text-sm pl-2">Add Route</span>
@@ -157,14 +168,14 @@ export default function PickupAssignPage() {
           </div>
         </form>
 
-        {routes?.map((_, indx) => (
+        {/* {routes?.map((_, indx) => (
           <RouteForm
             indx={indx}
             onDelete={onDelete}
             key={"Route Form - " + indx}
             isDeleteDisable={routes.length <= 1}
           />
-        ))}
+        ))} */}
         <RecentAssigned />
       </div>
     </div>

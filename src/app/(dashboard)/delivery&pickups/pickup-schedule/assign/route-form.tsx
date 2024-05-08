@@ -1,16 +1,15 @@
 import SearchInput from "@/components/input/select-box";
 import Status from "@/components/status/status";
+import { CreatePickupRouteResponse } from "@/features/api/schedule-module/pickupRoute.type";
 import cn from "@/utils/class-names";
-import assignPickupSchedule, {
-  AssignPickupSchedule,
-} from "@/utils/schema/delivery-pickups/asignPickupSchedule.schema";
+import { AssignPickupSchedule, assignPickupSchedule } from "@/utils/schema/delivery-pickups/asignPickupSchedule.schema";
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BinIcon, CloseIcon, DownIcon } from "@public/assets/Icons/index";
 import { Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Badge, Button, Input, Select, Textarea } from "rizzui";
 import { PiPlus } from "react-icons/pi";
-import { Tab } from "@headlessui/react";
+import { Button, Input, Select, Textarea } from "rizzui";
 
 const data = [
   {
@@ -73,9 +72,15 @@ interface Props {
   onDelete: (indx: number) => void;
   indx: number;
   isDeleteDisable: boolean;
+  routeDetails: CreatePickupRouteResponse["data"];
 }
 
-export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
+export default function RouteForm({
+  onDelete,
+  indx,
+  isDeleteDisable,
+  routeDetails,
+}: Props) {
   const {
     handleSubmit,
     register,
@@ -129,7 +134,7 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
       })}
     >
       <div className="w-full flex bg-[#C6E7D9] px-4 py-3 items-center relative">
-        <h2 className="font-medium text-sm">Route Name :</h2>
+        <h2 className="font-medium text-sm">Route Name: {routeDetails.name}</h2>
 
         <span
           className={cn(
@@ -169,9 +174,9 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
               </div>
             </div>
             <div className="w-full bg-gray-300 h-[1px]" />
-            <Tab.Group defaultIndex={0}>
+            <TabGroup defaultIndex={0}>
               <div className="flex justify-between items-center">
-                <Tab.List className="w-fit items-center flex gap-1.5 bg-primary-lighter/60 border border-primary p-1.5 rounded-md">
+                <TabList className="w-fit items-center flex gap-1.5 bg-primary-lighter/60 border border-primary p-1.5 rounded-md">
                   {schedule.map((_, scheduleIndex) => (
                     <Tab as={Fragment} key={scheduleIndex}>
                       {({ selected }) => (
@@ -186,7 +191,7 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
                       )}
                     </Tab>
                   ))}
-                </Tab.List>
+                </TabList>
 
                 <span
                   className={cn(
@@ -203,9 +208,9 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
                 </span>
               </div>
 
-              <Tab.Panels>
+              <TabPanels>
                 {schedule.map((_, scheduleIndex) => (
-                  <Tab.Panel className="flex w-full gap-3 flex-col">
+                  <TabPanel className="flex w-full gap-3 flex-col">
                     <h2 className="text-md font-medium">Customer's Details</h2>
                     <div className="flex items-end gap-4">
                       <SearchInput<{
@@ -357,10 +362,10 @@ export default function RouteForm({ onDelete, indx, isDeleteDisable }: Props) {
                           ?.message
                       }
                     />
-                  </Tab.Panel>
+                  </Tab.>
                 ))}
-              </Tab.Panels>
-            </Tab.Group>
+              </TabPanels>
+            </TabGroup>
 
             <Button
               className="w-1/4 ml-auto"

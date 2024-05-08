@@ -6,6 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import useSWR from "swr";
 import { getOnePickupRoute } from "@/features/api/schedule-module/pickupRoute.api";
 import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
+import DeliveryTruckIcon from "@/components/icons/delivery-truck";
+;
+import { Avatar } from "rizzui";
 
 interface PickupRouteProps {
   id: number;
@@ -40,7 +43,14 @@ export default function PickupRoute({ id, isOpen, onClick }: PickupRouteProps) {
       {isOpen && (
         <div className="bg-white w-full">
           <div className="p-6 flex justify-between items-center">
+          <Avatar
+        name="John Doe"
+        src="https://randomuser.me/api/portraits/women/40.jpg"
+        size="xl"
+      />
+
             <div className="flex flex-col gap-2">
+
               <p className="text-black">
                 Driver’s Name :{" "}
                 <span className="text-[#706F6F]">
@@ -54,10 +64,28 @@ export default function PickupRoute({ id, isOpen, onClick }: PickupRouteProps) {
                 </span>
               </p>
             </div>
-            <Badge className="bg-[#DADADA] text-black text-sm font-normal flex gap-2 w-fit px-5 py-2">
-              <DisLikeIcon height="17" width="18" />
-              <p>Unavailable for Pickup</p>
-            </Badge>
+            <div className="flex flex-col gap-2">
+
+<p className="text-black">
+  Email :{" "}
+  <span className="text-black text-normal">
+    {routeDetails?.data.driver.name}
+  </span>
+</p>
+<p className="text-black">
+  Phone :{" "}
+  <span className="text-[#706F6F]">
+    {routeDetails?.data.asset.rego_number}
+  </span>
+</p>
+</div>
+<div className="border-2 border-yellow-600 rounded-md p-3 bg-orange-400/20">
+    <div className="flex flex-row">
+   
+    <p className="text-yellow-500 text-md font-normal pl-4"> 2 Pickup in Queue</p>
+    </div>
+
+  </div>
           </div>
           {routeDetails?.data.schedule.map((schedule, index) => (
             <div key={index}>

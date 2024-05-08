@@ -9,22 +9,23 @@ import {
   UpdateAssetBody,
   UpdateAssetResponse,
   GetOneAsset,
-  GetAllAssetResponse 
+  GetAllAssetResponse
 } from "./asset.type";
 
 const baseEnd = "/asset";
 
 //Delete: Permanent Delete Asset
 export async function permanentDeleteAsset({ id }: { id: string }) {
-  const response = await api.delete<PermanentDeleteAssetResponse>(
-    `${baseEnd}/delete${id}`
+  const response = await api.request<PermanentDeleteAssetResponse, any>({
+    endpoint: `${baseEnd}/delete${id}`, method: "DELETE", body: {}
+  }
   );
   return response.data;
 }
 
 //Delete: Delete Asset
 export async function deleteAsset({ id }: { id: string }) {
-  const response = await api.delete<DeleteAssetResponse>(`${baseEnd}/${id}`);
+  const response = await api.request<DeleteAssetResponse, any>({ endpoint: `${baseEnd}/${id}`, method: "DELETE", body: {} });
   return response.data;
 }
 
@@ -59,9 +60,9 @@ export async function updateAsset({
   id,
   body,
 
-}:{
-  id:string;
-  body:UpdateAssetBody
+}: {
+  id: string;
+  body: UpdateAssetBody
 }) {
   const response = await api.request<UpdateAssetResponse, UpdateAssetBody>({
     endpoint: `${baseEnd}/${id}`,
@@ -73,7 +74,7 @@ export async function updateAsset({
 
 
 //Get: Get All Assets
-export async function getAllAssets(){
+export async function getAllAssets() {
   const response = await api.get<GetAllAssetResponse>(`${baseEnd}`);
   return response.data;
 }
@@ -83,5 +84,5 @@ export async function getAllAssets(){
 export async function getOneAsset({ id }: { id: string }) {
   const response = await api.get<GetOneAsset>(`${baseEnd}/${id}`);
   return response.data;
-} 
+}
 

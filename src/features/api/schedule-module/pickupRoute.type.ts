@@ -1,4 +1,5 @@
 import { CommonApiResponse } from "../types";
+import { PickupScheduleDetails } from "./pickupSchedule.type";
 
 export interface CreatePickupRouteBody {
     name: string;
@@ -82,40 +83,17 @@ export interface PickupSchedule {
     customer_id: number
     materials: PickupMaterial[]
     status: string
+    tare_weight: number[]
     customer: {
         id: number
         name: string
     }
 }
 
-interface PickupMaterial {
+export interface PickupMaterial {
     name: string
     amount: number
     rate: number
-    weight: string
-    tare_weight: number
+    weighing_type: string
 }
 
-export interface PickupScheduleDetails {
-    id: number
-    route_id: number
-    driver_id: number
-    asset_id: number
-    customer_id: number
-    pickup_date: string
-    status: string
-    notes: string
-    materials: PickupMaterial[]
-    n_bins: string
-    image: string[]
-    coordinates: string[]
-    deleted_at: any
-    created_at: string
-    updated_at: string
-    customer: {
-        id: number
-        name: string
-        phone_number: any
-        image: string
-    }
-}

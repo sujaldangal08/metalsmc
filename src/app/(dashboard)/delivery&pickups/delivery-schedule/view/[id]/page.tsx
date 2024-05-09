@@ -3,6 +3,7 @@ import { PickupScheduleDetails } from "@/features/api/schedule-module/pickupRout
 import DeliveryIcon from "@public/assets/Icons/DeliveryIcon";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import { Avatar } from "rizzui";
+import EmailIcon from "@public/assets/Icons/email";
 
 export interface ScheduleCardProps {
   scheduleDetails: PickupScheduleDetails;
@@ -52,6 +53,7 @@ export default function ScheduleCard({ scheduleDetails }: ScheduleCardProps) {
       <span>123456</span>
     </div>
   </div>
+  <div className="h-16 w-px bg-gray-200"></div>
   <div className="flex flex-col items-start">
     <div className="flex flex-row items-center mb-2">
       <p className="text-sm font-semibold text-black mr-2">Email:</p>
@@ -62,6 +64,7 @@ export default function ScheduleCard({ scheduleDetails }: ScheduleCardProps) {
       <span>(+977) 9876543210</span>
     </div>
   </div>
+  <div className="h-16 w-px bg-gray-200"></div>
   <div className="border-2 border-yellow-600 rounded-md p-3 bg-orange-400/20">
     <div className="flex flex-row">
     <DeliveryIcon/>
@@ -85,33 +88,42 @@ export default function ScheduleCard({ scheduleDetails }: ScheduleCardProps) {
   <div className="inline-flex flex-col space-y-2">
     <p className="text-sm font-semibold text-black">Customer Details</p>
     <p>Customer's Name: John Doe</p>
-    <p>Pickup Location: Auburn</p>
+    <p>Email: sid.sdk@gmail.com</p>
+    <p>Phone: 9876543210</p>
+    <p>Delivery Location: Auburn</p>
     <p>Note: Fragile Material</p>
   </div>
-  <div className="inline-flex flex-col space-y-2">
-    <p className="text-sm font-semibold text-black ">Trip Details</p>
+  
+  <div className="inline-flex flex-col space-y-2 ">
+    <p className="text-sm font-semibold text-black">Trip Details</p>
     <p>Start Date: dd/mm/yy</p>
     <p>Interval: 5 Days</p>
     <p>Number of Days: 3</p>
   </div>
+
+
 </div>
 
+<button className="bg-green-100 w-fit rounded-md border border-green px-4 py-1 mt-3">
+  Trip 1
+</button>
+<span className=" text-normal">Date:mm/dd/yy</span>
       <div className="flex flex-col gap-5 flex-1">
           <h1 className="text-sm font-semibold leading-normal">
             Material Details
           </h1>
-          <p className="text-black">Material Type & Weight</p>
-          <div className="border rounded">
-            <table className="w-full">
+ 
+          <div className="">
+            <table className="w-fit">
               <thead>
                 <tr className="bg-[#C6E7D9]">
-                  <th className="px-5 py-2 font-normal w-1/3 text-start text-black">
+                  <th className="px-5 py-2 font-normal w-1/6 text-start text-black">
                     Material
                   </th>
-                  <th className="px-5 py-2 font-normal w-1/3 text-start text-black">
+                  <th className="px-5 py-2 font-normal w-1/6 text-start text-black">
                     Price/Unit
                   </th>
-                  <th className="px-5 py-2 font-normal w-1/3 text-start text-black">
+                  <th className="px-5 py-2 font-normal w-1/6 text-start text-black">
                     Total Weight
                   </th>
                 </tr>

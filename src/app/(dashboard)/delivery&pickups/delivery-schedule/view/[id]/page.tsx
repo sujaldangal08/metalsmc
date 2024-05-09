@@ -81,22 +81,21 @@ export default function ScheduleCard({ scheduleDetails }: ScheduleCardProps) {
       />
 
       
-<div className="flex flex-row gap-60 w-1/2">
-<div className="inline-flex flex-col space-y-2">
-    <p className="text-sm font-semibold text-black mr-32">Customer Details</p>
-    <p>Customer's Name : John Doe</p>
+<div className="flex flex-row justify-between w-1/2">
+  <div className="inline-flex flex-col space-y-2">
+    <p className="text-sm font-semibold text-black">Customer Details</p>
+    <p>Customer's Name: John Doe</p>
     <p>Pickup Location: Auburn</p>
-    <p>Note: Fragile Material </p>
+    <p>Note: Fragile Material</p>
   </div>
-<div className="inline-flex flex-col space-y-2">
-    <p className="text-sm font-semibold text-black ml-32">Trip Details</p>
+  <div className="inline-flex flex-col space-y-2">
+    <p className="text-sm font-semibold text-black ">Trip Details</p>
     <p>Start Date: dd/mm/yy</p>
     <p>Interval: 5 Days</p>
-    <p>Number of Days: 3 </p>
+    <p>Number of Days: 3</p>
   </div>
-
-
 </div>
+
       <div className="flex flex-col gap-5 flex-1">
           <h1 className="text-sm font-semibold leading-normal">
             Material Details

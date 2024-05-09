@@ -5,11 +5,12 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 import useSWR from "swr";
 import PickupRoute from "../pickup-route";
+import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
 
 export default function ViewPickupSchedulePage() {
   const [currentAccordion, setCurrentAccordion] = useState<number | null>(0);
   const params = useParams();
-  const { data: pickupRoutes } = useSWR(
+  const { data: pickupRoutes, isLoading } = useSWR(
     params.id ? ["pickup-route-details", params.id] : null,
     ([_, id]) => getOnePickupRoute(Number(id))
   );
@@ -21,6 +22,10 @@ export default function ViewPickupSchedulePage() {
       setCurrentAccordion(index);
     }
   };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="flex flex-col gap-10">

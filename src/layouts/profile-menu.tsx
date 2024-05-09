@@ -83,8 +83,6 @@ export default function ProfileMenu({
   const pathname = usePathname();
   const { data: user, isLoading } = useSWR("user", getUserDetails);
 
-  console.log(user);
-
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);

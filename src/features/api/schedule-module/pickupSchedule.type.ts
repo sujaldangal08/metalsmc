@@ -29,16 +29,16 @@ export interface PickupScheduleDetails {
   updated_at: string
 }
 
-export interface PickupScheduleBody {
+export interface CreatePickupScheduleBody {
   customer_id: number;
+  route_id: string;
+  asset_id: string
   pickup_date: string;
   status: string;
   notes: string;
-  materials: Array<string>;
-  amount: Array<number>;
+  materials: PickupMaterial[];
   n_bins: string;
   tare_weight: Array<number>;
-  weighing_type: Array<string>;
   coordinates: Array<number>;
 }
 

@@ -64,14 +64,31 @@ export interface DriverData {
     updated_at: string
 }
 
-export interface GetAllCustomerResponse extends CommonApiResponse {
-
+export interface GetAllCustomersResponse extends CommonApiResponse {
+    total: number
+    data: CustomerData[]
 }
 
 export interface GetAllVehiclesResponse extends CommonApiResponse {
     total: number
     data: VehicleData[]
 }
+
+export interface CustomerData {
+    id: number
+    name: string
+    email: string
+    image: string
+    phone_number: any
+    city: any
+    state: any
+    country: any
+    zip_code: any
+    language: string
+    created_at: string
+    updated_at: string
+}
+
 
 export interface VehicleData {
     id: number

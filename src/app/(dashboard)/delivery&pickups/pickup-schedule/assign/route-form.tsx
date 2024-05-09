@@ -1,184 +1,143 @@
-import SearchInput from "@/components/input/select-box";
+import CustomSelectBox from "@/components/input/select-box";
 import Status from "@/components/status/status";
+import { Button } from "@/components/ui/button";
+import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
+import { Input } from "@/components/ui/input";
 import { CreatePickupRouteResponse } from "@/features/api/schedule-module/pickupRoute.type";
+import { getAllCustomers } from "@/features/api/user";
 import cn from "@/utils/class-names";
-import { AssignPickupSchedule, assignPickupSchedule } from "@/utils/schema/delivery-pickups/asignPickupSchedule.schema";
+import {
+  CreatePickupScheduleSchema,
+  createPickupScheduleSchema,
+} from "@/utils/schema/delivery-pickups/asignPickupSchedule.schema";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { BinIcon, CloseIcon, DownIcon } from "@public/assets/Icons/index";
+import { BinIcon, DownIcon } from "@public/assets/Icons/index";
 import { Fragment, useState } from "react";
-import { useForm } from "react-hook-form";
+import {
+  Controller,
+  FormProvider,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
 import { PiPlus } from "react-icons/pi";
-import { Button, Input, Select, Textarea } from "rizzui";
-
-const data = [
-  {
-    avatar:
-      "https://cdn3d.iconscout.com/3d/premium/thumb/boy-avatar-6299533-5187865.png",
-    name: "Joe Doe",
-    truckNumber: "123455A5v",
-  },
-  {
-    avatar:
-      "https://cdn3d.iconscout.com/3d/premium/thumb/woman-avatar-6299541-5187873.png",
-    name: "Emily Johnson",
-    truckNumber: "6789ABC",
-  },
-  {
-    avatar:
-      "https://getillustrations.b-cdn.net//photos/pack/3d-avatar-male_lg.png",
-    name: "John Smith",
-    truckNumber: "XYZ123",
-  },
-  {
-    avatar:
-      "https://cdn3d.iconscout.com/3d/premium/thumb/boy-avatar-6299533-5187865.png",
-    name: "Joe Doe",
-    truckNumber: "123455A5v",
-  },
-  {
-    avatar:
-      "https://cdn3d.iconscout.com/3d/premium/thumb/woman-avatar-6299541-5187873.png",
-    name: "Emily Johnson",
-    truckNumber: "6789ABC",
-  },
-  {
-    avatar:
-      "https://getillustrations.b-cdn.net//photos/pack/3d-avatar-male_lg.png",
-    name: "John Smith",
-    truckNumber: "XYZ123",
-  },
-  {
-    avatar:
-      "https://cdn3d.iconscout.com/3d/premium/thumb/boy-avatar-6299533-5187865.png",
-    name: "Joe Doe",
-    truckNumber: "123455A5v",
-  },
-  {
-    avatar:
-      "https://cdn3d.iconscout.com/3d/premium/thumb/woman-avatar-6299541-5187873.png",
-    name: "Emily Johnson",
-    truckNumber: "6789ABC",
-  },
-  {
-    avatar:
-      "https://getillustrations.b-cdn.net//photos/pack/3d-avatar-male_lg.png",
-    name: "John Smith",
-    truckNumber: "XYZ123",
-  },
-];
+import { Textarea } from "rizzui";
+import useSWR from "swr";
+import MaterialForm from "./material-form";
+import MetadataTable from "./metadata-table";
 
 interface Props {
-  onDelete: (indx: number) => void;
-  indx: number;
-  isDeleteDisable: boolean;
-  routeDetails: CreatePickupRouteResponse["data"];
+  onDelete?: (indx: number) => void;
+  indx?: number;
+  isDeleteDisable?: boolean;
+  routeDetails?: CreatePickupRouteResponse["data"];
 }
 
 export default function RouteForm({
   onDelete,
   indx,
   isDeleteDisable,
-  routeDetails,
+  // routeDetails: { driver, asset, name },
 }: Props) {
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm<AssignPickupSchedule>({
-    resolver: zodResolver(assignPickupSchedule),
+  const defaultFormValues = {
+    driver_id: 1,
+    asset_id: 2,
+    route_id: 3,
+    coordinates: [20.04433, 23.12102],
+    materials: [{ name: "", amount: 0, rate: 0, weighing_type: "bridge" }],
+    n_bins: 0,
+  };
+
+  const methods = useForm<CreatePickupScheduleSchema>({
+    defaultValues: defaultFormValues,
+    resolver: zodResolver(createPickupScheduleSchema),
   });
 
-  const [searched_driver, setSearchedDriver] = useState("");
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+    reset,
+    watch,
+  } = methods;
 
-  const material_options = [
-    { value: "Material 1", label: "Material 2" },
-    { value: "Material 2", label: "Material 2" },
-    { value: "Material 3", label: "Material 4" },
-  ];
+  const { data: listOfCustomers, isLoading } = useSWR(
+    "customers-list",
+    getAllCustomers
+  );
 
   const [open, setOpen] = useState(true);
 
-  const [material, setMaterial] = useState([0]);
-  const [schedule, setSchedule] = useState([0]);
+  // const deleteSchedule = (indx: number) => {
+  //   if (schedule.length > 1) {
+  //     // removeSchedule(indx);
+  //     setSchedule((prev) => prev.filter((_, i) => i !== indx));
+  //   }
+  // };
 
-  const filterFunction = (value: string) => {
-    return data
-      ?.filter((curr) => {
-        if (curr.name.toLocaleLowerCase().includes(value.toLocaleLowerCase())) {
-          return curr;
-        }
-      })
-      .slice(0, 5);
+  const onSubmit: SubmitHandler<CreatePickupScheduleSchema> = (data) => {
+    console.log("Schedule form", data);
   };
 
-  const deleteSchedule = (indx: number) => {
-    if (schedule.length > 1) {
-      // removeSchedule(indx);
-      setSchedule((prev) => prev.filter((_, i) => i !== indx));
-    }
+  const onError = (err: any) => {
+    console.log(err);
   };
 
-  const deleteMaterial = (indx: number) => {
-    if (material.length > 1) {
-      // removeSchedule(indx);
-      setMaterial((prev) => prev.filter((_, i) => i !== indx));
-    }
-  };
+  if (isLoading) return <LoadingSpinner />;
 
   return (
-    <form
-      className="flex flex-col w-full overflow-clip shadow-sm rounded-t-md"
-      onSubmit={handleSubmit(() => {
-        console.log("o");
-      })}
-    >
-      <div className="w-full flex bg-[#C6E7D9] px-4 py-3 items-center relative">
-        <h2 className="font-medium text-sm">Route Name: {routeDetails.name}</h2>
-
-        <span
-          className={cn(
-            "absolute right-4 cursor-pointer",
-            "transition-all delay-200 ease-in",
-            open ? "rotate-180" : "rotate-0"
-          )}
-          onClick={() => {
-            setOpen(!open);
-          }}
-        >
-          <DownIcon />
-        </span>
-      </div>
-      <div
-        className={cn(
-          "bg-white w-full px-4 flex flex-col overflow-hidden transition-all delay-200 ease-in",
-          open ? "h-full py-4" : "h-0 py-0"
-        )}
+    <FormProvider {...methods}>
+      <form
+        className="flex flex-col w-full shadow-sm rounded-t-md overflow-hidden"
+        onSubmit={handleSubmit(onSubmit, onError)}
       >
-        <div className="flex w-full">
-          <div className="flex flex-col w-full gap-3">
-            <div className="flex w-full items-center justify-between">
-              <div className="flex *:!text-[15px] *:!font-normal md:flex-row flex-col md:items-end items-start md:gap-14 gap-1">
-                <h2>
-                  Driver's Name : <span className="text-gray">Jhon Doe</span>
-                </h2>
-                <h2>
-                  Truck License Plate no :{" "}
-                  <span className="text-gray">123456</span>
-                </h2>
-                <Status
-                  className="pb-1 text-xs"
-                  status="success"
-                  title="Available"
-                />
+        <div className="w-full flex bg-[#C6E7D9] px-4 py-3 items-center relative">
+          <h2 className="font-medium text-sm">Route Name: </h2>
+
+          <span
+            className={cn(
+              "absolute right-4 cursor-pointer",
+              "transition-all delay-200 ease-in",
+              open ? "rotate-180" : "rotate-0"
+            )}
+            onClick={() => {
+              setOpen(!open);
+            }}
+          >
+            <DownIcon />
+          </span>
+        </div>
+        <div
+          className={cn(
+            "bg-white w-full px-4 flex flex-col overflow-hidden transition-all delay-200 ease-in",
+            open ? "h-full py-4" : "h-0 py-0"
+          )}
+        >
+          <div className="flex w-full">
+            <div className="flex flex-col w-full gap-3">
+              <div className="flex w-full items-center justify-between">
+                <div className="flex *:!text-[15px] *:!font-normal md:flex-row flex-col md:items-end items-start md:gap-14 gap-1">
+                  <h2>
+                    Driver's Name : <span className="text-gray"></span>
+                  </h2>
+                  <h2>
+                    Truck License Plate no : <span className="text-gray"></span>
+                  </h2>
+                  <Status
+                    className="pb-1 text-xs"
+                    status="success"
+                    title="Available"
+                  />
+                </div>
               </div>
-            </div>
-            <div className="w-full bg-gray-300 h-[1px]" />
-            <TabGroup defaultIndex={0}>
-              <div className="flex justify-between items-center">
-                <TabList className="w-fit items-center flex gap-1.5 bg-primary-lighter/60 border border-primary p-1.5 rounded-md">
-                  {schedule.map((_, scheduleIndex) => (
-                    <Tab as={Fragment} key={scheduleIndex}>
+              <div className="w-full bg-gray-300 h-[1px]" />
+
+              {/* schedule tab group =================================== */}
+              <TabGroup defaultIndex={0}>
+                <div className="flex justify-between items-center">
+                  <TabList className="w-fit items-center flex gap-1.5 bg-primary-lighter/60 border border-primary p-1.5 rounded-md">
+                    <Tab as={Fragment}>
                       {({ selected }) => (
                         <button
                           className={cn(
@@ -186,218 +145,146 @@ export default function RouteForm({
                             selected && "bg-primary text-white hover:bg-primary"
                           )}
                         >
-                          Schedule {scheduleIndex + 1}
+                          Schedule 1
                         </button>
                       )}
                     </Tab>
-                  ))}
-                </TabList>
+                  </TabList>
 
-                <span
-                  className={cn(
-                    schedule.length === 1
-                      ? "opacity-50 cursor-not-allowed"
-                      : "opacity-100 cursor-pointer"
-                  )}
-                  onClick={() => {
-                    //Function to delete schedule from schedule list
-                    deleteSchedule(indx);
-                  }}
-                >
-                  <BinIcon className="fill-red-500" />
-                </span>
-              </div>
+                  {/* Add new schedule button ===================================== */}
+                  <Button
+                    className="w-[220px] ml-auto mr-3"
+                    variant="outline"
+                    onClick={() => {}}
+                  >
+                    <span className="bg-primary py-1 px-1 mr-3 text-white rounded-md text-sm">
+                      <PiPlus />
+                    </span>
+                    <span className="text-sm font-medium text-black">
+                      Add New Schedule
+                    </span>
+                  </Button>
+                  <span
+                    className={cn(
+                      true
+                        ? "opacity-50 cursor-not-allowed"
+                        : "opacity-100 cursor-pointer"
+                    )}
+                    onClick={() => {}}
+                  >
+                    <BinIcon className="fill-red-500" />
+                  </span>
+                </div>
 
-              <TabPanels>
-                {schedule.map((_, scheduleIndex) => (
+                {/* Customer details ======================================= */}
+                <TabPanels className="mt-5">
                   <TabPanel className="flex w-full gap-3 flex-col">
                     <h2 className="text-md font-medium">Customer's Details</h2>
-                    <div className="flex items-end gap-4">
-                      <SearchInput<{
-                        avatar: string;
-                        name: string;
-                        truckNumber: string;
-                      }>
-                        placeholder="Choose Customer"
-                        label=""
-                        className="w-[35%]"
-                        value={searched_driver}
-                        setValue={(value: string | number) => {
-                          setSearchedDriver(value.toString());
-                        }}
-                        filterFunction={filterFunction}
-                        render={(data) => (
-                          <>
-                            {data?.map((driver, indx) => (
-                              <h2
-                                key={indx}
-                                className="text-sm font-medium text-gray-dark px-4 py-1 hover:bg-gray-50 cursor-pointer"
-                                onClick={() => {
-                                  setSearchedDriver(driver.name);
-                                }}
-                              >
-                                {driver.name}
-                              </h2>
-                            ))}
-                          </>
+
+                    <div className="flex gap-4">
+                      <Controller
+                        name="customer_id"
+                        control={control}
+                        render={({
+                          field: { onChange, value },
+                          formState: { errors },
+                        }) => (
+                          <CustomSelectBox
+                            items={listOfCustomers?.data!}
+                            placeholder="Choose customer"
+                            value={
+                              listOfCustomers?.data.filter(
+                                (data) => data.id === value
+                              )[0]
+                            }
+                            setValue={(value) => onChange(value?.id)}
+                            getDisplayItem={(item) => item?.name!}
+                            error={errors.customer_id}
+                          />
                         )}
                       />
                       <Input
-                        placeholder="Delivery Location"
-                        inputClassName="ring-gray-dark"
-                        {...register(
-                          `schedules.${scheduleIndex}.customer.location`
-                        )}
-                        error={
-                          errors?.schedules?.[scheduleIndex]?.customer?.location
-                            ?.message
-                        }
+                        placeholder="Pickup Location"
+                        register={register}
+                        name="location"
+                        className="w-52"
                       />
                     </div>
                     <div className="w-full h-[1px] bg-gray-300 my-2" />
-                    <div className="flex flex-col w-full gap-2">
-                      <div className="flex w-full items-center justify-between">
-                        <div>
-                          <h2 className="text-md font-medium">
-                            Material’s Details
-                          </h2>
-                          <h2 className="text-sm font-normal">
-                            Material Type & Weight
-                          </h2>
-                        </div>
-                        <Button
-                          variant="outline"
-                          onClick={() => {
-                            setMaterial([...material, material.length]);
-                          }}
-                        >
-                          <span className="bg-primary py-1 px-[6px] mr-3 text-white rounded-md text-md">
-                            <PiPlus />
-                          </span>
-                          <span className="text-sm font-medium text-black">
-                            Add Material
-                          </span>
-                        </Button>
-                      </div>
-                      <div className="grid grid-cols-7 gap-3 items-center max-h-[150px] overflow-y-auto">
-                        {material.map((_, materialIndex) => (
-                          <Fragment key={materialIndex}>
-                            <div className="sm:col-span-2 col-span-6">
-                              <Select
-                                options={material_options}
-                                placeholder="Select Material"
-                                {...register(
-                                  `schedules.${scheduleIndex}.materials.${materialIndex}.material`
-                                )}
-                                error={
-                                  errors?.schedules?.[scheduleIndex]
-                                    ?.materials?.[materialIndex]?.material
-                                    ?.message
-                                }
-                              />
-                            </div>
-                            <div className="sm:col-span-2 col-span-6">
-                              <Input
-                                placeholder="Price / Unit"
-                                type="number"
-                                {...register(
-                                  `schedules.${indx}.materials.${indx}.rate`
-                                )}
-                                error={
-                                  errors?.schedules?.[indx]?.materials?.[indx]
-                                    ?.rate?.message
-                                }
-                              />
-                            </div>
-                            <div className="sm:hidden block col-span-1">
-                              <button
-                                type="button"
-                                disabled={material.length == 1}
-                                className="mx-auto col-span-1 bg-gray-light rounded-full w-7 h-7 flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-50"
-                                onClick={() => {
-                                  deleteMaterial(materialIndex);
-                                }}
-                              >
-                                <CloseIcon />
-                              </button>
-                            </div>
-                            <div className="sm:col-span-2 col-span-6">
-                              <Input
-                                placeholder="Weight"
-                                type="number"
-                                prefix="Tons"
-                                prefixClassName="text-xs"
-                                {...register(
-                                  `schedules.${indx}.materials.${indx}.weight`
-                                )}
-                                error={
-                                  errors?.schedules?.[indx]?.materials?.[indx]
-                                    ?.weight?.message
-                                }
-                              />
-                            </div>
-                            <div className="sm:block hidden col-span-1">
-                              <button
-                                type="button"
-                                disabled={material.length == 1}
-                                className="mx-auto col-span-1 bg-gray-light rounded-full w-7 h-7 flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-50"
-                                onClick={() => {
-                                  deleteMaterial(materialIndex);
-                                }}
-                              >
-                                <CloseIcon />
-                              </button>
-                            </div>
-                          </Fragment>
-                        ))}
-                      </div>
+
+                    {/* Material details ==================================== */}
+                    <MaterialForm />
+
+                    {/* Number of bins and tare weight select box ======================= */}
+                    <div className="grid grid-cols-4 gap-3 pt-4 pb-6 border-b border-gray-300">
+                      <Controller
+                        name="n_bins"
+                        control={control}
+                        render={({ field: { onChange, value } }) => (
+                          <Input
+                            type="number"
+                            label="Number of bins"
+                            placeholder="Number of bins"
+                            onChange={(e) => onChange(parseInt(e.target.value))}
+                            value={value}
+                            error={errors.n_bins}
+                          />
+                        )}
+                      />
+
+                      <Input
+                        label="Tare weight"
+                        name="tare_weight"
+                        placeholder="30, 40, 50"
+                        register={register}
+                        error={errors.tare_weight}
+                      />
                     </div>
+
+                    {/* meta table fields ================================================ */}
+                    <MetadataTable />
+
+                    {/* Notes ============================================================= */}
                     <Textarea
                       maxLength={80}
-                      textareaClassName="resize-none h-[100px] ring-gray-dark"
+                      textareaClassName="resize-none h-[100px] border border-gray-300"
                       placeholder="Note"
-                      {...register(`schedules.${scheduleIndex}.customer.note`)}
-                      error={
-                        errors?.schedules?.[scheduleIndex]?.customer?.note
-                          ?.message
-                      }
                     />
-                  </Tab.>
-                ))}
-              </TabPanels>
-            </TabGroup>
+                  </TabPanel>
+                </TabPanels>
+              </TabGroup>
 
-            <Button
-              className="w-1/4 ml-auto"
-              variant="outline"
-              onClick={() => {
-                setSchedule([...schedule, schedule.length]);
-              }}
-            >
-              <span className="bg-primary py-1 px-[6px] mr-3 text-white rounded-md text-sm">
-                <PiPlus />
-              </span>
-              <span className="text-sm font-medium text-black">
-                Add New Schedule
-              </span>
-            </Button>
-            <div className="flex w-full justify-end gap-5">
-              <Button
-                className="bg-red-500 hover:bg-red-600 disabled:bg-red-400 disabled:text-white w-1/4"
-                onClick={() => {
-                  onDelete(indx);
-                }}
-                disabled={isDeleteDisable}
-              >
-                Delete Route
-              </Button>
-              <Button className="w-1/4" type="submit">
-                Assign Pickup Task
-              </Button>
+              <div className="flex w-full justify-end gap-5 mt-4">
+                <Button
+                  onClick={() => reset(defaultFormValues)}
+                  variant="solid"
+                  color="secondary"
+                  type="button"
+                >
+                  Reset
+                </Button>
+                <Button
+                  className="bg-red-500 hover:bg-red-600 disabled:bg-red-400 text-white w-52"
+                  onClick={() => {
+                    // onDelete(indx);
+                  }}
+                  disabled={isDeleteDisable}
+                >
+                  Delete Route
+                </Button>
+                <Button
+                  className="w-52"
+                  variant="solid"
+                  color="primary"
+                  type="submit"
+                >
+                  Assign Pickup Task
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </FormProvider>
   );
 }

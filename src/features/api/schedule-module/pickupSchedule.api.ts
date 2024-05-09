@@ -1,15 +1,15 @@
 import { api } from "@/config/api.config";
 import {
+  CreatePickupScheduleBody,
+  DeletePickupScheduleResponse,
   GetAllPickupScheduleResponse,
   GetOnePickupScheduleResponse,
-  PickupScheduleResponse,
-  PickupScheduleBody,
-  UpdatePickupScheduleResponse,
-  UpdatePickupScheduleBody,
-  DeletePickupScheduleResponse,
-  RestorePickupScheduleResponse,
-  RestorePickupScheduleBody,
   PermanentDeletePickupScheduleResponse,
+  PickupScheduleResponse,
+  RestorePickupScheduleBody,
+  RestorePickupScheduleResponse,
+  UpdatePickupScheduleBody,
+  UpdatePickupScheduleResponse
 } from "./pickupSchedule.type";
 
 const baseEnd = "/schedule/pickup";
@@ -29,10 +29,10 @@ export async function getOnePickupSchedule(id: string) {
 }
 
 //Post: Create Pickup Schedule
-export async function createPickupSchedule(body: PickupScheduleBody) {
+export async function createPickupSchedule(body: CreatePickupScheduleBody) {
   const response = await api.request<
     PickupScheduleResponse,
-    PickupScheduleBody
+    CreatePickupScheduleBody
   >({
     endpoint: `${baseEnd}`,
     method: "POST",

@@ -13,9 +13,9 @@ export const Button: FC<ButtonProps & { spinnerSize?: SpinnerSizeTypes }> = ({
   ...props
 }) => {
   const colorVariants = {
-    default: "text-black bg-white hover:bg-gray-200",
+    default: "text-black bg-white hover:bg-gray-100",
     primary: "text-white bg-primary hover:bg-primary-dark ",
-    secondary: "",
+    secondary: "bg-gray-300 text-black border border-gray-400 hover:bg-gray-200",
     danger: "",
   };
 

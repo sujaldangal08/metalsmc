@@ -9,8 +9,8 @@ import { Input as RizzUIInput, type InputProps } from "rizzui";
 interface CustomInputProps extends Omit<InputProps, "error"> {
   error?: FieldError;
   hideErrorMessage?: boolean;
-  register: UseFormRegister<any>;
-  name: string;
+  register?: UseFormRegister<any>;
+  name?: string;
 }
 
 export const Input: FC<CustomInputProps> = ({
@@ -27,7 +27,7 @@ export const Input: FC<CustomInputProps> = ({
       inputClassName="!bg-white border border-gray-light ring-0"
       errorClassName="focus:ring-0"
       error={error?.message}
-      {...register(name)}
+      {...(register && name ? register(name) : {})}
       {...props}
     />
   );

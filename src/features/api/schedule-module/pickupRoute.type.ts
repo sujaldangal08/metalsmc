@@ -9,6 +9,8 @@ export interface CreatePickupRouteBody {
     driver_id: number;
     asset_id: number;
 }
+
+
 export interface CreatePickupRouteResponse extends CommonApiResponse {
     data: {
         name: string
@@ -20,6 +22,17 @@ export interface CreatePickupRouteResponse extends CommonApiResponse {
         updated_at: string
         created_at: string
         id: number
+        driver: {
+            id: number
+            name: string
+            image: string
+        }
+        asset: {
+            id: number
+            title: string
+            rego_number: string
+            image: string
+        }
     }
 }
 

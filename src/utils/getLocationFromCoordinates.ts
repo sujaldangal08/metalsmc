@@ -1,3 +1,5 @@
+import axios from "axios";
+
 interface AddressComponent {
   long_name: string;
   short_name: string;
@@ -15,10 +17,7 @@ interface Viewport {
 }
 
 interface Geometry {
-  bounds?: {
-    northeast: Location;
-    southwest: Location;
-  };
+  bounds?: { northeast: Location; southwest: Location };
   location: Location;
   location_type: string;
   viewport?: Viewport;
@@ -55,15 +54,8 @@ export default async function getLocationFromCoordinates({
   const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`;
 
   try {
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch: ${response.status} ${response.statusText}`
-      );
-    }
-
-    const data: GeocodingResponse = await response.json();
+    const response = await axios.get<GeocodingResponse>(url);
+    const data = response.data;
 
     if (data.status === "OK") {
       return data;

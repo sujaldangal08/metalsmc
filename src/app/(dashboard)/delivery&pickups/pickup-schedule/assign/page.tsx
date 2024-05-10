@@ -1,87 +1,60 @@
 "use client";
 
-import { useState } from "react";
-import { Button, Input } from "rizzui";
-import SearchInput from "@/components/input/search-input";
-import RecentAssigned from "./recent-assigned";
-import RouteForm from "./route-form";
+import NotFound from "@/app/not-found";
+import CustomSelectBox from "@/components/input/select-box";
 import Breadcrumb from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
+import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
+import { Input } from "@/components/ui/input";
+import { createPickupRoute } from "@/features/api/schedule-module/pickupRoute.api";
+import {
+  CreatePickupRouteBody,
+  CreatePickupRouteResponse,
+} from "@/features/api/schedule-module/pickupRoute.type";
+import { getAllDrivers, getAllVehicles } from "@/features/api/user";
 import { Route } from "@/lib/enums/routes.enums";
-import { CreatePickupRouteBody } from "@/features/api/schedule-module/pickupRoute.type";
+import useMutation from "@/lib/hooks/useMutation";
+import { formatErrorMessage } from "@/utils/format-errors";
+import {
+  CreatePickupRouteSchema,
+  createPickupRouteSchema,
+} from "@/utils/schema/delivery-pickups/asignPickupSchedule.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { PiPlus } from "react-icons/pi";
-
-const data = [
-  {
-    avatar:
-      "https://cdn3d.iconscout.com/3d/premium/thumb/boy-avatar-6299533-5187865.png",
-    name: "Joe Doe",
-    truckNumber: "123455A5v",
-  },
-  {
-    avatar:
-      "https://cdn3d.iconscout.com/3d/premium/thumb/woman-avatar-6299541-5187873.png",
-    name: "Emily Johnson",
-    truckNumber: "6789ABC",
-  },
-  {
-    avatar:
-      "https://getillustrations.b-cdn.net//photos/pack/3d-avatar-male_lg.png",
-    name: "John Smith",
-    truckNumber: "XYZ123",
-  },
-  {
-    avatar:
-      "https://cdn3d.iconscout.com/3d/premium/thumb/boy-avatar-6299533-5187865.png",
-    name: "Joe Doe",
-    truckNumber: "123455A5v",
-  },
-  {
-    avatar:
-      "https://cdn3d.iconscout.com/3d/premium/thumb/woman-avatar-6299541-5187873.png",
-    name: "Emily Johnson",
-    truckNumber: "6789ABC",
-  },
-  {
-    avatar:
-      "https://getillustrations.b-cdn.net//photos/pack/3d-avatar-male_lg.png",
-    name: "John Smith",
-    truckNumber: "XYZ123",
-  },
-  {
-    avatar:
-      "https://cdn3d.iconscout.com/3d/premium/thumb/boy-avatar-6299533-5187865.png",
-    name: "Joe Doe",
-    truckNumber: "123455A5v",
-  },
-  {
-    avatar:
-      "https://cdn3d.iconscout.com/3d/premium/thumb/woman-avatar-6299541-5187873.png",
-    name: "Emily Johnson",
-    truckNumber: "6789ABC",
-  },
-  {
-    avatar:
-      "https://getillustrations.b-cdn.net//photos/pack/3d-avatar-male_lg.png",
-    name: "John Smith",
-    truckNumber: "XYZ123",
-  },
-];
+import useSWR from "swr";
+import RecentAssigned from "./recent-assigned";
+import PickupRouteForm from "./route-form";
 
 export default function PickupAssignPage() {
-  const [searched_driver, setSearchedDriver] = useState("");
+  const {
+    register,
+    control,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<CreatePickupRouteSchema>({
+    resolver: zodResolver(createPickupRouteSchema),
+  });
 
-  const [route, setRoute] = useState<Partial<CreatePickupRouteBody>>();
-  const [routes, setRoutes] = useState<CreatePickupRouteBody[]>([]);
+  const {
+    data: listOfDrivers,
+    isLoading: fetchingListOfDrivers,
+    error: driversError,
+  } = useSWR("drivers-list", getAllDrivers);
 
-  const filterFunction = (value: string) => {
-    return data
-      ?.filter((curr) => {
-        if (curr.name.toLocaleLowerCase().includes(value.toLocaleLowerCase())) {
-          return curr;
-        }
-      })
-      .slice(0, 5);
-  };
+  const {
+    data: listOfVehicles,
+    isLoading: fetchingListOfVehicles,
+    error: vehiclesError,
+  } = useSWR("vehicles-list", getAllVehicles);
+
+  const { mutate: createPickupMn, isLoading } = useMutation({
+    mutateFn: (body: CreatePickupRouteBody) => createPickupRoute(body),
+  });
+
+  const [routes, setRoutes] = useState<CreatePickupRouteResponse["data"][]>([]);
 
   const onDelete = (indx: number) => {
     if (routes.length > 1) {
@@ -89,8 +62,29 @@ export default function PickupAssignPage() {
     }
   };
 
+  const onSubmit: SubmitHandler<CreatePickupRouteSchema> = async (data) => {
+    try {
+      const res = await createPickupMn({
+        ...data,
+        status: "active",
+        description: "hello",
+      });
+
+      setRoutes([...routes, res.data.data]);
+      toast.success(
+        `${data.name} assigned successfully to driver: ${data.driver_id}`
+      );
+    } catch (err: any) {
+      toast.error(formatErrorMessage(err));
+    }
+  };
+
+  if (fetchingListOfDrivers || fetchingListOfVehicles)
+    return <LoadingSpinner />;
+  if (driversError || vehiclesError) return <NotFound />;
+
   return (
-    <div className="flex flex-col py-4 gap-4 w-full">
+    <div className="relative flex flex-col py-4 gap-4 w-full">
       <Breadcrumb>
         <Breadcrumb.Item href={Route.PickupSchedule}>
           Pickup Schedule
@@ -99,89 +93,91 @@ export default function PickupAssignPage() {
           Assign Schedule
         </Breadcrumb.Item>
       </Breadcrumb>
-      <div className="w-full flex mt-4">
-        <div className="lg:w-4/5 w-full gap-4 lg:pr-5 pr-0">
-          <div className="flex gap-4 w-full">
-            <div className="grid grid-cols-4 gap-4 ">
-              <Input
-                placeholder="Enter route...."
-                className=""
-                inputClassName="bg-white ring-gray-dark bg-white"
-                onChange={(e) => setRoute({ ...route, name: e.target.value })}
-              />
-              <Input
-                inputClassName="bg-white ring-gray-dark"
-                type="date"
-                label=""
-                className=""
-                onChange={(e) =>
-                  setRoute({ ...route, start_date: e.target.value })
-                }
-              />
-              <SearchInput<{
-                avatar: string;
-                name: string;
-                truckNumber: string;
-              }>
-                placeholder="Choose Driver"
-                label=""
-                value={searched_driver}
-                setValue={(value: string | number) => {
-                  setRoute({ ...route, driver_id: 1 });
-                }}
-                filterFunction={filterFunction}
-                className="w-full"
-                render={(data) => (
-                  <>
-                    {data?.map((driver, indx) => (
-                      <h2
-                        key={indx}
-                        className="text-sm font-medium text-gray-dark px-4 py-1 hover:bg-gray-50 cursor-pointer"
-                        onClick={() => {
-                          alert(driver.name);
-                        }}
-                      >
-                        {driver.name}
-                      </h2>
-                    ))}
-                  </>
-                )}
-              />
-              <SearchInput<{
-                avatar: string;
-                name: string;
-                truckNumber: string;
-              }>
-                placeholder="Choose Truck"
-                className="w-full"
-                label=""
-                value={searched_driver}
-                setValue={(value: string | number) => {
-                  setRoute({ ...route, asset_id: 1 });
-                }}
-                filterFunction={filterFunction}
-                render={(data) => (
-                  <>
-                    {data?.map((driver, indx) => (
-                      <h2
-                        key={indx}
-                        className="text-sm font-medium text-gray-dark px-4 py-1 hover:bg-gray-50 cursor-pointer"
-                      >
-                        {driver.name}
-                      </h2>
-                    ))}
-                  </>
-                )}
-              />
-            </div>
-            <Button className="font-normal w-[180px] px-2 " onClick={() => {}}>
-              <PiPlus className="text-rg"/>
-              <span className="text-sm pl-2">Add Route</span>
-            </Button>
-          </div>
+      <div className="w-full flex items-start mt-4">
+        <div className="lg:w-4/5  lg:pr-5 pr-0 flex flex-col gap-6 justify-start">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="w-full gap-4 h-[40px]"
+          >
+            <div className="flex gap-4 w-full">
+              <div className="grid grid-cols-4 gap-4 ">
+                <Input
+                  placeholder="Enter route name"
+                  name="name"
+                  register={register}
+                  error={errors.name}
+                  hideErrorMessage
+                />
 
-          {routes?.map((_, indx) => (
-            <RouteForm
+                <Input
+                  type="date"
+                  label=""
+                  name="start_date"
+                  register={register}
+                  error={errors.start_date}
+                  hideErrorMessage
+                />
+
+                <Controller
+                  name="driver_id"
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    formState: { errors },
+                  }) => (
+                    <CustomSelectBox
+                      items={listOfDrivers?.data!}
+                      placeholder="Choose driver"
+                      value={
+                        listOfDrivers?.data.filter(
+                          (data) => data.id === value
+                        )[0]
+                      }
+                      setValue={(value) => onChange(value?.id)}
+                      getDisplayItem={(item) => item?.name!}
+                      error={errors.driver_id}
+                    />
+                  )}
+                />
+
+                <Controller
+                  name="asset_id"
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    formState: { errors },
+                  }) => (
+                    <CustomSelectBox
+                      items={listOfVehicles?.data!}
+                      placeholder="Choose asset"
+                      value={
+                        listOfVehicles?.data.filter(
+                          (data) => data.id === value
+                        )[0]
+                      }
+                      setValue={(value) => onChange(value?.id)}
+                      getDisplayItem={(item) => item?.rego_number!}
+                      error={errors.asset_id}
+                    />
+                  )}
+                />
+              </div>
+              <Button
+                type="submit"
+                isLoading={isLoading}
+                color="primary"
+                className="font-normal w-[180px] px-2 "
+                spinnerSize="sm"
+              >
+                <PiPlus className="text-rg" />
+                <span className="text-sm pl-2">Add Route</span>
+              </Button>
+            </div>
+          </form>
+
+          {routes?.map((route, indx) => (
+            <PickupRouteForm
+              routeDetails={route}
               indx={indx}
               onDelete={onDelete}
               key={"Route Form - " + indx}

@@ -24,12 +24,14 @@ export default function ViewPickupSchedulePage() {
     }
   };
 
+  console.log("Pickup routes:",pickupRoutes)
+
   return (
     <div className="flex flex-col gap-10">
       <div className="text-[#706F6F]">
       <Breadcrumb className="pl-2 ">
-        <Breadcrumb.Item href="/delivery-schedule">
-          Delivery Schedule
+        <Breadcrumb.Item href="/pickup-schedule">
+          Pickup Schedule
         </Breadcrumb.Item>
         <Breadcrumb.Item href="/">view</Breadcrumb.Item>
       </Breadcrumb>

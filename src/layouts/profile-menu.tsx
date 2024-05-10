@@ -81,7 +81,9 @@ export default function ProfileMenu({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-  const { data: user, isLoading } = useSWR("user", getUserDetails);
+  const { data: user, isLoading } = useSWR("user", getUserDetails, {
+    revalidateOnFocus: false,
+  });
 
   useEffect(() => {
     setIsOpen(false);

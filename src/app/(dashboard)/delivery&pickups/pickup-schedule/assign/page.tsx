@@ -26,7 +26,7 @@ import toast from "react-hot-toast";
 import { PiPlus } from "react-icons/pi";
 import useSWR from "swr";
 import RecentAssigned from "./recent-assigned";
-import RouteForm from "./route-form";
+import PickupRouteForm from "./route-form";
 
 export default function PickupAssignPage() {
   const {
@@ -71,6 +71,9 @@ export default function PickupAssignPage() {
       });
 
       setRoutes([...routes, res.data.data]);
+      toast.success(
+        `${data.name} assigned successfully to driver: ${data.driver_id}`
+      );
     } catch (err: any) {
       toast.error(formatErrorMessage(err));
     }
@@ -81,7 +84,7 @@ export default function PickupAssignPage() {
   if (driversError || vehiclesError) return <NotFound />;
 
   return (
-    <div className="flex flex-col py-4 gap-4 w-full">
+    <div className="relative flex flex-col py-4 gap-4 w-full">
       <Breadcrumb>
         <Breadcrumb.Item href={Route.PickupSchedule}>
           Pickup Schedule
@@ -172,15 +175,15 @@ export default function PickupAssignPage() {
             </div>
           </form>
 
-          {/* {routes?.map((route, indx) => ( */}
-          <RouteForm
-          // routeDetails={route}
-          // indx={indx}
-          // onDelete={onDelete}
-          // key={"Route Form - " + indx}
-          // isDeleteDisable={routes.length <= 1}
-          />
-          {/* ))} */}
+          {routes?.map((route, indx) => (
+            <PickupRouteForm
+              routeDetails={route}
+              indx={indx}
+              onDelete={onDelete}
+              key={"Route Form - " + indx}
+              isDeleteDisable={routes.length <= 1}
+            />
+          ))}
         </div>
         <RecentAssigned />
       </div>

@@ -23,8 +23,8 @@ export const createPickupScheduleSchema = z.object({
   coordinates: z.number().array().min(1, "Coordinates is required"),
   materials: z.array(addPickupMaterialSchema),
   meta: z.object({
-    name: z.string().optional(),
-    contact: z.string().optional(),
+    name: z.string(),
+    contact: z.string(),
     extra: z.string().optional(),
   }).optional(),
   notes: z.string().optional(),

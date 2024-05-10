@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { CreatePickupScheduleSchema } from "@/utils/schema/delivery-pickups/asignPickupSchedule.schema";
 import { CloseIcon } from "@public/assets/Icons";
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent } from "react";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { PiPlus } from "react-icons/pi";
 
@@ -11,7 +11,6 @@ function MaterialForm() {
   const {
     control,
     register,
-    setValue,
     formState: { errors },
   } = useFormContext<CreatePickupScheduleSchema>();
 
@@ -65,15 +64,13 @@ function MaterialForm() {
               <Controller
                 name={`materials.${index}.rate`}
                 control={control}
-                render={(props) => (
+                render={({ field: { onChange, value } }) => (
                   <Input
                     placeholder="Price / Unit"
                     type="number"
-                    onChange={(e) =>
-                      props.field.onChange(parseInt(e.target.value))
-                    }
+                    onChange={(e) => onChange(parseInt(e.target.value))}
                     error={errors?.materials?.[index]?.rate}
-                    {...props}
+                    value={value}
                     hideErrorMessage
                   />
                 )}
@@ -82,17 +79,15 @@ function MaterialForm() {
               <Controller
                 name={`materials.${index}.amount`}
                 control={control}
-                render={(props) => (
+                render={({ field: { onChange, value } }) => (
                   <Input
                     placeholder="Weight"
                     type="number"
-                    onChange={(e) =>
-                      props.field.onChange(parseInt(e.target.value))
-                    }
+                    onChange={(e) => onChange(parseInt(e.target.value))}
                     prefix="Tons"
                     prefixClassName="text-xs"
                     error={errors?.materials?.[index]?.amount}
-                    {...props}
+                    value={value}
                     hideErrorMessage
                   />
                 )}
@@ -101,7 +96,7 @@ function MaterialForm() {
               <Controller
                 name={`materials.${index}.weighing_type`}
                 control={control}
-                render={(props) => (
+                render={({ field: { onChange, value } }) => (
                   <Select
                     options={[
                       { value: "bridge", label: "Bridge" },
@@ -109,10 +104,11 @@ function MaterialForm() {
                     ]}
                     onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                       const weighing_type = e.target.value;
-                      props.field.onChange(weighing_type);
+                      console.log(weighing_type)
+                      onChange(weighing_type);
                     }}
                     error={errors?.materials?.[index]?.weighing_type}
-                    {...props}
+                    value={value}
                   />
                 )}
               />

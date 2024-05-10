@@ -12,6 +12,7 @@ import {
   UpdatePickupScheduleResponse
 } from "./pickupSchedule.type";
 
+
 const baseEnd = "/schedule/pickup";
 
 //Get: Get All Pickup Schedule
@@ -38,7 +39,8 @@ export async function createPickupSchedule(body: CreatePickupScheduleBody) {
     method: "POST",
     body,
   });
-  return response.data;
+
+  return response;
 }
 
 //Patch: Update Pickup Schedule

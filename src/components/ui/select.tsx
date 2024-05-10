@@ -42,13 +42,11 @@ export const Select: FC<CustomSelectProps> = ({
         id="select"
       >
         {options.map(({ value, label }, indx) => (
-          <option value={value}>
-            {label}
-          </option>
+          <option value={value}>{label}</option>
         ))}
       </HUISelect>
 
-      <PiCaretDownBold className="absolute right-2 top-1/2 -translate-y-1/2 text-sm" />
+      <PiCaretDownBold className="absolute pointer-events-none right-2 top-1/2 -translate-y-1/2 text-sm" />
     </label>
   );
 };

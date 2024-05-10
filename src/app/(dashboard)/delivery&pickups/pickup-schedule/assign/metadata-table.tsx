@@ -3,7 +3,7 @@ import { Controller, useFormContext } from "react-hook-form";
 function MetadataTable() {
   const { register } = useFormContext();
 
-  const metaFields = ["name", "contact", "extras"];
+  const metaFields = ["name", "contact", "extra"];
 
   return (
     <div className="my-4 rounded-md overflow-hidden border border-gray-300">

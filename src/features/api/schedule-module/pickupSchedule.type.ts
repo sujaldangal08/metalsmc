@@ -8,7 +8,21 @@ export interface GetAllPickupScheduleResponse extends CommonApiResponse {
 
 export interface GetOnePickupScheduleResponse { }
 
-export interface PickupScheduleResponse { }
+export interface PickupScheduleResponse extends CommonApiResponse {
+  data: Omit<PickupScheduleDetails, "driver_id" | "asset_id">
+  route: {
+    name: string
+    description: string
+    status: string
+    start_date: string
+  }
+  customer: {
+    name: string
+    email: string
+    phone: any
+    image: string
+  }
+}
 
 export interface PickupScheduleDetails {
   id: number
@@ -21,25 +35,27 @@ export interface PickupScheduleDetails {
   notes: string
   materials: PickupMaterial[]
   tare_weight: number[]
-  n_bins: string
+  n_bins: number
   image: string[]
   coordinates: string[]
-  deleted_at: any
   created_at: string
   updated_at: string
 }
 
-export interface PickupScheduleBody {
+export interface CreatePickupScheduleBody {
   customer_id: number;
-  pickup_date: string;
-  status: string;
-  notes: string;
-  materials: Array<string>;
-  amount: Array<number>;
-  n_bins: string;
+  route_id: number;
+  asset_id: number
+  driver_id: number;
+  notes?: string;
+  materials: string[];
+  rate: number[];
+  amount: number[];
+  weighing_type: string[]
+  n_bins: number;
   tare_weight: Array<number>;
-  weighing_type: Array<string>;
   coordinates: Array<number>;
+  meta?: { name: string, contact: string, extra?: string }
 }
 
 export interface UpdatePickupScheduleResponse { }

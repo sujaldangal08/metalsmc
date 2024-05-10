@@ -1,5 +1,5 @@
 import { api } from "@/config/api.config";
-import { GetAllDriversResponse, GetAllVehiclesResponse, UpdateUserResponse, UserResponse } from "./types";
+import { GetAllCustomersResponse, GetAllDriversResponse, GetAllVehiclesResponse, UpdateUserResponse, UserResponse } from "./types";
 
 export const getUserDetails = async () => {
     const response = await api.get<UserResponse>("/user");
@@ -18,5 +18,10 @@ export const getAllDrivers = async () => {
 
 export const getAllVehicles = async () => {
     const response = await api.get<GetAllVehiclesResponse>("/vehicle");
+    return response.data;
+}
+
+export const getAllCustomers = async () => {
+    const response = await api.get<GetAllCustomersResponse>("/customers");
     return response.data;
 }

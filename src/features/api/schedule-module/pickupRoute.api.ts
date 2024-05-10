@@ -13,10 +13,10 @@ import {
 const baseEnd = "/route"
 
 interface PickupRouteQueryParams {
-  driver_id?: number;
-  asset_id?: number;
+  driver_id?: string;
+  asset_id?: string;
   status?: string;
-  branch_id?: number;
+  branch_id?: string;
   start_date?: string;
   paginate?: boolean;
   page?: number;

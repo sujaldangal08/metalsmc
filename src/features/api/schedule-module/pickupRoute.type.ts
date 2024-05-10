@@ -95,11 +95,15 @@ export interface PickupSchedule {
     route_id: number
     customer_id: number
     materials: PickupMaterial[]
-    status: string
     tare_weight: number[]
+    status: string
+    coordinates: string[]
+    notes: string
     customer: {
         id: number
         name: string
+        email: string
+        contact: string
     }
 }
 

@@ -5,6 +5,8 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 import useSWR from "swr";
 import PickupRoute from "../pickup-route";
+import { Avatar } from "rizzui";
+import Breadcrumb from "@/components/ui/breadcrumb";
 import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
 
 export default function ViewPickupSchedulePage() {
@@ -23,6 +25,8 @@ export default function ViewPickupSchedulePage() {
     }
   };
 
+  console.log("Pickup routes:",pickupRoutes)
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -30,10 +34,12 @@ export default function ViewPickupSchedulePage() {
   return (
     <div className="flex flex-col gap-10">
       <div className="text-[#706F6F]">
-        <h1 className="text-[#706F6F] font-semibold text-rg leading-[31px] mb-2">
+      <Breadcrumb className="pl-2 ">
+        <Breadcrumb.Item href="/pickup-schedule">
           Pickup Schedule
-        </h1>
-        <p>View Pickup Schedule</p>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item href="/">view</Breadcrumb.Item>
+      </Breadcrumb>
       </div>
       {pickupRoutes?.data.schedule.map((route, index) => (
         <PickupRoute

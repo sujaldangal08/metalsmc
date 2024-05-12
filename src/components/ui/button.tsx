@@ -1,5 +1,6 @@
 "use client";
 
+import cn from "@/utils/class-names";
 import { FC } from "react";
 import { Button as RizzuiButton, type ButtonProps } from "rizzui";
 import Spinner, { SpinnerSizeTypes } from "./spinner";

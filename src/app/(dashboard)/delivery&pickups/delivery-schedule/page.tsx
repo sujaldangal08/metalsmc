@@ -2,6 +2,8 @@
 "use client";
 import FileStats from "@/app/shared/file/dashboard/file-stats";
 import FilterIcon from "@/components/icons/FilterIcon";
+import LeftIcon from "@/components/icons/LeftIcon";
+import RightArrowIcon from "@/components/icons/RightIcon";
 import TableCard from "@/components/pages/delivery-schedule/table-card";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
@@ -92,6 +94,54 @@ const PickupSchedulePage: React.FC = () => {
               // searchHandler(e.target.value);
             }}
           />
+        </div>
+        <div className="flex justify-between items-center my-4">
+          <div className="flex gap-5">
+            <Button
+              className="!w-[200px] flex items-center rounded-3xl text-sm font-semibold"
+              type="submit"
+            >
+              <LeftIcon />
+              <span className="mx-2">December 2023</span>
+              <RightArrowIcon />
+            </Button>
+            <button
+              className={`px-[40px] h-10 text-base font-regular e shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-lg ${
+                tabIndex == 0
+                  ? " text-white focus-visible:outline-primary bg-primary"
+                  : " text-primary focus-visible:outline-white bg-white"
+              } rounded-md`}
+              onClick={() => {
+                setTabIndex(0);
+              }}
+            >
+              Day
+            </button>
+            <button
+              className={`px-[20px] h-10 text-base font-regular e shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-lg ${
+                tabIndex == 1
+                  ? " text-white focus-visible:outline-primary bg-primary"
+                  : " text-primary focus-visible:outline-white bg-white"
+              } rounded-2xl`}
+              onClick={() => {
+                setTabIndex(1);
+              }}
+            >
+              Month
+            </button>
+            <button
+              className={`px-[40px] h-10 text-base font-regular e shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-lg ${
+                tabIndex == 2
+                  ? " text-white focus-visible:outline-primary bg-primary"
+                  : " text-primary focus-visible:outline-white bg-white"
+              } rounded-md`}
+              onClick={() => {
+                setTabIndex(2);
+              }}
+            >
+              Year
+            </button>
+          </div>
           <div className="flex gap-5 ">
             <Button
               className="py-5 bg-white rounded-lg w-3/5 text-black text-sm font-semibold"

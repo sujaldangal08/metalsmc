@@ -3,6 +3,13 @@ import cn from "@/utils/class-names";
 import { Tab } from "@headlessui/react";
 import { Fragment } from "react";
 import { Button } from "rizzui";
+import {
+  PenOutlineIcon,
+  ThreeDotIcon,
+  BinOutlineIcon,
+} from "@public/assets/Icons";
+import { Dropdown } from "rizzui";
+import Status from "@/components/status/status";
 
 interface TableProps {
   routeDetails: PickupRouteData[];
@@ -36,25 +43,24 @@ function Table({ routeDetails }: TableProps) {
         <Tab.Panels>
           {routeDetails.map((route) => (
             <Tab.Panel key={route.id}>
-              <table className="w-full border border-gray-300  rounded-md relative border-separate border-spacing-0 ">
+              <table className="w-full border border-gray-300  rounded-md relative border-separate border-spacing-0">
                 <thead>
                   <tr className="text-base h-[40px] text-[#434343] bg-[#C6E7D9] sticky top-0 left-0 z-10 rounded-md">
                     {[
                       "Customer Name",
                       "Material",
-                      "Total Rate",
+                      "Unit Price",
                       "Total Weight",
-
                       "Status",
                     ].map((header) => (
                       <th
                         key={header}
-                        className="font-medium first:pl-5 px-2 text-start border-y-[1px] border-y-primary"
+                        className="font-medium first:pl-5 px-2 text-start border-t-[1px] border-gray-200"
                       >
                         {header}
                       </th>
                     ))}
-                    <th className="font-medium px-2 text-start w-[80px] border-y-primary border-y-[1px]">
+                    <th className="font-medium first:pl-5 px-2 text-center border-t-[1px] border-gray-200">
                       Action
                     </th>
                   </tr>
@@ -81,15 +87,46 @@ function Table({ routeDetails }: TableProps) {
                       <td className="px-2 py-4">
                         {schedule.materials
                           .map((material) => material.amount)
-                          .join(", ")}{" "}
+                          .join(", ")}
                         (tons)
                       </td>
-
-                      <td className="px-2 py-4">{schedule?.status}</td>
-                      <td className="px-2 py-4"></td>
+                      <td className="px-2 py-4">
+                        <Status status={schedule?.status} dotSize="small" />
+                      </td>
+                      <td className="px-2 py-4 flex items-center justify-center">
+                        <Dropdown
+                          placement="bottom-start"
+                          className={"cursor-pointer"}
+                        >
+                          <Dropdown.Trigger>
+                            <ThreeDotIcon w="20" h="20" />
+                          </Dropdown.Trigger>
+                          <Dropdown.Menu>
+                            <Dropdown.Item className="flex gap-3">
+                              <PenOutlineIcon w="16" h="16" />
+                              <h2 className="text-sm font-medium text-gray-dark">
+                                Edit
+                              </h2>
+                            </Dropdown.Item>
+                            <Dropdown.Item className="flex gap-3">
+                              <BinOutlineIcon w="16" h="16" />
+                              <h2 className="text-sm font-medium text-gray-dark">
+                                Delete
+                              </h2>
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
+                <tfoot>
+                  <tr>
+                    <td className="px-3 py-2">
+                      <Status status={route.status} dotSize="small" />
+                    </td>
+                  </tr>
+                </tfoot>
               </table>
             </Tab.Panel>
           ))}

@@ -185,10 +185,10 @@ const PickupSchedulePage: React.FC = () => {
             </Button>
             <Button
               color="primary"
-              className="py-5 rounded-lg w-full text-white text-sm font-semibold"
+              className="py-5 rounded-lg w-full text-white text-sm font-medium"
               type="submit"
             >
-              <Link href={Route.AssignPickupSchedule}>+Assign New Task</Link>
+              <Link href={Route.AssignPickupSchedule}>+ Assign New Task</Link>
             </Button>
           </div>
         </div>

@@ -14,6 +14,9 @@ import BinIcon from "./bin-icon";
 import DownIcon from "./down-icon";
 import PenIcon from "./pen-icon";
 import EyeIcon from "./eye-icon";
+import ThreeDotIcon from "./three-dot-icon";
+import PenOutlineIcon from "./pen-outline-icon";
+import BinOutlineIcon from "./bin-outline-icon";
 
 export {
   MetalIcon,
@@ -30,6 +33,9 @@ export {
   CloseIcon,
   BinIcon,
   DownIcon,
+  PenOutlineIcon,
   PenIcon,
   EyeIcon,
+  ThreeDotIcon,
+  BinOutlineIcon,
 };

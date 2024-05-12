@@ -74,6 +74,7 @@ export default function PickupAssignPage() {
       toast.success(
         `${data.name} assigned successfully to driver: ${data.driver_id}`
       );
+
     } catch (err: any) {
       toast.error(formatErrorMessage(err));
     }

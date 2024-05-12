@@ -1,7 +1,7 @@
 import { GetAllPickupResponse } from "@/features/api/schedule-module/pickupRoute.type";
 import Card from "./card";
 import Table from "./table";
-import { formateDDMMYY } from "@/lib/formateDate";
+import { formateDDMMYY } from "@/utils/format-date";
 
 interface TableCardProps {
   driverData: GetAllPickupResponse["data"][0];
@@ -16,7 +16,7 @@ function TableCard({ driverData }: TableCardProps) {
         </p>
       </div>
       <div className="flex flex-col gap-4">
-        <div className="flex shadow-md first:rounded-t-none rounded-md overflow-hidden bg-white flex-row gap-8 border-t border-gray-200 ">
+        <div className="flex shadow-md first:rounded-t-none rounded-md overflow-hidden flex-row gap-8 border-t border-gray-200 ">
           <Card driverDetails={driverData} />
           <Table routeDetails={driverData.routes} />
         </div>

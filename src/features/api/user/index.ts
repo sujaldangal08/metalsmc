@@ -1,5 +1,5 @@
 import { api } from "@/config/api.config";
-import { GetAllDriversResponse, UpdateUserResponse, UserResponse } from "./types";
+import { GetAllCustomersResponse, GetAllDriversResponse, GetAllVehiclesResponse, UpdateUserResponse, UserResponse } from "./types";
 
 export const getUserDetails = async () => {
     const response = await api.get<UserResponse>("/user");
@@ -13,5 +13,15 @@ export const updateUserDetails = async <T = Partial<Pick<UserResponse, 'data'>>>
 
 export const getAllDrivers = async () => {
     const response = await api.get<GetAllDriversResponse>("/drivers");
+    return response.data;
+}
+
+export const getAllVehicles = async () => {
+    const response = await api.get<GetAllVehiclesResponse>("/vehicle");
+    return response.data;
+}
+
+export const getAllCustomers = async () => {
+    const response = await api.get<GetAllCustomersResponse>("/customers");
     return response.data;
 }

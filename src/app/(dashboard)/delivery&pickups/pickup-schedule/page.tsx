@@ -108,10 +108,10 @@ const PickupSchedulePage: React.FC = () => {
         </h1>
         <div className="flex gap-3 w-full items-center  mt-2">
           <Input
-            prefix={<SearchIcon />}
+            prefix={<SearchIcon className="w-6 h-6"/>}
             placeholder="Search by name, phone or email"
-            className="w-1/3"
-            inputClassName="bg-white ring-gray-dark"
+            className="w-1/4"
+            inputClassName="bg-white py-[1.4rem]"
             onChange={(e) => {
               // searchHandler(e.target.value);
             }}

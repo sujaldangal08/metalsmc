@@ -38,7 +38,7 @@ export default function CustomSelectBox<T>({
         );
 
   return (
-    <div className="mx-auto h-screen w-52 ">
+    <div className="w-52">
       <Combobox value={value} onChange={(value) => setValue(value!)}>
         <div className="relative">
           <ComboboxInput
@@ -47,6 +47,7 @@ export default function CustomSelectBox<T>({
               "w-full rounded-md border border-gray-300 bg-white py-[7px] pr-8 pl-3 text-sm/6 ",
               "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25",
               error?.message && "border-red-400"
+              error?.message && "border-red-500"
             )}
             displayValue={getDisplayItem}
             onChange={(event) => setQuery(event.target.value)}

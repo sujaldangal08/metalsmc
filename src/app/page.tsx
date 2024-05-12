@@ -11,4 +11,4 @@ function FileDashboardPage() {
   );
 }
 
-export default (FileDashboardPage);
+export default withAuth(FileDashboardPage);

@@ -3,12 +3,20 @@
 import cn from "@/utils/class-names";
 import { FC } from "react";
 import { Button as RizzuiButton, type ButtonProps } from "rizzui";
+import Spinner, { SpinnerSizeTypes } from "./spinner";
+import cn from "@/utils/class-names";
 
-export const Button: FC<ButtonProps> = ({ children, ...props }) => {
+export const Button: FC<ButtonProps & { spinnerSize?: SpinnerSizeTypes }> = ({
+  children,
+  className,
+  isLoading = false,
+  spinnerSize,
+  ...props
+}) => {
   const colorVariants = {
-    default: "text-black bg-white hover:bg-gray-200",
-    primary: "text-white bg-primary hover:bg-primary-lighter ",
-    secondary: "",
+    default: "text-black bg-white hover:bg-gray-100",
+    primary: "text-white bg-primary hover:bg-primary-dark ",
+    secondary: "bg-gray-300 text-black border border-gray-400 hover:bg-gray-200",
     danger: "",
   };
 
@@ -17,10 +25,11 @@ export const Button: FC<ButtonProps> = ({ children, ...props }) => {
       {...props}
       className={cn(
         colorVariants[props.color ? props.color : "default"],
-        props.className
+        className
       )}
+      disabled={isLoading}
     >
-      {children}
+      {isLoading ? <Spinner color="white" size={spinnerSize} /> : children}
     </RizzuiButton>
   );
 };

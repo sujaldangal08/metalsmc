@@ -49,7 +49,7 @@ export default {
           DEFAULT: "rgb(var(--gray-default) / <alpha-value>)",
           light: "rgb(var(--gray-light) / <alpha-value>)",
           dark: "rgb(var(--gray-dark) / <alpha-value>)",
-        },
+        },  
         background: "rgb(var(--background) / <alpha-value>)",
         foreground: "rgb(var(--foreground) / <alpha-value>)",
         muted: "rgb(var(--muted) / <alpha-value>)",

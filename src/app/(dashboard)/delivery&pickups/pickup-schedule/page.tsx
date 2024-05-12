@@ -1,16 +1,20 @@
-// pages/index.tsx
 "use client";
+
 import FileStats from "@/app/shared/file/dashboard/file-stats";
 import FilterIcon from "@/components/icons/FilterIcon";
 import LeftIcon from "@/components/icons/LeftIcon";
 import RightArrowIcon from "@/components/icons/RightIcon";
 import TableCard from "@/components/pages/pickup-schedule/table-card";
-import { Button } from "@/components/ui/button";
+import { Button, Input } from "rizzui";
 import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
 import { getAllPickupRoutes } from "@/features/api/schedule-module/pickupRoute.api";
-import React, { useState } from "react";
+import { Route } from "@/lib/enums/routes.enums";
+import Link from "next/link";
+import React, { Fragment, useEffect, useState } from "react";
 import useSWR from "swr";
-
+import getLocationFromCoordinates from "@/lib/getLocationFromCoordinates";
+import { SearchIcon } from "@public/assets/Icons";
+import cn from "@/utils/class-names";
 
 const pickupStatsData = [
   {
@@ -56,9 +60,31 @@ const pickupStatsData = [
 ];
 
 const PickupSchedulePage: React.FC = () => {
-  const [tabIndex, setTabIndex] = useState<number>(0);
+  const [time, setTime] = useState<"day" | "month" | "year">("day");
 
-  const { data, error, isLoading } = useSWR("pickup-data", getAllPickupRoutes);
+  const {
+    data: allDriverPickupRoutes,
+    error,
+    isLoading,
+  } = useSWR("pickup-data", () => getAllPickupRoutes());
+
+  // Example usage
+  const latitude = 27.712094; // Example latitude
+  const longitude = 85.3281912; // Example longitude
+
+  // useEffect(() => {
+  //   getLocationFromCoordinates({ latitude, longitude })
+  //     .then((data) => {
+  //       console.log(data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error getting location:", error);
+  //     });
+  // }, [latitude, longitude]);
+
+  useEffect(() => {
+    console.log(allDriverPickupRoutes);
+  }, [allDriverPickupRoutes]);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -68,21 +94,24 @@ const PickupSchedulePage: React.FC = () => {
     <>
       <div className="bg-gray-100 py-5">
         <h1 className="font-semibold text-lg text-[#706F6F]">
-          Pickup Schedule{" "}
+          Pickup Schedule
         </h1>
         <p className=" text-sm text-[#706F6F] pb-4 mt-2">
-          {" "}
           Manage Pickup Schedule
         </p>
         <div className="mt-2 pb-3">
           <FileStats data={pickupStatsData} />
         </div>
 
-        <h1 className="font-semibold text-md mt-4">Pickup Schedule Table</h1>
-        <div className="flex gap-3 w-full items-center   mt-2">
-          <input
-            className="bg-white h-10 text-sm focus:outline-none rounded-md outline-none"
-            placeholder="Search by name,phone or email"
+        <h1 className="font-medium text-md mt-4 text-gray-dark">
+          Pickup Schedule Table
+        </h1>
+        <div className="flex gap-3 w-full items-center  mt-2">
+          <Input
+            prefix={<SearchIcon className="w-6 h-6"/>}
+            placeholder="Search by name, phone or email"
+            className="w-1/4"
+            inputClassName="bg-white py-[1.4rem]"
             onChange={(e) => {
               // searchHandler(e.target.value);
             }}
@@ -90,50 +119,59 @@ const PickupSchedulePage: React.FC = () => {
         </div>
         <div className="flex justify-between items-center my-4">
           <div className="flex gap-5">
+            <div className="px-3 bg-white text-black flex items-center rounded-full">
+              <Button className="bg-white hover:bg-white">
+                <LeftIcon />
+              </Button>
+              <span className="mx-2 px-4 text-sm font-medium">
+                December 2023
+              </span>
+              <Button className="bg-white hover:bg-white">
+                <RightArrowIcon />
+              </Button>
+            </div>
             <Button
-              className="!w-[200px] flex items-center rounded-3xl text-sm font-semibold"
-              type="submit"
-            >
-              <LeftIcon />
-              <span className="mx-2">December 2023</span>
-              <RightArrowIcon />
-            </Button>
-            <button
-              className={`px-[40px] h-10 text-base font-regular e shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-lg ${
-                tabIndex == 0
-                  ? " text-white focus-visible:outline-primary bg-primary"
-                  : " text-primary focus-visible:outline-white bg-white"
-              } rounded-md`}
+              className={cn(
+                `w-[100px] font-regular rounded-full text-md ${
+                  time === "day"
+                    ? "text-white bg-primary hover:bg-primary-dark"
+                    : " text-primary bg-white hover:bg-gray-50"
+                }`
+              )}
               onClick={() => {
-                setTabIndex(0);
+                setTime("day");
               }}
             >
               Day
-            </button>
-            <button
-              className={`px-[20px] h-10 text-base font-regular e shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-lg ${
-                tabIndex == 1
-                  ? " text-white focus-visible:outline-primary bg-primary"
-                  : " text-primary focus-visible:outline-white bg-white"
-              } rounded-2xl`}
+            </Button>
+            <Button
+              className={cn(
+                `w-[100px] font-regular rounded-full text-md ${
+                  time === "month"
+                    ? "text-white bg-primary hover:bg-primary-dark"
+                    : " text-primary bg-white hover:bg-gray-50"
+                }`
+              )}
               onClick={() => {
-                setTabIndex(1);
+                setTime("month");
               }}
             >
               Month
-            </button>
-            <button
-              className={`px-[40px] h-10 text-base font-regular e shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 rounded-lg ${
-                tabIndex == 2
-                  ? " text-white focus-visible:outline-primary bg-primary"
-                  : " text-primary focus-visible:outline-white bg-white"
-              } rounded-md`}
+            </Button>
+            <Button
+              className={cn(
+                `w-[100px] font-regular rounded-full text-md ${
+                  time === "year"
+                    ? "text-white bg-primary hover:bg-primary-dark"
+                    : " text-primary bg-white hover:bg-gray-50"
+                }`
+              )}
               onClick={() => {
-                setTabIndex(2);
+                setTime("year");
               }}
             >
               Year
-            </button>
+            </Button>
           </div>
           <div className="flex gap-5 ">
             <Button
@@ -147,25 +185,17 @@ const PickupSchedulePage: React.FC = () => {
             </Button>
             <Button
               color="primary"
-              className="py-5 rounded-lg w-full text-white text-sm font-semibold"
+              className="py-5 rounded-lg w-full text-white text-sm font-medium"
               type="submit"
             >
-              <div className="flex items-center">
-                <span className="">+Assign New Task</span>
-              </div>
+              <Link href={Route.AssignPickupSchedule}>+ Assign New Task</Link>
             </Button>
           </div>
         </div>
-        <div className=" ">
-          <div className="py-3 bg-white rounded-t-md">
-            <p className="font-semibold text-sm  pl-4">Date: dd/mm/yy</p>
-          </div>
-
-          <div className="flex flex-col gap-4">
-            {data?.routes.data.map((routeData) => (
-              <TableCard routeData={routeData} />
-            ))}
-          </div>
+        <div className="flex flex-col w-full gap-6">
+          {allDriverPickupRoutes?.data.map((driverData, indx) => (
+            <TableCard driverData={driverData} key={indx} />
+          ))}
         </div>
       </div>
     </>

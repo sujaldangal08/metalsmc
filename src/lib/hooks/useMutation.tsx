@@ -1,13 +1,16 @@
 import { AxiosResponse } from "axios";
 import { useState } from "react";
 
-interface UseMutationOptions<T> {
+interface UseMutationOptions<T, S> {
   initialData?: any;
-  mutateFn: (body: T) => Promise<AxiosResponse<any, any>>;
+  mutateFn: (body: T) => Promise<AxiosResponse<S, any>>;
 }
 
-const useMutation = <T,>({ initialData, mutateFn }: UseMutationOptions<T>) => {
-  const [data, setData] = useState(initialData);
+function useMutation<T = unknown, S = any>({
+  initialData,
+  mutateFn,
+}: UseMutationOptions<T, S>) {
+  const [data, setData] = useState<AxiosResponse<S, any>>(initialData);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -21,7 +24,6 @@ const useMutation = <T,>({ initialData, mutateFn }: UseMutationOptions<T>) => {
       return responseData;
     } catch (error: any) {
       setIsError(true);
-      console.log(error);
       throw new Error(error.response.data.message);
     } finally {
       setIsLoading(false);
@@ -29,6 +31,6 @@ const useMutation = <T,>({ initialData, mutateFn }: UseMutationOptions<T>) => {
   };
 
   return { data, isLoading, isError, mutate };
-};
+}
 
 export default useMutation;

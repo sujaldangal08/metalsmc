@@ -31,8 +31,8 @@ export async function restoreMaintenance({
 
 //Delete : Delete Maintenance
 export async function deleteMaintenance({ id }: { id: string }) {
-  const response = await api.delete<DeleteMaintenanceResponse>(
-    `${baseEnd}/${id}`
+  const response = await api.request<DeleteMaintenanceResponse, any>(
+    { endpoint: `${baseEnd}/${id}`, method: "POST", body: {} }
   );
   return response.data;
 }

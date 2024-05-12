@@ -6,10 +6,12 @@ import { UserLoginBody } from "@/features/api/auth/types";
 import { setSessionCookie } from "@/lib/auth";
 import { Route } from "@/lib/enums/routes.enums";
 import useMutation from "@/lib/hooks/useMutation";
-import { handleGoogleSignin } from "@/lib/oauth-helpers";
+import { handleFacebookSignin, handleGoogleSignin } from "@/lib/oauth-helpers";
 import { formatErrorMessage } from "@/utils/format-errors";
 import { LoginSchema, loginSchema } from "@/utils/validators/login.schema";
-import FacebookLogin from "@greatsumini/react-facebook-login";
+import FacebookLogin, {
+  SuccessResponse,
+} from "@greatsumini/react-facebook-login";
 import FacebookIcon from "@public/assets/facebook_icon.png";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import Image from "next/image";
@@ -38,6 +40,7 @@ export default function SignInForm() {
       const res = await signInMn({
         email: data.email,
         password: data.password,
+        token: "asdas",
       });
 
       setSessionCookie(res.data.access_token);
@@ -51,15 +54,20 @@ export default function SignInForm() {
   const handleGoogleAuthResponse = async (res: CredentialResponse) => {
     try {
       await handleGoogleSignin(res.credential!);
-      console.log(res.credential);
+      // console.log(res.credential);
       router.push(Route.Home);
     } catch (err: any) {
       toast.error(formatErrorMessage(err));
     }
   };
 
-  const handleFacebookResponse = (res: any) => {
-    console.log(res);
+  const handleFacebookResponse = async (res: SuccessResponse) => {
+    try {
+      await handleFacebookSignin(res.accessToken);
+      router.push(Route.Home);
+    } catch (err: any) {
+      toast.error(formatErrorMessage(err));
+    }
   };
 
   return (

@@ -28,11 +28,7 @@ const filesData =
     "fileSize": "2 MB",
     "uploadedOn": "08 May, 2024"
   },
-  {
-    "fileName": "report.docx",
-    "fileSize": "300 KB",
-    "uploadedOn": "05 May, 2024"
-  }
+
 ]
 const FileIcon = ({ fileName }) => {
   const getFileExtension = (name) => {
@@ -91,16 +87,20 @@ export default function Attachment(props: Props) {
             </thead>
             <tbody>
         {filesData.map((file, index) => (
-          <tr key={index} className="even:bg-[#C6E7D930]">
-            <td className="px-4 py-2 pl-6">
-              <div className="bg-gray-100 p-3 pl-4 rounded-md shadow-md flex flex-row max-w-md">
+          <tr className="">
+            <td className="px-4 py-4 pl-6">
+              <div className="bg-gray-100 p-3 pl-4 rounded-md shadow-md flex flex-row max-w-md py-4">
                 <div className="flex flex-row gap-3 items-center">
                   <FileIcon fileName={file.fileName} />
                   <p className="text-gray-800">{file.fileName}</p>
                 </div>
                 <div className="flex flex-row ml-auto gap-3">
-                  <span className="material-icons">file_download</span>
-                  <span className="material-icons">visibility</span>
+                <DownloadIcon/>
+               
+                <ViewIcon />
+                
+                 
+                  
                 </div>
               </div>
             </td>

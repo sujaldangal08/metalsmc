@@ -12,7 +12,6 @@ import { Route } from "@/lib/enums/routes.enums";
 import Link from "next/link";
 import React, { Fragment, useEffect, useState } from "react";
 import useSWR from "swr";
-import getLocationFromCoordinates from "@/lib/getLocationFromCoordinates";
 import { SearchIcon } from "@public/assets/Icons";
 import cn from "@/utils/class-names";
 

@@ -1,6 +1,5 @@
 "use client";
 
-import cn from "@/utils/class-names";
 import { FC } from "react";
 import { Button as RizzuiButton, type ButtonProps } from "rizzui";
 import Spinner, { SpinnerSizeTypes } from "./spinner";
@@ -16,7 +15,8 @@ export const Button: FC<ButtonProps & { spinnerSize?: SpinnerSizeTypes }> = ({
   const colorVariants = {
     default: "text-black bg-white hover:bg-gray-100",
     primary: "text-white bg-primary hover:bg-primary-dark ",
-    secondary: "bg-gray-300 text-black border border-gray-400 hover:bg-gray-200",
+    secondary:
+      "bg-gray-300 text-black border border-gray-400 hover:bg-gray-200",
     danger: "",
   };
 

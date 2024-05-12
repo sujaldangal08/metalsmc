@@ -1,7 +1,6 @@
 import { DeliverySchedule } from "@/features/api/schedule-module/deliverySchedule.type";
 import Card from "./card";
 import Table from "./table";
-import { formateDDMMYY } from "@/utils/format-date";
 
 interface TableCardProps {
   deliverySchedule: DeliverySchedule;

@@ -1,19 +1,17 @@
 "use client";
 
-import ActionDropdown from "@/components/ui/action-dropdown";
 import { DeliveryData } from "@/features/api/schedule-module/deliverySchedule.type";
 import cn from "@/utils/class-names";
-import { Tab } from "@headlessui/react";
-import { Fragment } from "react";
-import { Button } from "rizzui";
+import { formateDDmmYY } from "@/utils/format-date";
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { formateDDmmYY } from "@/utils/format-date";
-import getLocationFromCoordinates from "@/utils/getLocationFromCoordinates";
+import { Fragment } from "react";
+import { Button } from "rizzui";
 
 interface TableProps {
   deliveryData: DeliveryData[];
@@ -46,12 +44,12 @@ function DeliveryTabel({ deliveryData }: TableProps) {
       header: "Total Weight",
     }),
     columnHelper.accessor("coordinates", {
-      cell: async (info) => {
-        const data = await getLocationFromCoordinates({
-          latitude: info.getValue()[0],
-          longitude: info.getValue()[1],
-        });
-        console.log(data);
+      cell: (info) => {
+        // const data = await getLocationFromCoordinates({
+        //   latitude: info.getValue()[0],
+        //   longitude: info.getValue()[1],
+        // });
+        // console.log(data);
         return "Hey";
       },
       header: "Location",
@@ -81,8 +79,8 @@ function DeliveryTabel({ deliveryData }: TableProps) {
 
   return (
     <div className="flex flex-col bg-white 2xl:w-full 2xl:mt-10 mt-0 rounded-md pl-2 pr-4 2xl:pb-0 pb-5">
-      <Tab.Group defaultIndex={0}>
-        <Tab.List className="flex gap-2">
+      <TabGroup defaultIndex={0}>
+        <TabList className="flex gap-2">
           {deliveryData.map((delivery) => (
             <Tab as={Fragment}>
               {({ selected }) => (
@@ -102,10 +100,10 @@ function DeliveryTabel({ deliveryData }: TableProps) {
               )}
             </Tab>
           ))}
-        </Tab.List>
-        <Tab.Panels>
+        </TabList>
+        <TabPanels>
           {deliveryData.map((deliver) => (
-            <Tab.Panel key={deliver.id}>
+            <TabPanel key={deliver.id}>
               <div className="rounded-b-lg rounded-tr-lg border border-gray-200 overflow-clip">
                 {table && (
                   <table className="w-full">
@@ -148,10 +146,10 @@ function DeliveryTabel({ deliveryData }: TableProps) {
                   </table>
                 )}
               </div>
-            </Tab.Panel>
+            </TabPanel>
           ))}
-        </Tab.Panels>
-      </Tab.Group>
+        </TabPanels>
+      </TabGroup>
     </div>
   );
 }

@@ -1,12 +1,14 @@
-export interface PermanentDeleteAssetResponse {}
+import { CommonApiResponse } from "../types";
 
-export interface DeleteAssetResponse {}
+export interface PermanentDeleteAssetResponse { }
 
-export interface RestoreAssetResponse {}
+export interface DeleteAssetResponse { }
 
-export interface RestoreAssetBody {}
+export interface RestoreAssetResponse { }
 
-export interface CreateAssetResponse {}
+export interface RestoreAssetBody { }
+
+export interface CreateAssetResponse { }
 
 export interface CreateAssetBody {
   title: string;
@@ -18,7 +20,7 @@ export interface CreateAssetBody {
   };
 }
 
-export interface UpdateAssetResponse {}
+export interface UpdateAssetResponse { }
 
 export interface UpdateAssetBody {
   title: string;
@@ -30,9 +32,10 @@ export interface UpdateAssetBody {
   };
   fuel_tank: string;
 }
-export interface GetAllAssetResponse {}
+
+export interface GetAllAssetResponse extends CommonApiResponse { }
 
 
 
-export interface GetOneAsset {}
+export interface GetOneAsset { }
 

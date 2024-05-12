@@ -22,20 +22,20 @@ export async function logout() {
 export async function getSession(): Promise<string | null> {
     const session = await Cookies.get(AuthCookie.Session);
     const issuedAt = await Cookies.get(AuthCookie.IssuedAt);
-    const expiredAt = (Number(issuedAt) + AuthCookie.ExpireTime);
+    // const expiredAt = (Number(issuedAt) + AuthCookie.ExpireTime);
 
     if (!session) return null;
 
-    if (Date.now() > expiredAt) {
-        //Session is expired
-        const newAccessToken = await refreshAccessToken();
-        if (newAccessToken) {
-            setSessionCookie(newAccessToken);
-            return newAccessToken;
-        } else {
-            return null;
-        }
-    }
+    // if (Date.now() > expiredAt) {
+    //     //Session is expired
+    //     const newAccessToken = await refreshAccessToken();
+    //     if (newAccessToken) {
+    //         setSessionCookie(newAccessToken);
+    //         return newAccessToken;
+    //     } else {
+    //         return null;
+    //     }
+    // }
 
     return session;
 }

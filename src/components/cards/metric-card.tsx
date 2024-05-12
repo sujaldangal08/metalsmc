@@ -1,16 +1,15 @@
+"use client";
 
-'use client';
-
-import { Title, Text } from '@/components/ui/text';
-import cn from '@/utils/class-names';
+import { Title, Text } from "@/components/ui/text";
+import cn from "@/utils/class-names";
 
 const metricCardClasses = {
-  base: 'border border-muted bg-gray-0 p-5 dark:bg-gray-50 lg:p-6',
+  base: "border border-muted bg-gray-0 p-5 dark:bg-gray-50 lg:p-6",
   rounded: {
-    sm: 'rounded-sm',
-    DEFAULT: 'rounded-lg',
-    lg: 'rounded-xl',
-    xl: 'rounded-2xl',
+    sm: "rounded-sm",
+    DEFAULT: "rounded-lg",
+    lg: "rounded-xl",
+    xl: "rounded-2xl",
   },
 };
 
@@ -35,7 +34,7 @@ export default function MetricCard({
   icon,
   chart,
   info,
-  rounded = 'DEFAULT',
+  rounded = "DEFAULT",
   className,
   iconClassName,
   contentClassName,
@@ -57,7 +56,7 @@ export default function MetricCard({
           {icon ? (
             <div
               className={cn(
-                'flex h-11 w-11 items-center justify-center rounded-lg bg-gray-100 lg:h-12 lg:w-12',
+                "flex h-11 w-11 items-center justify-center rounded-lg bg-gray-100 lg:h-12 lg:w-12",
                 iconClassName
               )}
             >
@@ -65,13 +64,18 @@ export default function MetricCard({
             </div>
           ) : null}
 
-          <div className={cn(icon && 'ps-3', contentClassName)}>
-            <Text className={cn('mb-0.5 text-gray-500', titleClassName)}>
+          <div className={cn(icon && "ps-3", contentClassName)}>
+            <Text
+              className={cn(
+                "text-[#202020] text-md font-medium",
+                titleClassName
+              )}
+            >
               {title}
             </Text>
             <Text
               className={cn(
-                'font-lexend text-lg font-semibold text-gray-900 2xl:xl:text-xl dark:text-gray-700',
+                "text-lg font-medium text-[#202020] 2xl:xl:text-xl dark:text-gray-700",
                 metricClassName
               )}
             >
@@ -83,7 +87,7 @@ export default function MetricCard({
         </div>
 
         {chart ? (
-          <div className={cn('h-12 w-20', chartClassName)}>{chart}</div>
+          <div className={cn("h-12 w-20", chartClassName)}>{chart}</div>
         ) : null}
       </div>
 
@@ -91,4 +95,3 @@ export default function MetricCard({
     </div>
   );
 }
-

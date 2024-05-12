@@ -3,6 +3,7 @@ import cn from "@/utils/class-names";
 const sizes = {
   sm: "w-5 h-5",
   DEFAULT: "w-7 h-7",
+  md: "w-8 h-8",
   lg: "w-9 h-9",
   xl: "w-11 h-11",
 };
@@ -10,8 +11,9 @@ const sizes = {
 const strokeSizes = {
   sm: "border-2",
   DEFAULT: "border-2",
-  lg: "border-[3px]",
-  xl: "border-4",
+  md: "border-[3px]",
+  lg: "border-4",
+  xl: "border-[5px]",
 };
 
 const colors = {
@@ -31,7 +33,7 @@ export type SpinnerColorTypes = keyof typeof colors;
 
 type SpinnerProps = {
   tag?: "div" | "span";
-  size?: SpinnerSizeTypes;
+  size?: SpinnerSizeTypes | "md";
   color?: SpinnerColorTypes;
   className?: string;
 } & React.HTMLAttributes<HTMLDivElement | HTMLSpanElement>;

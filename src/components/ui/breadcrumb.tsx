@@ -32,7 +32,7 @@ export interface BreadcrumbProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const Breadcrumb = ({
-  separator = "/",
+  separator = ".",
   disableCurrent = true,
   children,
   className,
@@ -50,19 +50,19 @@ const Breadcrumb = ({
           <>
             {React.cloneElement(child, {
               className: cn(
-                "text-gray-700 last:text-gray-500 font-semibold text-md",
+                "text-gray-500 last:text-black font-normal text-sm",
                 disableCurrent && "last:pointer-events-none"
               ),
             })}
             {index < numOfItems - 1 &&
               (separatorVariant === "default" ? (
                 <span
-                  className={cn("text-md text-gray-500", separatorClassName)}
+                  className={cn("text-md text-gray-700", separatorClassName)}
                 >
                   {separator}
                 </span>
               ) : (
-                <span className="h-2 w-2 rounded-full bg-gray-400" />
+                <span className="h-[6px] w-[6px] rounded-full bg-gray-400" />
               ))}
           </>
         );

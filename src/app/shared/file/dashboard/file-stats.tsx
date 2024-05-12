@@ -7,8 +7,8 @@ import { useScrollableSlider } from "@/hooks/use-scrollable-slider";
 import { PiCaretLeftBold, PiCaretRightBold } from "react-icons/pi";
 import MetricCard from "@/components/cards/metric-card";
 import CircleProgressBar from "@/components/charts/circle-progressbar";
-import TrendingUpIcon from "@/components/icons/trending-up";
 import TrendingDownIcon from "@/components/icons/trending-down";
+import { GrowthIcon } from "@public/assets/Icons";
 
 type FileStatsData = {
   id: number;
@@ -26,7 +26,6 @@ type FileStatsType = {
   data: FileStatsData[];
 };
 
-
 export function FileStatGrid({ className, data }: FileStatsType) {
   return (
     <>
@@ -41,15 +40,15 @@ export function FileStatGrid({ className, data }: FileStatsType) {
             chart={
               <CircleProgressBar
                 percentage={stat.percentage}
-                size={80}
+                size={100}
                 stroke={stat.fill + "33"}
-                strokeWidth={7}
+                strokeWidth={10}
                 progressColor={stat.fill}
                 useParentResponsive={true}
                 label={
                   <Text
                     as="span"
-                    className="font-lexend text-base font-medium text-gray-700"
+                    className="text-lg font-medium text-gray-dark"
                   >
                     {stat.percentage}%
                   </Text>
@@ -58,23 +57,23 @@ export function FileStatGrid({ className, data }: FileStatsType) {
               />
             }
           >
-            <Text className="mt-3 flex items-center leading-none text-gray-500">
+            <div className="mt-3 flex items-center leading-none text-gray-500">
+              {stat.increased ? (
+                <GrowthIcon />
+              ) : (
+                <TrendingDownIcon className="me-1 h-4 w-4" />
+              )}
               <Text
                 as="span"
                 className={cn(
-                  "me-2 inline-flex items-center font-medium",
+                  "me-2 inline-flex items-center font-medium mt-1",
                   stat.increased ? "text-green" : "text-red"
                 )}
               >
-                {stat.increased ? (
-                  <TrendingUpIcon className="me-1 h-4 w-4" />
-                ) : (
-                  <TrendingDownIcon className="me-1 h-4 w-4" />
-                )}
                 {stat.value}%
               </Text>
-              last month
-            </Text>
+              <Text className="mt-1">last month</Text>
+            </div>
           </MetricCard>
         );
       })}
@@ -110,7 +109,7 @@ export default function FileStats({ className, data }: FileStatsType) {
       <div className="w-full overflow-hidden">
         <div
           ref={sliderEl}
-          className="custom-scrollbar-x grid grid-flow-col gap-5 overflow-x-auto scroll-smooth 2xl:gap-6 3xl:gap-8"
+          className="custom-scrollbar-x grid grid-flow-col gap-5 scroll-smooth 2xl:gap-6 3xl:gap-8"
         >
           <FileStatGrid className="min-w-[292px]" data={data} />
         </div>

@@ -97,7 +97,7 @@ const ScheduleForm: FC<ScheduleFormProps> = ({
         onSubmit={handleSubmit(submitForm)}
         className="flex w-full gap-3 flex-col"
       >
-        <h2 className="text-md font-medium">Customer's Details</h2>
+        <h2 className="text-md font-medium">{`Customer's Details`}</h2>
 
         <div className="flex gap-4">
           <Controller

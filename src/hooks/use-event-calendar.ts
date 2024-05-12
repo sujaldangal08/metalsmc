@@ -1,6 +1,6 @@
 import { atom, useAtom } from 'jotai';
 import uniqueId from 'lodash/uniqueId';
-import { CalendarEvent } from '@/types';
+import { CalendarEvent } from '@/utils/types';
 
 const event = [
   {

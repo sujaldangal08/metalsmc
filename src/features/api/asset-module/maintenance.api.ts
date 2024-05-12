@@ -54,8 +54,11 @@ export async function updateMaintenance({
 
 //Delete: Permanent Delete Maintenance
 export async function permanentDeleteMaintenance({ id }: { id: string }) {
-  const response = await api.delete<PermanentDeleteMaintenanceResponse>(
-    `${baseEnd}/delete/${id}`
+  const response = await api.request<PermanentDeleteMaintenanceResponse, any>({
+    endpoint: `${baseEnd}/delete/${id}`,
+    method: "DELETE",
+    body: {}
+  }
   );
   return response.data;
 }

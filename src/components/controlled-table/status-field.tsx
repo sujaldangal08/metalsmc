@@ -1,13 +1,9 @@
-import {
-  Select,
-  type SelectProps,
-  type SelectOption,
-} from '@/components/ui/select';
+import { CustomSelectProps, Select } from "../ui/select";
 
 export default function StatusField({
-  placeholder = 'Select status',
+  placeholder = "Select status",
   ...props
-}: SelectProps<SelectOption>) {
+}: CustomSelectProps) {
   return (
     <Select
       inPortal={false}

@@ -1,24 +1,20 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import toast from 'react-hot-toast';
-import isEmpty from 'lodash/isEmpty';
-import prettyBytes from 'pretty-bytes';
-import { useCallback, useState } from 'react';
-import type { FileWithPath } from '@uploadthing/react';
-import { useDropzone } from '@uploadthing/react/hooks';
-import { PiCheckBold, PiTrashBold, PiUploadSimpleBold } from 'react-icons/pi';
-import {
-  UploadFileResponse,
-  generateClientDropzoneAccept,
-} from 'uploadthing/client';
-import { useUploadThing } from '@/utils/uploadthing';
-import { Button } from '@/components/ui/button';
-import { Text } from '@/components/ui/text';
-import cn from '@/utils/class-names';
-import UploadIcon from '@/components/shape/upload';
-import { FieldError } from '@/components/ui/field-error';
-import { endsWith } from 'lodash';
+import Image from "next/image";
+import toast from "react-hot-toast";
+import isEmpty from "lodash/isEmpty";
+import prettyBytes from "pretty-bytes";
+import { useCallback, useState } from "react";
+import { useDropzone } from "@uploadthing/react/hooks";
+import { PiCheckBold, PiTrashBold, PiUploadSimpleBold } from "react-icons/pi";
+import { generateClientDropzoneAccept } from "uploadthing/client";
+import { useUploadThing } from "@/utils/uploadthing";
+import { Button } from "@/components/ui/button";
+import { Text } from "@/components/ui/text";
+import cn from "@/utils/class-names";
+import UploadIcon from "@/components/shape/upload";
+import { FieldError } from "@/components/ui/field-error";
+import { endsWith } from "lodash";
 
 interface UploadZoneProps {
   label?: string;
@@ -46,8 +42,8 @@ export default function UploadZone({
   const [files, setFiles] = useState<File[]>([]);
 
   const onDrop = useCallback(
-    (acceptedFiles: FileWithPath[]) => {
-      console.log('acceptedFiles', acceptedFiles);
+    (acceptedFiles: any[]) => {
+      console.log("acceptedFiles", acceptedFiles);
       setFiles([
         ...acceptedFiles.map((file) =>
           Object.assign(file, {
@@ -81,10 +77,10 @@ export default function UploadZone({
   );
 
   const { startUpload, permittedFileInfo, isUploading } = useUploadThing(
-    'generalMedia',
+    "generalMedia",
     {
-      onClientUploadComplete: (res: UploadFileResponse<any>[] | undefined) => {
-        console.log('res', res);
+      onClientUploadComplete: (res: any[] | undefined) => {
+        console.log("res", res);
         if (setValue) {
           // const respondedUrls = res?.map((r) => r.url);
           setFiles([]);
@@ -118,7 +114,7 @@ export default function UploadZone({
   });
 
   return (
-    <div className={cn('grid @container', className)}>
+    <div className={cn("grid @container", className)}>
       {label && (
         <span className="mb-1.5 block font-semibold text-gray-900">
           {label}
@@ -126,18 +122,18 @@ export default function UploadZone({
       )}
       <div
         className={cn(
-          'rounded-md border-[1.8px]',
+          "rounded-md border-[1.8px]",
           !isEmpty(files) &&
-            'flex flex-wrap items-center justify-between @xl:flex-nowrap @xl:pr-6'
+            "flex flex-wrap items-center justify-between @xl:flex-nowrap @xl:pr-6"
         )}
       >
         <div
           {...getRootProps()}
           className={cn(
-            'flex cursor-pointer items-center gap-4 px-6 py-5 transition-all duration-300',
+            "flex cursor-pointer items-center gap-4 px-6 py-5 transition-all duration-300",
             isEmpty(files)
-              ? 'justify-center'
-              : 'flex-grow justify-center @xl:justify-start'
+              ? "justify-center"
+              : "flex-grow justify-center @xl:justify-start"
           )}
         >
           <input {...getInputProps()} />
@@ -176,7 +172,7 @@ export default function UploadZone({
       {(!isEmpty(uploadedItems) || !isEmpty(notUploadedItems)) && (
         <div className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-[repeat(auto-fit,_minmax(140px,_1fr))]">
           {uploadedItems.map((file: any, index: number) => (
-            <div key={index} className={cn('relative')}>
+            <div key={index} className={cn("relative")}>
               <figure className="group relative h-40 rounded-md bg-gray-50">
                 <MediaPreview name={file.name} url={file.url} />
                 <button
@@ -190,7 +186,7 @@ export default function UploadZone({
             </div>
           ))}
           {notUploadedItems.map((file: any, index: number) => (
-            <div key={index} className={cn('relative')}>
+            <div key={index} className={cn("relative")}>
               <figure className="group relative h-40 rounded-md bg-gray-50">
                 <MediaPreview name={file.name} url={file.preview} />
                 {isUploading ? (
@@ -252,7 +248,7 @@ function UploadButtons({
 }
 
 function MediaPreview({ name, url }: { name: string; url: string }) {
-  return endsWith(name, '.pdf') ? (
+  return endsWith(name, ".pdf") ? (
     <object data={url} type="application/pdf" width="100%" height="100%">
       <p>
         Alternative text - include a link <a href={url}>to the PDF!</a>

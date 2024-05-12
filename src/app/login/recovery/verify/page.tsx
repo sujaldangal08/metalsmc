@@ -1,11 +1,11 @@
 "use client";
 
 import SideImage from "@/components/ui/Signup/signup";
+import { Route } from "@/lib/enums/routes.enums";
 import ResetPasswordPhoto from "@public/assets/reset_password_photo_2.svg";
-import EnterOTPForm from "./enter-otp-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { Route } from "@/lib/enums/routes.enums";
+import EnterOTPForm from "./enter-otp-form";
 
 export default function VerifyOtpPage() {
   const searchParams = useSearchParams();
@@ -16,7 +16,7 @@ export default function VerifyOtpPage() {
     if (!email) {
       router.push(Route.Home);
     }
-  }, [email]);
+  }, [email, router]);
 
   if (!email) return null;
 

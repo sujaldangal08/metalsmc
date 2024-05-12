@@ -18,7 +18,7 @@ export default function RecentAssignedPickupCard({ curr }: Props) {
         name="John Doe"
         className={cn("!w-[70px] !h-[70px] border border-green")}
       />
-      <h3 className="text-md font-medium mt-4">Driver's Name</h3>
+      <h3 className="text-md font-medium mt-4">{`Driver's Name`}</h3>
       <h3 className="text-md font-medium truncate text-green">{curr.name}</h3>
       <h3 className="text-sm font-medium mt-1 text-gray-dark">
         Truck Number: {curr.truckNumber}

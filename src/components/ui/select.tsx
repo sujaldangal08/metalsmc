@@ -7,11 +7,12 @@ import { FieldError } from "react-hook-form";
 import { PiCaretDownBold } from "react-icons/pi";
 import { SelectOption, SelectProps } from "rizzui";
 
-interface CustomSelectProps extends Omit<SelectProps<SelectOption>, "error"> {
+export interface CustomSelectProps
+  extends Omit<SelectProps<SelectOption>, "error"> {
   label?: string;
   options: SelectOption[];
-  value?: string | number;
-  setValue?: (value: string | number) => void;
+  value?: string | number | null;
+  setValue?: (value: string | number | null) => void;
   labelLayout?: "horizontal" | "vertical";
   error?: FieldError;
 }
@@ -41,8 +42,10 @@ export const Select: FC<CustomSelectProps> = ({
         )}
         id="select"
       >
-        {options.map(({ value, label }, indx) => (
-          <option value={value}>{label}</option>
+        {options.map(({ value, label }) => (
+          <option key={value} value={value}>
+            {label}
+          </option>
         ))}
       </HUISelect>
 

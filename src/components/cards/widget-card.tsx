@@ -1,15 +1,14 @@
-
-import { Title } from '@/components/ui/text';
-import cn from '@/utils/class-names';
-import { ForwardedRef, forwardRef } from 'react';
+import { Title } from "@/components/ui/text";
+import cn from "@/utils/class-names";
+import { ForwardedRef, forwardRef } from "react";
 
 const widgetCardClasses = {
-  base: 'border border-muted bg-gray-0 p-5 dark:bg-gray-50 lg:p-7',
+  base: "border border-muted bg-gray-0 p-5 dark:bg-gray-50 lg:p-7",
   rounded: {
-    sm: 'rounded-sm',
-    DEFAULT: 'rounded-lg',
-    lg: 'rounded-xl',
-    xl: 'rounded-2xl',
+    sm: "rounded-sm",
+    DEFAULT: "rounded-lg",
+    lg: "rounded-xl",
+    xl: "rounded-2xl",
   },
 };
 
@@ -30,7 +29,7 @@ function WidgetCard(
     title,
     action,
     description,
-    rounded = 'DEFAULT',
+    rounded = "DEFAULT",
     className,
     headerClassName,
     actionClassName,
@@ -49,16 +48,11 @@ function WidgetCard(
       )}
       ref={ref}
     >
-      <div
-        className={cn(
-          action && 'flex items-start justify-between',
-          headerClassName
-        )}
-      >
+      <div className={cn("flex items-start justify-between", headerClassName)}>
         <div>
           <Title
             as="h3"
-            className={cn('text-base font-semibold sm:text-lg', titleClassName)}
+            className={cn("text-base font-semibold sm:text-lg", titleClassName)}
           >
             {title}
           </Title>
@@ -66,7 +60,7 @@ function WidgetCard(
             <div className={descriptionClassName}>{description}</div>
           )}
         </div>
-        {action && <div className={cn('ps-2', actionClassName)}>{action}</div>}
+        {action && <div className={cn("ps-2", actionClassName)}>{action}</div>}
       </div>
       {children}
     </div>
@@ -74,4 +68,4 @@ function WidgetCard(
 }
 
 export default forwardRef(WidgetCard);
-WidgetCard.displayName = 'WidgetCard';
+WidgetCard.displayName = "WidgetCard";

@@ -1,9 +1,6 @@
-"use client";
-
 import cn from "@/utils/class-names";
-import { FC } from "react";
+import React, { FC, LegacyRef, forwardRef } from "react";
 import { FieldError, UseFormRegister } from "react-hook-form";
-
 import { Input as RizzUIInput, type InputProps } from "rizzui";
 
 interface CustomInputProps extends Omit<InputProps, "error"> {
@@ -28,7 +25,7 @@ export const Input: FC<CustomInputProps> = ({
       errorClassName="focus:ring-0"
       error={error?.message}
       {...(register && name ? register(name) : {})}
-      {...props}
+      {...props} // Spread the props object without the 'ref' prop
     />
   );
 };

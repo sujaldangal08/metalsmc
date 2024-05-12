@@ -19,7 +19,6 @@ export enum Route {
   XeroCallbackCallback = "/xero-callback/callback",
   XeroCallbackCallbackCallback = "/xero-callback/callback/callback",
 
-  //Delivery and Pickups
   //Delivery Shedule
   DeliverySchedule = "/delivery&pickups/delivery-schedule",
   AssignDeliverySchedule = "/delivery&pickups/delivery-schedule/assign",
@@ -27,4 +26,5 @@ export enum Route {
   PickupSchedule = "/delivery&pickups/pickup-schedule",
   ViewPickupSchedule = "/delivery&pickups/pickup-schedule/view",
   AssignPickupSchedule = "/delivery&pickups/pickup-schedule/assign",
+  ViewPickupAttachment = "/delivery&pickups/pickup-schedule/attachment"
 }

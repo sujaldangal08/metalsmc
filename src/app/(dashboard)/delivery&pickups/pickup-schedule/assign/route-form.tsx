@@ -101,7 +101,7 @@ export default function PickupRouteForm({
             <div className="flex w-full items-center justify-between">
               <div className="flex *:!text-[15px] *:!font-normal md:flex-row flex-col md:items-end items-start md:gap-14 gap-1">
                 <h2>
-                  Driver's Name : {driver.name}
+                  {`Driver's Name :`} {driver.name}
                   <span className="text-gray"></span>
                 </h2>
                 <h2>

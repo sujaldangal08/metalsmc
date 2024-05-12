@@ -4,6 +4,7 @@ interface Props {
   className?: string;
   dotSize?: "small" | "medium" | "large";
   status: string;
+  title: string;
 }
 
 const formatString = (input: string): string =>
@@ -33,6 +34,7 @@ const getStatusColor = (status: string): "green" | "red" => {
 export default function Status({
   className,
   status,
+  title,
   dotSize = "medium",
 }: Props) {
   const color = getStatusColor(status);
@@ -53,7 +55,7 @@ export default function Status({
               : "text-[18px]"
         )}
       >
-        {formatString(status)}
+        {formatString(title)}
       </h3>
     </div>
   );

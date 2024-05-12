@@ -1,5 +1,5 @@
-// pages/index.tsx
 "use client";
+
 import FileStats from "@/app/shared/file/dashboard/file-stats";
 import FilterIcon from "@/components/icons/FilterIcon";
 import TableCard from "@/components/pages/delivery-schedule/table-card";
@@ -86,8 +86,8 @@ const PickupSchedulePage: React.FC = () => {
           <Input
             prefix={<SearchIcon />}
             placeholder="Search by name, phone or email"
-            className="w-1/3"
-            inputClassName="bg-white ring-gray-dark"
+            className="w-1/4"
+            inputClassName="bg-white"
             onChange={(e) => {
               // searchHandler(e.target.value);
             }}
@@ -113,7 +113,10 @@ const PickupSchedulePage: React.FC = () => {
         </div>
         <div className="flex flex-col w-full gap-6">
           {allDeliverySchedule?.data?.map((deliverySchedule) => (
-            <TableCard deliverySchedule={deliverySchedule} />
+            <TableCard
+              key={deliverySchedule.id}
+              deliverySchedule={deliverySchedule}
+            />
           ))}
         </div>
       </div>

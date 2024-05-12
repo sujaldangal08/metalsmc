@@ -102,7 +102,6 @@ export default function QuickAccess({ className }: { className?: string }) {
         <Button
           title="Prev"
           variant="text"
-          ref={sliderPrevBtn}
           onClick={() => scrollToTheLeft()}
           className="!absolute left-0 top-0 z-10 !h-full w-8 !justify-start rounded-none bg-gradient-to-r from-white via-white to-transparent px-0 text-gray-500 hover:text-black dark:from-gray-50/80 dark:via-gray-50/80 3xl:hidden"
         >
@@ -121,7 +120,6 @@ export default function QuickAccess({ className }: { className?: string }) {
         <Button
           title="Next"
           variant="text"
-          ref={sliderNextBtn}
           onClick={() => scrollToTheRight()}
           className="!absolute right-0 top-0 z-10 !h-full w-8 !justify-end rounded-none bg-gradient-to-l from-white via-white to-transparent px-0 text-gray-500 hover:text-black dark:from-gray-50/80 dark:via-gray-50/80 3xl:hidden"
         >

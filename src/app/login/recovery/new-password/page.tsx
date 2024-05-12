@@ -1,11 +1,11 @@
 "use client";
 
 import SideImage from "@/components/ui/Signup/signup";
-import ChangePasswordForm from "./change-password-form";
+import { Route } from "@/lib/enums/routes.enums";
 import ChnagePasswordPhoto from "@public/assets/change_password_photo.svg";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { Route } from "@/lib/enums/routes.enums";
+import ChangePasswordForm from "./change-password-form";
 
 export default function ChangePasswordPage() {
   const searchParams = useSearchParams();
@@ -16,7 +16,7 @@ export default function ChangePasswordPage() {
     if (!hash) {
       router.push(Route.Home);
     }
-  }, [hash]);
+  }, [hash, router]);
 
   if (!hash) return null;
 

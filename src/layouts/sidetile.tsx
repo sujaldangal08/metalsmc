@@ -15,7 +15,7 @@ interface SideTileProps {
   isDropdownOpen: boolean;
   isActive: boolean;
   pathname: any;
-  openDrawer: boolean;
+  openDrawer?: boolean;
 }
 
 export default function SideTile({

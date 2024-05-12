@@ -1,6 +1,6 @@
 import { PickupRouteData } from "@/features/api/schedule-module/pickupRoute.type";
 import cn from "@/utils/class-names";
-import { Tab } from "@headlessui/react";
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import { Fragment } from "react";
 import { Button } from "rizzui";
 import {
@@ -10,6 +10,9 @@ import {
 } from "@public/assets/Icons";
 import { Dropdown } from "rizzui";
 import Status from "@/components/status/status";
+import Link from "next/link";
+import { Route } from "@/lib/enums/routes.enums";
+import { PiLinkSimpleHorizontalBold } from "react-icons/pi";
 
 interface TableProps {
   routeDetails: PickupRouteData[];
@@ -18,10 +21,10 @@ interface TableProps {
 function Table({ routeDetails }: TableProps) {
   return (
     <div className="flex flex-col  bg-white w-full h-[250px] mt-10 rounded-md pr-4">
-      <Tab.Group defaultIndex={0}>
-        <Tab.List className="flex gap-2 ">
+      <TabGroup defaultIndex={0}>
+        <TabList className="flex gap-2 ">
           {routeDetails.map((route) => (
-            <Tab as={Fragment}>
+            <Tab key={route.id} as={Fragment}>
               {({ selected }) => (
                 <Button
                   key={route.id}
@@ -39,10 +42,10 @@ function Table({ routeDetails }: TableProps) {
               )}
             </Tab>
           ))}
-        </Tab.List>
-        <Tab.Panels>
+        </TabList>
+        <TabPanels>
           {routeDetails.map((route) => (
-            <Tab.Panel key={route.id}>
+            <TabPanel key={route.id}>
               <table className="w-full border border-gray-300  rounded-md relative border-separate border-spacing-0">
                 <thead>
                   <tr className="text-base h-[40px] text-[#434343] bg-[#C6E7D9] sticky top-0 left-0 z-10 rounded-md">
@@ -91,7 +94,11 @@ function Table({ routeDetails }: TableProps) {
                         (tons)
                       </td>
                       <td className="px-2 py-4">
-                        <Status status={schedule?.status} dotSize="small" />
+                        <Status
+                          status={schedule?.status}
+                          dotSize="small"
+                          title={schedule.status}
+                        />
                       </td>
                       <td className="px-2 py-4 flex items-center justify-center">
                         <Dropdown
@@ -122,16 +129,26 @@ function Table({ routeDetails }: TableProps) {
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td className="px-3 py-2">
-                      <Status status={route.status} dotSize="small" />
+                    <td className="px-4 py-2.5">
+                      <Link
+                        href={Route.ViewPickupAttachment}
+                        className="text-primary flex gap-0.5 items-center underline leading-6"
+                      >
+                        <PiLinkSimpleHorizontalBold className="rotate-90 text-md" />{" "}
+                        View attachments
+                      </Link>
+                    </td>
+
+                    <td colSpan={5} className="text-right pr-4">
+                      <p>Pickup Unloading</p>
                     </td>
                   </tr>
                 </tfoot>
               </table>
-            </Tab.Panel>
+            </TabPanel>
           ))}
-        </Tab.Panels>
-      </Tab.Group>
+        </TabPanels>
+      </TabGroup>
     </div>
   );
 }

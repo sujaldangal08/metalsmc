@@ -1,5 +1,4 @@
 import cn from "@/utils/class-names";
-import DeliveryIcon from "@public/assets/Icons/deliveryIcon";
 import DownArrowIcon from "@public/assets/Icons/downarrow-icon";
 import EmailIcon from "@public/assets/Icons/emailIcon";
 import Icon from "@public/assets/Icons/icon";
@@ -9,6 +8,7 @@ import ScheduleCard from "./schedule-card";
 
 import { PickupRouteData } from "@/features/api/schedule-module/pickupRoute.type";
 import DeliveryTruck from "@public/assets/Icons/truck.icon";
+import DeliveryIcon from "@public/assets/Icons/deliveryIcon";
 
 interface PickupRouteProps {
   id: number;
@@ -53,7 +53,7 @@ export default function PickupRoute({
                 <div className=" bg-green-100 rounded-full p-1 mr-2">
                   <Icon />
                 </div>
-                Driver's Name:{" "}
+                {`Driver's Name:`}
                 <span className="text-[#706F6F] ml-20">{driverName}</span>
               </div>
 

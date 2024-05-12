@@ -14,6 +14,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import useSWR from "swr";
 import { SearchIcon } from "@public/assets/Icons";
 import cn from "@/utils/class-names";
+import { useRouter } from "next/navigation";
 
 const pickupStatsData = [
   {
@@ -60,6 +61,7 @@ const pickupStatsData = [
 
 const PickupSchedulePage: React.FC = () => {
   const [time, setTime] = useState<"day" | "month" | "year">("day");
+  const router = useRouter();
 
   const {
     data: allDriverPickupRoutes,
@@ -107,7 +109,7 @@ const PickupSchedulePage: React.FC = () => {
         </h1>
         <div className="flex gap-3 w-full items-center  mt-2">
           <Input
-            prefix={<SearchIcon className="w-6 h-6"/>}
+            prefix={<SearchIcon className="w-6 h-6" />}
             placeholder="Search by name, phone or email"
             className="w-1/4"
             inputClassName="bg-white py-[1.4rem]"
@@ -186,8 +188,9 @@ const PickupSchedulePage: React.FC = () => {
               color="primary"
               className="py-5 rounded-lg w-full text-white text-sm font-medium"
               type="submit"
+              onClick={() => router.push(Route.AssignPickupSchedule)}
             >
-              <Link href={Route.AssignPickupSchedule}>+ Assign New Task</Link>
+              + Assign New Task
             </Button>
           </div>
         </div>

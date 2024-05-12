@@ -1,4 +1,4 @@
-import { api } from "@/features/api";
+import { api } from "@/config/api.config";
 import { GetAllDeliveryTripResponse } from "./deliveryTrip.type";
 
 const baseEnd = "/delivery-trip";

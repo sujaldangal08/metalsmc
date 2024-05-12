@@ -1,23 +1,22 @@
-'use client';
+"use client";
 
-import { Fragment, useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
-import { Input } from '@/components/ui/input';
-import { Title } from '@/components/ui/text';
-import { Button } from '@/components/ui/button';
-import { ActionIcon } from '@/components/ui/action-icon';
-import { Empty, SearchNotFoundIcon } from '@/components/ui/empty';
+import { Fragment, useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { Input } from "@/components/ui/input";
+import { Title } from "@/components/ui/text";
+import { Button } from "@/components/ui/button";
+import { ActionIcon } from "@/components/ui/action-icon";
+import { Empty, SearchNotFoundIcon } from "@/components/ui/empty";
 import {
   PiFileTextDuotone,
   PiMagnifyingGlassBold,
   PiXBold,
-} from 'react-icons/pi';
-import cn from '@/utils/class-names';
-import { pageLinks } from './page-links.data';
+} from "react-icons/pi";
+import cn from "@/utils/class-names";
+import { pageLinks } from "./page-links.data";
 
 export default function SearchList({ onClose }: { onClose?: () => void }) {
-  const inputRef = useRef(null);
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
 
   let menuItemsFiltered = pageLinks;
   if (searchText.length > 0) {
@@ -30,24 +29,12 @@ export default function SearchList({ onClose }: { onClose?: () => void }) {
     });
   }
 
-  useEffect(() => {
-    if (inputRef?.current) {
-      // @ts-ignore
-      inputRef.current.focus();
-    }
-    return () => {
-      inputRef.current = null;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <>
       <div className="flex items-center px-5 py-4">
         <Input
           variant="flat"
           value={searchText}
-          ref={inputRef}
           onChange={(e) => setSearchText(() => e.target.value)}
           placeholder="Search here"
           className="flex-1"
@@ -62,7 +49,7 @@ export default function SearchList({ onClose }: { onClose?: () => void }) {
                 className="h-auto w-auto px-0"
                 onClick={(e) => {
                   e.preventDefault();
-                  setSearchText(() => '');
+                  setSearchText(() => "");
                 }}
               >
                 Clear
@@ -101,7 +88,7 @@ export default function SearchList({ onClose }: { onClose?: () => void }) {
 
         {menuItemsFiltered.map((item, index) => {
           return (
-            <Fragment key={item.name + '-' + index}>
+            <Fragment key={item.name + "-" + index}>
               {item?.href ? (
                 <Link
                   href={item?.href as string}
@@ -124,8 +111,8 @@ export default function SearchList({ onClose }: { onClose?: () => void }) {
                 <Title
                   as="h6"
                   className={cn(
-                    'mb-1 px-3 text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-500',
-                    index !== 0 && 'mt-6 4xl:mt-7'
+                    "mb-1 px-3 text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-500",
+                    index !== 0 && "mt-6 4xl:mt-7"
                   )}
                 >
                   {item.name}

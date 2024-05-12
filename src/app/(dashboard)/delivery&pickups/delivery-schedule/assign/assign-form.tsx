@@ -35,7 +35,7 @@ export default function AssignForm() {
       <div className="flex w-full items-center justify-between px-4 py-3">
         <div className="flex md:flex-row flex-col md:items-end items-start md:gap-14 gap-1">
           <h2 className="text-md font-normal">
-            Driver's Name : <span className="text-gray">Jhon Doe</span>
+            {`Driver's Name`} : <span className="text-gray">Jhon Doe</span>
           </h2>
           <h2 className="text-md font-normal">
             Truck License Plate no : <span className="text-gray">123456</span>
@@ -45,7 +45,7 @@ export default function AssignForm() {
       </div>
       <hr className="border-[#DADADA]" />
       <div className="p-4 flex flex-col gap-2">
-        <h2 className="text-md font-medium">Customer's Data</h2>
+        <h2 className="text-md font-medium">{`Customer's Data`}</h2>
         <div className="flex gap-5">
           <Select
             placeholder="Customer's Name"

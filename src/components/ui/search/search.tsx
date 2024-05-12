@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Modal } from "@/components/ui/modal";
 import SearchTrigger from "./search-trigger";
 import SearchList from "./search-list";
+
 export default function SearchWidget({
   className,
   icon,

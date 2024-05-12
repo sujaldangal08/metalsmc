@@ -4,6 +4,7 @@ import { setSessionCookie } from "@/lib/auth";
 import useMutation from "@/lib/hooks/useMutation";
 import { formatErrorMessage } from "@/utils/format-errors";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
 import { FC, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
@@ -94,19 +95,21 @@ const TwoFactorAuth: FC<TwoFactorAuthProps> = ({
                 Install Google Authenticator (IOS - Android) or Authy (IOS -
                 Android).
               </li>
-              <li>In the authenticator app, select "+" icon.</li>
+              <li>{`In the authenticator app, select "+" icon.`}</li>
               <li>
-                Select "Scan a barcode (or QR code)" and use the phone's camera
-                to scan this barcode.
+                {`Select "Scan a barcode (or QR code)" and use the phone's camera
+                to scan this barcode.`}
               </li>
             </div>
             <div>
               <h4 className={styles.heading4}>Scan QR Code</h4>
               <div className="flex justify-center">
-                <img
+                <Image
                   className="block w-64 h-64 object-contain"
                   src={qr_code_url}
                   alt="qrcode url"
+                  width={200}
+                  height={200}
                 />
               </div>
             </div>

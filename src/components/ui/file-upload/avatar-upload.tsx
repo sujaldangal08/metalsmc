@@ -1,22 +1,18 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import toast from 'react-hot-toast';
-import { useCallback, useState } from 'react';
-import type { FileWithPath } from '@uploadthing/react';
-import { useDropzone } from '@uploadthing/react/hooks';
-import {
-  UploadFileResponse,
-  generateClientDropzoneAccept,
-} from 'uploadthing/client';
-import { useUploadThing } from '@/utils/uploadthing';
-import { Text } from '@/components/ui/text';
-import cn from '@/utils/class-names';
-import UploadIcon from '@/components/shape/upload';
-import { Loader } from '@/components/ui/loader';
-import { FieldError } from '@/components/ui/field-error';
-import { PiPencilSimple } from 'react-icons/pi';
-import { LoadingSpinner } from '@/components/ui/file-upload/upload-zone';
+import Image from "next/image";
+import toast from "react-hot-toast";
+import { useCallback, useState } from "react";
+import { useDropzone } from "@uploadthing/react/hooks";
+import { generateClientDropzoneAccept } from "uploadthing/client";
+import { useUploadThing } from "@/utils/uploadthing";
+import { Text } from "@/components/ui/text";
+import cn from "@/utils/class-names";
+import UploadIcon from "@/components/shape/upload";
+import { Loader } from "@/components/ui/loader";
+import { FieldError } from "@/components/ui/field-error";
+import { PiPencilSimple } from "react-icons/pi";
+import { LoadingSpinner } from "@/components/ui/file-upload/upload-zone";
 
 interface UploadZoneProps {
   name: string;
@@ -38,9 +34,9 @@ export default function AvatarUpload({
   const formValue = getValues(name);
 
   const { startUpload, permittedFileInfo, isUploading } = useUploadThing(
-    'avatar',
+    "avatar",
     {
-      onClientUploadComplete: (res: UploadFileResponse<any>[] | undefined) => {
+      onClientUploadComplete: (res: any[] | undefined) => {
         if (setValue) {
           const respondedUrls = res?.map((r) => ({
             name: r.name,
@@ -67,7 +63,7 @@ export default function AvatarUpload({
     : [];
 
   const onDrop = useCallback(
-    (acceptedFiles: FileWithPath[]) => {
+    (acceptedFiles: any[]) => {
       setFiles([
         ...acceptedFiles.map((file) =>
           Object.assign(file, {
@@ -87,10 +83,10 @@ export default function AvatarUpload({
   });
 
   return (
-    <div className={cn('grid gap-5', className)}>
+    <div className={cn("grid gap-5", className)}>
       <div
         className={cn(
-          'relative grid h-40 w-40 place-content-center rounded-full border-[1.8px]'
+          "relative grid h-40 w-40 place-content-center rounded-full border-[1.8px]"
         )}
       >
         {formValue ? (
@@ -106,7 +102,7 @@ export default function AvatarUpload({
             <div
               {...getRootProps()}
               className={cn(
-                'absolute inset-0 grid place-content-center rounded-full bg-black/70'
+                "absolute inset-0 grid place-content-center rounded-full bg-black/70"
               )}
             >
               {isUploading ? (
@@ -122,7 +118,7 @@ export default function AvatarUpload({
           <div
             {...getRootProps()}
             className={cn(
-              'absolute inset-0 z-10 grid cursor-pointer place-content-center'
+              "absolute inset-0 z-10 grid cursor-pointer place-content-center"
             )}
           >
             <input {...getInputProps()} />

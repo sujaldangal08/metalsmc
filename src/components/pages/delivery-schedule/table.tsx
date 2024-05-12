@@ -82,7 +82,7 @@ function DeliveryTabel({ deliveryData }: TableProps) {
       <TabGroup defaultIndex={0}>
         <TabList className="flex gap-2">
           {deliveryData.map((delivery) => (
-            <Tab as={Fragment}>
+            <Tab key={delivery.id} as={Fragment}>
               {({ selected }) => (
                 <Button
                   key={delivery.id}

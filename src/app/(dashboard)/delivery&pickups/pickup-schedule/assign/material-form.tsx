@@ -22,7 +22,7 @@ function MaterialForm() {
   return (
     <div className="flex flex-col w-full gap-6">
       <div className="flex w-full items-center justify-between">
-        <h2 className="text-md font-medium">Material's Details</h2>
+        <h2 className="text-md font-medium">{`Material's Details`}</h2>
         <div className="flex gap-6">
           <Button
             onClick={() =>

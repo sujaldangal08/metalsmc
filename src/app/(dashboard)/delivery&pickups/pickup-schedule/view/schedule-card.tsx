@@ -21,7 +21,7 @@ export default function ScheduleCard({ scheduleDetails }: ScheduleCardProps) {
             Customer Details
           </h1>
           <div className="grid grid-cols-2 gap-x-12 gap-y-2">
-            <span className="font-normal w-36">Customer's Name:</span>
+            <span className="font-normal w-36">{`Customer's Name:`}</span>
             <span>{customer.name}</span>
 
             <span className="font-normal">Email:</span>
@@ -53,8 +53,11 @@ export default function ScheduleCard({ scheduleDetails }: ScheduleCardProps) {
                     "total weight",
                     "no of bins",
                     "unit price",
-                  ].map((item) => (
-                    <th className="first:pl-4 px-2 py-2 font-normal w-1/6 text-start text-black">
+                  ].map((item, idx) => (
+                    <th
+                      key={idx}
+                      className="first:pl-4 px-2 py-2 font-normal w-1/6 text-start text-black"
+                    >
                       {item}
                     </th>
                   ))}

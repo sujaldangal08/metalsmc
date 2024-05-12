@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import cn from '@/utils/class-names';
-import { Button } from '@/components/ui/button';
-import { Title, Text } from '@/components/ui/text';
-import DocIcon from '@/components/icons/doc-solid';
-import ImageIcon from '@/components/icons/image-solid';
-import MusicIcon from '@/components/icons/music-solid';
-import VideoIcon from '@/components/icons/video-solid';
-import DriveIcon from '@/components/icons/drive-solid';
-import { useScrollableSlider } from '@/hooks/use-scrollable-slider';
-import { PiCaretLeftBold, PiCaretRightBold } from 'react-icons/pi';
-import MetricCard from '@/components/cards/metric-card';
-import CircleProgressBar from '@/components/charts/circle-progressbar';
+import cn from "@/utils/class-names";
+import { Button } from "@/components/ui/button";
+import { Title, Text } from "@/components/ui/text";
+import DocIcon from "@/components/icons/doc-solid";
+import ImageIcon from "@/components/icons/image-solid";
+import MusicIcon from "@/components/icons/music-solid";
+import VideoIcon from "@/components/icons/video-solid";
+import DriveIcon from "@/components/icons/drive-solid";
+import { useScrollableSlider } from "@/hooks/use-scrollable-slider";
+import { PiCaretLeftBold, PiCaretRightBold } from "react-icons/pi";
+import MetricCard from "@/components/cards/metric-card";
+import CircleProgressBar from "@/components/charts/circle-progressbar";
 
 type FileStatsType = {
   className?: string;
@@ -20,42 +20,42 @@ type FileStatsType = {
 const filesStatData = [
   {
     id: 1,
-    title: 'Total Storage',
-    metric: '94 GB',
+    title: "Total Storage",
+    metric: "94 GB",
     icon: <DriveIcon className="h-12 w-10" />,
-    fill: '#4c5c75',
+    fill: "#4c5c75",
     percentage: 94,
   },
   {
     id: 2,
-    title: 'Images',
-    metric: '26 GB',
+    title: "Images",
+    metric: "26 GB",
     icon: <ImageIcon className="h-10 w-10" />,
-    fill: '#f3962d',
+    fill: "#f3962d",
     percentage: 26,
   },
   {
     id: 3,
-    title: 'Documents',
-    metric: '38 GB',
+    title: "Documents",
+    metric: "38 GB",
     icon: <DocIcon className="h-10 w-10" />,
-    fill: '#6d98ff',
+    fill: "#6d98ff",
     percentage: 38,
   },
   {
     id: 4,
-    title: 'Audios',
-    metric: '54 GB',
+    title: "Audios",
+    metric: "54 GB",
     icon: <MusicIcon className="h-10 w-10" />,
-    fill: '#fbc13b',
+    fill: "#fbc13b",
     percentage: 54,
   },
   {
     id: 5,
-    title: 'Videos',
-    metric: '67 GB',
+    title: "Videos",
+    metric: "67 GB",
     icon: <VideoIcon className="h-10 w-10" />,
-    fill: '#e16244',
+    fill: "#e16244",
     percentage: 67,
   },
 ];
@@ -72,14 +72,13 @@ export default function FileStats({ className }: FileStatsType) {
   return (
     <div
       className={cn(
-        'relative flex w-auto items-center overflow-hidden',
+        "relative flex w-auto items-center overflow-hidden",
         className
       )}
     >
       <Button
         title="Prev"
         variant="text"
-        ref={sliderPrevBtn}
         onClick={() => scrollToTheLeft()}
         className="!absolute left-0 top-0 z-10 !h-full w-8 !justify-start rounded-none bg-gradient-to-r from-white via-white to-transparent px-0  text-gray-500 hover:text-black dark:from-gray-50/80 dark:via-gray-50/80 3xl:hidden"
       >
@@ -134,7 +133,6 @@ export default function FileStats({ className }: FileStatsType) {
       <Button
         title="Next"
         variant="text"
-        ref={sliderNextBtn}
         onClick={() => scrollToTheRight()}
         className="!absolute right-0 top-0 z-10 !h-full w-8 !justify-end rounded-none bg-gradient-to-l from-white via-white to-transparent px-0  text-gray-500 hover:text-black dark:from-gray-50/80 dark:via-gray-50/80 3xl:hidden"
       >

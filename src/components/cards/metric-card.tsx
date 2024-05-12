@@ -64,7 +64,7 @@ export default function MetricCard({
             </div>
           ) : null}
 
-          <div className={cn(icon && "ps-3", contentClassName)}>
+          <div className={cn("ps-3", contentClassName)}>
             <Text
               className={cn(
                 "text-[#202020] text-md font-medium",

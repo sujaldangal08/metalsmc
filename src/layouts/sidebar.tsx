@@ -10,7 +10,13 @@ import Image from "next/image";
 import { menuItems } from "./menu-items";
 import SideTile from "./sidetile";
 
-export default function Sidebar({ className }: { className?: string }) {
+interface SidebarProps {
+  className: string;
+  openDrawer?: boolean;
+  setOpenDrawer?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function Sidebar({ className, openDrawer }: SidebarProps) {
   const pathname = usePathname();
   return (
     <aside
@@ -54,11 +60,12 @@ export default function Sidebar({ className }: { className?: string }) {
             return (
               <SideTile
                 key={item.name}
-                item={item}
+                item={item as any}
                 index={index}
                 isDropdownOpen={isDropdownOpen}
                 isActive={isActive}
                 pathname={pathnameExistInDropdowns}
+                openDrawer={openDrawer}
               />
             );
           })}

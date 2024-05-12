@@ -16,17 +16,22 @@ const baseEnd = "/insurance";
 
 //Delete: Permanent Delete Insurance
 export async function permanentDeleteInsurance({ id }: { id: string }) {
-  const response = await api.delete<PermanentDeleteInsuranceResponse>(
-    `${baseEnd}/delete${id}`
+  const response = await api.request<PermanentDeleteInsuranceResponse, any>({
+    endpoint: `${baseEnd}/delete${id}`,
+    method: "DELETE",
+    body: {}
+  }
   );
   return response.data;
 }
 
 //Delete: Delete Insurance
 export async function deleteInsurance({ id }: { id: string }) {
-  const response = await api.delete<DeleteInsuranceResponse>(
-    `${baseEnd}/${id}`
-  );
+  const response = await api.request<DeleteInsuranceResponse, any>({
+    endpoint: `${baseEnd}/${id}`,
+    method: "DELETE",
+    body: {}
+  });
   return response.data;
 }
 

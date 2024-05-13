@@ -1,0 +1,29 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  nodeVersion: '20.x'
+
+jobs:
+- deployment: VMDeploy
+  displayName: Web deploy
+  environment:
+    name: 'react'
+    resourceType: VirtualMachine
+    resourceName: 'SMC-React'
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - script: |
+            sudo fuser -k 80/tcp   # Terminate any process running on port 80
+            cd /home/securesclogin/SMC_Frontend
+            git pull
+            apt update
+            yarn install
+            yarn build
+            yarn start -p 80
+          displayName: 'Continuous Integration and Deployment'

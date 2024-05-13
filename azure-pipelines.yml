@@ -2,28 +2,53 @@ trigger:
 - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
 variables:
-  nodeVersion: '20.x'
+  appServicePlanSku: 'B2'  # Define a variable for the SKU level
 
 jobs:
-- deployment: VMDeploy
-  displayName: Web deploy
-  environment:
-    name: 'react'
-    resourceType: VirtualMachine
-    resourceName: 'SMC-React'
+- deployment: DeployWebApp
+  displayName: 'Deploy to Web App'
+  environment: 'reactsmc'
   strategy:
     runOnce:
       deploy:
         steps:
+        - checkout: self  # This step fetches the source code from your repository
+
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '20.x'
+          displayName: 'Install Node.js'
+
         - script: |
-            sudo fuser -k 80/tcp   # Terminate any process running on port 80
-            cd /home/securesclogin/SMC_Frontend
-            git pull
-            sudo apt update
+            npm install -g yarn
             yarn install
             yarn build
-            sudo yarn start -p 80 &
-          displayName: 'Continuous Integration and Deployment'
+          displayName: 'Install dependencies and build'
+
+        - task: CopyFiles@2
+          inputs:
+            SourceFolder: '$(System.DefaultWorkingDirectory)'
+            Contents: '**/*.!(zip)'
+            TargetFolder: '$(Build.ArtifactStagingDirectory)'
+            CleanTargetFolder: true
+            OverWrite: true
+          displayName: 'Copy files for artifact'
+
+        - task: ArchiveFiles@2
+          inputs:
+            rootFolderOrFile: '$(Build.ArtifactStagingDirectory)'
+            includeRootFolder: false
+            archiveFile: '$(Build.ArtifactStagingDirectory)/build.zip'
+            replaceExistingArchive: true
+          displayName: 'Archive build files'
+
+        - task: AzureWebApp@1
+          inputs:
+            azureSubscription: 'reactmetal'
+            appType: 'webAppLinux'
+            appName: 'metalreact'
+            package: '$(Build.ArtifactStagingDirectory)/build.zip'
+            appServicePlan: '$(appServicePlanSku)'  # Use the variable for the SKU level

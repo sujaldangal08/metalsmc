@@ -12,6 +12,8 @@ jobs:
     runOnce:
       deploy:
         steps:
+        - checkout: self  # This step fetches the source code from your repository
+
         - task: NodeTool@0
           inputs:
             versionSpec: '20.x'

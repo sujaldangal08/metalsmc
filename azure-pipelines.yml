@@ -4,6 +4,9 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  appServicePlanSku: 'B2'  # Define a variable for the SKU level
+
 jobs:
 - deployment: DeployWebApp
   displayName: 'Deploy to Web App'
@@ -48,3 +51,4 @@ jobs:
             appType: 'webAppLinux'
             appName: 'metalreact'
             package: '$(Build.ArtifactStagingDirectory)/build.zip'
+            appServicePlan: '$(appServicePlanSku)'  # Use the variable for the SKU level

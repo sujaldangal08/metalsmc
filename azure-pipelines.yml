@@ -25,5 +25,5 @@ jobs:
             sudo apt update
             yarn install
             yarn build
-            sudo yarn start -p 80
+            sudo yarn start -p 80 &
           displayName: 'Continuous Integration and Deployment'

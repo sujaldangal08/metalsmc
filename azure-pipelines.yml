@@ -2,28 +2,23 @@ trigger:
 - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
-variables:
-  nodeVersion: '20.x'
+steps:
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'reactmetal'
+    appType: 'webAppLinux'
+    appName: 'metalreact'
+    package: '$(System.ArtifactsDirectory)/build.zip'
+- task: DownloadBuildArtifacts@0
+  inputs:
+    artifactName: 'build'  # Name of the artifact produced by your build pipeline
+    downloadPath: '$(System.ArtifactsDirectory)'
 
-jobs:
-- deployment: VMDeploy
-  displayName: Web deploy
-  environment:
-    name: 'react'
-    resourceType: VirtualMachine
-    resourceName: 'SMC-React'
-  strategy:
-    runOnce:
-      deploy:
-        steps:
-        - script: |
-            sudo fuser -k 80/tcp   # Terminate any process running on port 80
-            cd /home/securesclogin/SMC_Frontend
-            git pull
-            sudo apt update
-            yarn install
-            yarn build
-            sudo yarn start -p 80 &
-          displayName: 'Continuous Integration and Deployment'
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'reactmetal'
+    appType: 'webAppLinux'
+    appName: 'metalreact'
+    package: '$(System.ArtifactsDirectory)/build.zip'
